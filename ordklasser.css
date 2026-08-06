@@ -1,0 +1,366 @@
+/* Ordklasse-øvelsen. Bygger på styles.css og bruker samme blåfarge (#4a90e2).
+   Alt er laget for trykk: ingen knapp under 48px høy, ingen dra-og-slipp. */
+
+#ordklasser main {
+    padding: 1rem 1rem 6rem;   /* plass til bunnmenyen */
+    max-width: 640px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#ordklasser button {
+    font-family: inherit;
+    font-size: 1.1rem;
+    cursor: pointer;
+    border-radius: 12px;
+    border: 2px solid transparent;
+}
+
+#ordklasser button:disabled { cursor: default; }
+
+#ordklasser button:focus-visible {
+    outline: 3px solid #1a5fb4;
+    outline-offset: 2px;
+}
+
+/* ---------- Topplinje og regelkort ---------- */
+
+.topplinje {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.xp { font-weight: bold; font-size: 1.1rem; color: #2c3e50; }
+
+.lyd-knapp {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.regelkort {
+    background: white;
+    border-left: 6px solid #4a90e2;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.regelkort h2 { margin: 0 0 0.5rem; color: #4a90e2; }
+.regelkort .regel { margin: 0 0 0.5rem; font-size: 1.2rem; font-weight: bold; }
+.regelkort .prove { margin: 0; color: #555; }
+
+/* ---------- Banekartet ---------- */
+
+.baneliste { list-style: none; padding: 0; margin: 0; }
+.bane { margin-bottom: 0.75rem; }
+
+.bane-knapp {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    background: white;
+    padding: 1rem;
+    text-align: left;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    min-height: 56px;
+}
+
+.bane-knapp:hover:not(:disabled) { border-color: #4a90e2; }
+.bane-knapp:disabled { background: #e8ecf1; color: #8b98a5; box-shadow: none; }
+
+.bane-tekst { display: flex; flex-direction: column; }
+.bane-navn { font-weight: bold; font-size: 1.1rem; }
+.bane-under { font-size: 0.9rem; color: #6b7785; }
+.bane-knapp:disabled .bane-under { color: #97a3b0; }
+
+.stjerner { font-size: 1.2rem; color: #f5a623; white-space: nowrap; }
+
+/* ---------- Økt ---------- */
+
+.okt-topp {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.tilbake {
+    background: none;
+    border: none;
+    color: #4a90e2;
+    font-size: 1rem;
+    padding: 0.5rem 0;
+}
+
+.framdrift {
+    flex-grow: 1;
+    height: 10px;
+    background: #dde3ea;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.framdrift-fyll {
+    height: 100%;
+    background: #4a90e2;
+    transition: width 0.3s ease-out;
+}
+
+.teller { font-size: 0.9rem; color: #6b7785; white-space: nowrap; }
+
+.rekke {
+    text-align: center;
+    font-weight: bold;
+    color: #e8710a;
+    margin-bottom: 0.5rem;
+}
+
+.sporsmal {
+    text-align: center;
+    font-size: 1.25rem;
+    margin: 0 0 1.25rem;
+    color: #2c3e50;
+}
+
+/* ---------- Oppgaveflater ---------- */
+
+.stort-ord {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem 1rem;
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #2c3e50;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 1.25rem;
+}
+
+.ramme {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    font-size: 1.35rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 1.25rem;
+}
+
+.ramme p { margin: 0.5rem 0; }
+
+.ramme-ledetekst {
+    font-size: 1rem;
+    color: #6b7785;
+    margin-bottom: 0.75rem !important;
+}
+
+.hull {
+    display: inline-block;
+    background: #fff3d6;
+    border-bottom: 3px solid #f5a623;
+    padding: 0.1rem 0.6rem;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.hull.tom { min-width: 4.5rem; }
+
+.valg { display: flex; gap: 0.75rem; }
+
+.valg-knapp {
+    flex: 1;
+    background: #4a90e2;
+    color: white;
+    padding: 1rem 0.5rem;
+    min-height: 56px;
+    font-weight: bold;
+}
+
+.valg-knapp:hover:not(:disabled) { background: #3a7bc8; }
+.valg-knapp:disabled { background: #b9c6d4; }
+
+/* Finn verbet i setningen */
+
+.setning {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem 1rem;
+    font-size: 1.3rem;
+    line-height: 2.4;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.ordknapp {
+    background: #eef3f9;
+    border: 2px solid #d4dee8;
+    padding: 0.4rem 0.7rem;
+    font-size: 1.2rem;
+    color: #2c3e50;
+}
+
+.ordknapp:hover:not(:disabled) { background: #d9e6f5; border-color: #4a90e2; }
+.ordknapp:disabled { opacity: 0.65; }
+.ordknapp.fasit {
+    background: #d8f3dc;
+    border-color: #2d9c4a;
+    opacity: 1;
+    font-weight: bold;
+}
+
+/* Rydd kurven */
+
+.rutenett {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+}
+
+.brikke {
+    background: white;
+    border: 2px solid #d4dee8;
+    padding: 1rem 0.5rem;
+    min-height: 56px;
+    color: #2c3e50;
+}
+
+.brikke.valgt {
+    background: #4a90e2;
+    border-color: #3a7bc8;
+    color: white;
+    font-weight: bold;
+}
+
+.sjekk-knapp {
+    width: 100%;
+    background: #2d9c4a;
+    color: white;
+    padding: 1rem;
+    min-height: 56px;
+    font-weight: bold;
+}
+
+.sjekk-knapp:disabled { background: #b9c6d4; }
+
+/* ---------- Hjelp ---------- */
+
+.hjelp {
+    margin: 1.25rem 0 0;
+    background: #fff9ec;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+}
+
+.hjelp summary {
+    cursor: pointer;
+    font-weight: bold;
+    color: #8a6100;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+}
+
+.hjelp-innhold p { margin: 0.5rem 0; }
+.hjelp-innhold .felle { color: #6b7785; font-size: 0.95rem; }
+
+/* ---------- Tilbakemelding ---------- */
+
+.svarfelt { margin-top: 1.25rem; }
+
+.tilbakemelding {
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    font-size: 1.05rem;
+    line-height: 1.5;
+}
+
+.tilbakemelding.riktig { background: #d8f3dc; border-left: 6px solid #2d9c4a; }
+.tilbakemelding.feil { background: #fdeeee; border-left: 6px solid #d64545; }
+.tilbakemelding .minne { margin: 0.6rem 0 0; color: #555; font-size: 0.95rem; }
+
+.neste-knapp {
+    width: 100%;
+    background: #4a90e2;
+    color: white;
+    padding: 1rem;
+    min-height: 56px;
+    font-weight: bold;
+}
+
+.neste-knapp:hover { background: #3a7bc8; }
+
+.sekundaer-knapp {
+    width: 100%;
+    background: none;
+    border: 2px solid #4a90e2;
+    color: #4a90e2;
+    padding: 0.85rem;
+    min-height: 48px;
+    margin-top: 0.6rem;
+}
+
+/* ---------- Resultat ---------- */
+
+.resultat {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.resultat h2 { margin-top: 0; color: #4a90e2; }
+
+.store-stjerner {
+    font-size: 3rem;
+    color: #f5a623;
+    margin: 0.5rem 0 1rem;
+}
+
+.resultatliste {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem;
+}
+
+.resultatliste li {
+    padding: 0.4rem 0;
+    border-bottom: 1px solid #eef1f5;
+}
+
+.resultatliste li:last-child { border-bottom: none; }
+
+/* ---------- Varsel ---------- */
+
+.varsel {
+    background: #fff3d6;
+    border-left: 6px solid #f5a623;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    margin: 0 0 1rem;
+}
+
+/* ---------- Meny ---------- */
+
+#ordklasser .bottom-menu a.aktiv { background: #4a90e2; }
+
+/* ---------- Større skjerm ---------- */
+
+@media screen and (min-width: 600px) {
+    .rutenett { grid-template-columns: repeat(4, 1fr); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .framdrift-fyll { transition: none; }
+}
