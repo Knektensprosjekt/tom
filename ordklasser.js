@@ -157,6 +157,19 @@
         return treff.length ? treff : setningsbank();
     }
 
+    /* «har ryddet» er ETT verb delt på to ord. «Elias kaster en snøball, og
+       Emma ler» er TO verb. Begge har to ord i verb-lista, men eleven må få
+       vite hvilken av delene det er - ellers lærer hen at «har bakt» betyr at
+       det skjer to ting. */
+    var HJELPEVERB = ['har', 'hadde', 'skal', 'vil', 'kan', 'må',
+                      'skulle', 'ville', 'kunne', 'måtte', 'er', 'var', 'blir', 'ble'];
+
+    function erSammensatt(s) {
+        return s.verb.length === 2 && HJELPEVERB.indexOf(s.verb[0].toLowerCase()) !== -1;
+    }
+
+    function toVerb(s) { return s.verb.length > 1 && !erSammensatt(s); }
+
     /* ---------- Oppgavegenerering ---------- */
 
     function lagJaNei() {
@@ -207,28 +220,49 @@
 
     function lagHvaSkjer(niva) {
         var s = ett(setningerPaaNiva(niva));
+        var hint = null, forklaring;
+
+        if (erSammensatt(s)) {
+            hint = 'Verbet er på to ord her — trykk på begge';
+            forklaring = 'Verbet er <b>' + s.verb.join(' ') + '</b>. Det er én ting ' +
+                'som skjer, men den er delt på to ord.';
+        } else if (toVerb(s)) {
+            hint = 'Det skjer to ting her — trykk på begge';
+            forklaring = 'Her skjer det to ting: <b>' + s.verb[0] + '</b> og <b>' +
+                s.verb[1] + '</b>.';
+        } else {
+            forklaring = '<b>' + s.verb[0] + '</b> er det som skjer. Det er verbet.';
+        }
+
         return {
             type: 'hvaSkjer',
             sporsmal: 'Hva skjer her?',
-            hint: s.verb.length > 1 ? 'Det er to ting som skjer — trykk på begge' : null,
+            hint: hint,
             setning: s,
+            svarIndeks: s.verbIndeks,
             niva: s.niva,
-            forklaring: s.verb.length > 1
-                ? 'Her skjer det to ting: <b>' + s.verb.join('</b> og <b>') + '</b>.'
-                : '<b>' + s.verb[0] + '</b> er det som skjer. Det er verbet.'
+            forklaring: forklaring
         };
     }
 
     function lagHvemGjor(niva) {
-        var s = ett(setningerPaaNiva(niva));
+        /* Setninger med to selvstendige verb holdes utenfor her. «Vi bygger en
+           hytte, og naboen hjelper til» har to som gjør noe, og da har
+           spørsmålet «hvem gjør noe?» to riktige svar. */
+        function greie(liste) { return liste.filter(function (s) { return !toVerb(s); }); }
+        var kandidater = greie(setningerPaaNiva(niva));
+        if (!kandidater.length) kandidater = greie(setningsbank());
+
+        var s = ett(kandidater);
         return {
             type: 'hvemGjor',
             steg: 1,
             sporsmal: 'Hvem eller hva gjør noe?',
             setning: s,
+            svarIndeks: s.verbIndeks,
             niva: s.niva,
-            forklaring: '<b>' + s.subjekt + '</b> er den som gjør noe, og ' +
-                '<b>' + s.verb.join(' ') + '</b> er det de gjør.'
+            forklaring: '<b>' + rent(s.subjekt) + '</b> er den som gjør noe, og ' +
+                '<b>' + s.verb.join(' ') + '</b> er det som skjer.'
         };
     }
 
@@ -432,13 +466,13 @@
 
         if (o.type === 'hvaSkjer') {
             var valgte = [];
-            var flere = o.setning.verb.length > 1;
+            var flere = o.svarIndeks.length > 1;
             omraade.appendChild(tegnSetning(o.setning, function (indeks, knapp) {
                 if (!flere) { svar(o, [indeks], omraade); return; }
                 var p = valgte.indexOf(indeks);
                 if (p === -1) { valgte.push(indeks); knapp.classList.add('valgt'); }
                 else { valgte.splice(p, 1); knapp.classList.remove('valgt'); }
-                if (valgte.length === o.setning.verb.length) svar(o, valgte.slice(), omraade);
+                if (valgte.length === o.svarIndeks.length) svar(o, valgte.slice(), omraade);
             }));
             return;
         }
@@ -519,9 +553,9 @@
         var riktig;
 
         if (overstyrRiktig !== undefined) riktig = overstyrRiktig;
-        else if (o.type === 'hvaSkjer') riktig = likeLister(gitt, o.setning.verbIndeks);
+        else if (o.type === 'hvaSkjer') riktig = likeLister(gitt, o.svarIndeks);
         else if (o.type === 'hvemGjor' && o.steg === 1) riktig = gitt === o.setning.subjektIndeks;
-        else if (o.type === 'hvemGjor') riktig = o.setning.verbIndeks.indexOf(gitt) !== -1;
+        else if (o.type === 'hvemGjor') riktig = o.svarIndeks.indexOf(gitt) !== -1;
         else riktig = gitt === o.fasit;
 
         /* Steg 1 av «Hvem gjør noe?»: riktig svar går videre til steg 2 i
@@ -532,10 +566,10 @@
             o.steg = 2;
             o.sporsmal = 'Hva gjør ' + rent(o.setning.subjekt).toLowerCase() + '?';
             document.querySelector('.sporsmal').textContent = o.sporsmal;
-            if (o.setning.verb.length > 1) {
+            if (o.svarIndeks.length > 1) {
                 var h = document.querySelector('.hint');
                 if (!h) { h = el('p', 'hint'); document.querySelector('.sporsmal').after(h); }
-                h.textContent = 'Trykk på ett av ordene som forteller hva som skjer';
+                h.textContent = 'Verbet er på to ord her — trykk på ett av dem';
             }
             return;
         }
@@ -603,7 +637,7 @@
     }
 
     function laasOppgave(o, omraade) {
-        if (o.setning) merkOrd(omraade, o.setning.verbIndeks, 'fasit');
+        if (o.svarIndeks) merkOrd(omraade, o.svarIndeks, 'fasit');
         Array.prototype.forEach.call(omraade.querySelectorAll('button'), function (b) {
             b.disabled = true;
         });
