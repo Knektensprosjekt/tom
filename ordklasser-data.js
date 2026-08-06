@@ -73,34 +73,28 @@ const ORDBANK = {
         { ord: 'morsom',   klasse: 'adjektiv' }
     ],
 
-    /* Setninger med nøyaktig ETT verb. fasit må stå ordrett slik ordet
-       skrives i setningen (uten skilletegn). */
-    setninger: [
-        { tekst: 'Hunden løper etter ballen.',            fasit: 'løper' },
-        { tekst: 'Jeg leser en spennende bok.',           fasit: 'leser' },
-        { tekst: 'Emma sykler til skolen.',               fasit: 'sykler' },
-        { tekst: 'Katten sover på stolen.',               fasit: 'sover' },
-        { tekst: 'Vi spiser middag klokka fem.',          fasit: 'spiser' },
-        { tekst: 'Læreren skriver på tavla.',             fasit: 'skriver' },
-        { tekst: 'Mamma vasker den røde bilen.',          fasit: 'vasker' },
-        { tekst: 'Bestefar synger en gammel sang.',       fasit: 'synger' },
-        { tekst: 'Barna bygger en hytte i skogen.',       fasit: 'bygger' },
-        { tekst: 'Hesten hopper over det høye gjerdet.',  fasit: 'hopper' },
-        { tekst: 'Anna tegner en grønn drage.',           fasit: 'tegner' },
-        { tekst: 'Fuglene flyr sørover om høsten.',       fasit: 'flyr' },
-        { tekst: 'Vi rydder klasserommet etter timen.',   fasit: 'rydder' },
-        { tekst: 'Jonas kaster en stor snøball.',         fasit: 'kaster' },
-        { tekst: 'Klassen svømmer i det kalde vannet.',   fasit: 'svømmer' },
-        { tekst: 'Bestemor strikker en varm lue.',        fasit: 'strikker' },
-        { tekst: 'Gutten klatrer opp i det store treet.', fasit: 'klatrer' },
-        { tekst: 'Naboen graver et dypt hull i hagen.',   fasit: 'graver' }
-    ]
 };
 
-/* Huskeregelen. Én regel, én prøve. Den samme teksten vises overalt:
-   i banekartet, på hjelpeknappen og ved feil. */
+/* Reserveløsning hvis ordklasser-setninger.js ikke er lastet. Den store
+   setningsbanken ligger der. Formatet er likt: verbIndeks og subjektIndeks
+   peker på plassen til ordet når setningen deles på mellomrom. */
+const RESERVESETNINGER = [
+    { tekst: 'Hunden løper etter ballen.',        verb: ['løper'],            verbIndeks: [1],    subjekt: 'Hunden', subjektIndeks: 0, niva: 1 },
+    { tekst: 'Emma sykler til skolen.',           verb: ['sykler'],           verbIndeks: [1],    subjekt: 'Emma',   subjektIndeks: 0, niva: 1 },
+    { tekst: 'Katten sover på stolen.',           verb: ['sover'],            verbIndeks: [1],    subjekt: 'Katten', subjektIndeks: 0, niva: 2 },
+    { tekst: 'Barna bygger en hytte i skogen.',   verb: ['bygger'],           verbIndeks: [1],    subjekt: 'Barna',  subjektIndeks: 0, niva: 2 },
+    { tekst: 'Vi spiser den varme suppa.',        verb: ['spiser'],           verbIndeks: [1],    subjekt: 'Vi',     subjektIndeks: 0, niva: 3 },
+    { tekst: 'Anna tegner en grønn drage.',       verb: ['tegner'],           verbIndeks: [1],    subjekt: 'Anna',   subjektIndeks: 0, niva: 3 },
+    { tekst: 'I dag baker mamma boller.',         verb: ['baker'],            verbIndeks: [2],    subjekt: 'mamma',  subjektIndeks: 3, niva: 4 },
+    { tekst: 'Jonas løper ut og hopper over gjerdet.', verb: ['løper', 'hopper'], verbIndeks: [1, 4], subjekt: 'Jonas', subjektIndeks: 0, niva: 5 }
+];
+
+/* Huskeregelen. Ett bilde, to spørsmål, én sjekk. Samme tekst vises overalt:
+   i banekartet, bak hjelpeknappen og hver gang eleven svarer feil.
+   Ingen fagord - eleven skal kunne bruke setningene høyt for seg selv. */
 const HUSKEREGEL_VERB = {
-    kort: 'Verb er noe du gjør — eller er.',
-    prove: 'Tidsprøven: I dag <b>___</b>. I går <b>___</b>. Passer ordet i begge, er det verb.',
-    felle: 'Noen verb er ikke bevegelse: sove, tenke, hete, være. De består likevel tidsprøven.'
+    kort: 'Verb er det som skjer.',
+    sporsmal: 'Spør deg selv: <b>Hva skjer her?</b> Eller: <b>Hvem gjør noe — og hva gjør de?</b>',
+    tid: 'Sjekk med tid: I dag <b>___</b>. I går <b>___</b>. Passer ordet i begge, er det et verb.',
+    felle: 'Noen verb er ikke bevegelse: sove, tenke, hete, være, like. De er verb likevel — de skjer inni deg.'
 };

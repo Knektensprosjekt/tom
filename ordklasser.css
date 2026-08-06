@@ -1,9 +1,12 @@
 /* Ordklasse-øvelsen. Bygger på styles.css og bruker samme blåfarge (#4a90e2).
-   Alt er laget for trykk: ingen knapp under 48px høy, ingen dra-og-slipp. */
+
+   PC først: brede flater, tydelig hover, og tastatursnarveier vist som små
+   tastemerker. Under 700px legger alt seg i én kolonne, tastemerkene skjules
+   på flater uten mus, og ingen trykkflate er lavere enn 48px. */
 
 #ordklasser main {
-    padding: 1rem 1rem 6rem;   /* plass til bunnmenyen */
-    max-width: 640px;
+    padding: 2rem 1.5rem 7rem;
+    max-width: 880px;
     margin: 0 auto;
     width: 100%;
     box-sizing: border-box;
@@ -15,6 +18,7 @@
     cursor: pointer;
     border-radius: 12px;
     border: 2px solid transparent;
+    transition: background-color 0.12s ease, border-color 0.12s ease, transform 0.08s ease;
 }
 
 #ordklasser button:disabled { cursor: default; }
@@ -24,16 +28,35 @@
     outline-offset: 2px;
 }
 
+/* Tastemerke: viser hvilken tast som gjør det samme som museklikket */
+.tast {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.4rem;
+    height: 1.4rem;
+    margin-right: 0.6rem;
+    padding: 0 0.3rem;
+    border-radius: 5px;
+    background: rgba(255,255,255,0.28);
+    font-size: 0.8rem;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.brikke .tast { background: #e8eef6; color: #6b7785; }
+.brikke.valgt .tast { background: rgba(255,255,255,0.28); color: white; }
+
 /* ---------- Topplinje og regelkort ---------- */
 
 .topplinje {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
 }
 
-.xp { font-weight: bold; font-size: 1.1rem; color: #2c3e50; }
+.xp { font-weight: bold; font-size: 1.15rem; color: #2c3e50; }
 
 .lyd-knapp {
     background: none;
@@ -45,15 +68,15 @@
 .regelkort {
     background: white;
     border-left: 6px solid #4a90e2;
-    border-radius: 12px;
-    padding: 1rem;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
 .regelkort h2 { margin: 0 0 0.5rem; color: #4a90e2; }
-.regelkort .regel { margin: 0 0 0.5rem; font-size: 1.2rem; font-weight: bold; }
-.regelkort .prove { margin: 0; color: #555; }
+.regelkort .regel { margin: 0 0 0.5rem; font-size: 1.5rem; font-weight: bold; }
+.regelkort .prove { margin: 0; color: #555; font-size: 1.05rem; }
 
 /* ---------- Banekartet ---------- */
 
@@ -65,31 +88,31 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 0.75rem;
+    gap: 1rem;
     background: white;
-    padding: 1rem;
+    padding: 1.1rem 1.5rem;
     text-align: left;
     box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     min-height: 56px;
 }
 
-.bane-knapp:hover:not(:disabled) { border-color: #4a90e2; }
+.bane-knapp:hover:not(:disabled) { border-color: #4a90e2; transform: translateY(-1px); }
 .bane-knapp:disabled { background: #e8ecf1; color: #8b98a5; box-shadow: none; }
 
-.bane-tekst { display: flex; flex-direction: column; }
-.bane-navn { font-weight: bold; font-size: 1.1rem; }
-.bane-under { font-size: 0.9rem; color: #6b7785; }
+.bane-tekst { display: flex; flex-direction: column; gap: 0.15rem; }
+.bane-navn { font-weight: bold; font-size: 1.15rem; }
+.bane-under { font-size: 0.95rem; color: #6b7785; }
 .bane-knapp:disabled .bane-under { color: #97a3b0; }
 
-.stjerner { font-size: 1.2rem; color: #f5a623; white-space: nowrap; }
+.stjerner { font-size: 1.3rem; color: #f5a623; white-space: nowrap; }
 
 /* ---------- Økt ---------- */
 
 .okt-topp {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 .tilbake {
@@ -99,6 +122,8 @@
     font-size: 1rem;
     padding: 0.5rem 0;
 }
+
+.tilbake:hover { text-decoration: underline; }
 
 .framdrift {
     flex-grow: 1;
@@ -114,30 +139,37 @@
     transition: width 0.3s ease-out;
 }
 
-.teller { font-size: 0.9rem; color: #6b7785; white-space: nowrap; }
+.teller { font-size: 0.95rem; color: #6b7785; white-space: nowrap; }
 
 .rekke {
-    text-align: center;
     font-weight: bold;
     color: #e8710a;
-    margin-bottom: 0.5rem;
+    white-space: nowrap;
 }
 
 .sporsmal {
     text-align: center;
-    font-size: 1.25rem;
-    margin: 0 0 1.25rem;
+    font-size: 1.6rem;
+    margin: 0 0 0.5rem;
     color: #2c3e50;
 }
+
+.hint {
+    text-align: center;
+    color: #6b7785;
+    margin: 0 0 1.25rem;
+}
+
+.sporsmal + .oppgave { margin-top: 1.5rem; }
 
 /* ---------- Oppgaveflater ---------- */
 
 .stort-ord {
     background: white;
     border-radius: 16px;
-    padding: 2rem 1rem;
+    padding: 2.25rem 1rem;
     text-align: center;
-    font-size: 2.5rem;
+    font-size: 3rem;
     font-weight: bold;
     color: #2c3e50;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
@@ -149,18 +181,12 @@
     border-radius: 16px;
     padding: 1.5rem 1rem;
     text-align: center;
-    font-size: 1.35rem;
+    font-size: 1.4rem;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     margin-bottom: 1.25rem;
 }
 
 .ramme p { margin: 0.5rem 0; }
-
-.ramme-ledetekst {
-    font-size: 1rem;
-    color: #6b7785;
-    margin-bottom: 0.75rem !important;
-}
 
 .hull {
     display: inline-block;
@@ -169,46 +195,68 @@
     padding: 0.1rem 0.6rem;
     border-radius: 6px;
     font-weight: bold;
+    min-width: 5rem;
 }
 
-.hull.tom { min-width: 4.5rem; }
-
-.valg { display: flex; gap: 0.75rem; }
+.valg { display: flex; gap: 1rem; }
 
 .valg-knapp {
     flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: #4a90e2;
     color: white;
-    padding: 1rem 0.5rem;
-    min-height: 56px;
+    padding: 1.1rem 0.75rem;
+    min-height: 60px;
     font-weight: bold;
 }
 
-.valg-knapp:hover:not(:disabled) { background: #3a7bc8; }
+.valg-knapp:hover:not(:disabled) { background: #3a7bc8; transform: translateY(-1px); }
 .valg-knapp:disabled { background: #b9c6d4; }
 
-/* Finn verbet i setningen */
+/* Setningsoppgavene */
 
 .setning {
     background: white;
     border-radius: 16px;
-    padding: 1.5rem 1rem;
-    font-size: 1.3rem;
-    line-height: 2.4;
+    padding: 2rem 1.5rem;
+    font-size: 1.5rem;
+    line-height: 2.6;
     text-align: center;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin: 0;
 }
 
 .ordknapp {
     background: #eef3f9;
     border: 2px solid #d4dee8;
-    padding: 0.4rem 0.7rem;
-    font-size: 1.2rem;
+    padding: 0.35rem 0.7rem;
+    font-size: 1.4rem;
     color: #2c3e50;
 }
 
-.ordknapp:hover:not(:disabled) { background: #d9e6f5; border-color: #4a90e2; }
-.ordknapp:disabled { opacity: 0.65; }
+/* Hover må ikke overdøve ord som allerede er markert - derfor unntakene her */
+.ordknapp:hover:not(:disabled):not(.valgt):not(.funnet):not(.fasit) {
+    background: #d9e6f5;
+    border-color: #4a90e2;
+}
+.ordknapp:disabled { opacity: 0.6; }
+
+.ordknapp.valgt {
+    background: #4a90e2;
+    border-color: #3a7bc8;
+    color: white;
+}
+
+/* Subjektet eleven har funnet i steg 1 av «Hvem gjør noe?» */
+.ordknapp.funnet {
+    background: #fff3d6;
+    border-color: #f5a623;
+    opacity: 1;
+    font-weight: bold;
+}
+
 .ordknapp.fasit {
     background: #d8f3dc;
     border-color: #2d9c4a;
@@ -220,18 +268,23 @@
 
 .rutenett {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.6rem;
-    margin-bottom: 1rem;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
 }
 
 .brikke {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: white;
     border: 2px solid #d4dee8;
     padding: 1rem 0.5rem;
-    min-height: 56px;
+    min-height: 60px;
     color: #2c3e50;
 }
+
+.brikke:hover:not(:disabled) { border-color: #4a90e2; }
 
 .brikke.valgt {
     background: #4a90e2;
@@ -244,20 +297,21 @@
     width: 100%;
     background: #2d9c4a;
     color: white;
-    padding: 1rem;
-    min-height: 56px;
+    padding: 1.1rem;
+    min-height: 60px;
     font-weight: bold;
 }
 
+.sjekk-knapp:hover:not(:disabled) { background: #26833e; }
 .sjekk-knapp:disabled { background: #b9c6d4; }
 
 /* ---------- Hjelp ---------- */
 
 .hjelp {
-    margin: 1.25rem 0 0;
+    margin: 1.5rem 0 0;
     background: #fff9ec;
     border-radius: 12px;
-    padding: 0.75rem 1rem;
+    padding: 0.85rem 1.25rem;
 }
 
 .hjelp summary {
@@ -269,75 +323,84 @@
     align-items: center;
 }
 
-.hjelp-innhold p { margin: 0.5rem 0; }
+.hjelp summary::after {
+    content: 'tast H';
+    margin-left: auto;
+    font-weight: normal;
+    font-size: 0.8rem;
+    color: #b08a3e;
+}
+
+.hjelp-innhold p { margin: 0.6rem 0; }
+.hjelp-innhold .stor-regel { font-size: 1.25rem; font-weight: bold; color: #2c3e50; }
 .hjelp-innhold .felle { color: #6b7785; font-size: 0.95rem; }
 
 /* ---------- Tilbakemelding ---------- */
 
-.svarfelt { margin-top: 1.25rem; }
+.svarfelt { margin-top: 1.5rem; }
 
 .tilbakemelding {
     border-radius: 12px;
-    padding: 1rem;
-    margin-bottom: 0.75rem;
-    font-size: 1.05rem;
-    line-height: 1.5;
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 0.85rem;
+    font-size: 1.1rem;
+    line-height: 1.55;
 }
 
 .tilbakemelding.riktig { background: #d8f3dc; border-left: 6px solid #2d9c4a; }
 .tilbakemelding.feil { background: #fdeeee; border-left: 6px solid #d64545; }
-.tilbakemelding .minne { margin: 0.6rem 0 0; color: #555; font-size: 0.95rem; }
+.tilbakemelding .minne { margin: 0.7rem 0 0; color: #555; font-size: 1rem; }
 
 .neste-knapp {
     width: 100%;
     background: #4a90e2;
     color: white;
-    padding: 1rem;
-    min-height: 56px;
+    padding: 1.1rem;
+    min-height: 60px;
     font-weight: bold;
 }
 
 .neste-knapp:hover { background: #3a7bc8; }
+
+/* Enter-hintet gir bare mening der det finnes tastatur */
+@media (hover: hover) {
+    .neste-knapp::after { content: '  \21B5'; opacity: 0.75; }
+}
 
 .sekundaer-knapp {
     width: 100%;
     background: none;
     border: 2px solid #4a90e2;
     color: #4a90e2;
-    padding: 0.85rem;
+    padding: 0.9rem;
     min-height: 48px;
-    margin-top: 0.6rem;
+    margin-top: 0.7rem;
 }
+
+.sekundaer-knapp:hover { background: #eaf2fb; }
 
 /* ---------- Resultat ---------- */
 
 .resultat {
     background: white;
     border-radius: 16px;
-    padding: 1.5rem;
+    padding: 2rem;
     text-align: center;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    max-width: 520px;
+    margin: 0 auto;
 }
 
 .resultat h2 { margin-top: 0; color: #4a90e2; }
 
 .store-stjerner {
-    font-size: 3rem;
+    font-size: 3.5rem;
     color: #f5a623;
     margin: 0.5rem 0 1rem;
 }
 
-.resultatliste {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 1.5rem;
-}
-
-.resultatliste li {
-    padding: 0.4rem 0;
-    border-bottom: 1px solid #eef1f5;
-}
-
+.resultatliste { list-style: none; padding: 0; margin: 0 0 1.5rem; }
+.resultatliste li { padding: 0.5rem 0; border-bottom: 1px solid #eef1f5; }
 .resultatliste li:last-child { border-bottom: none; }
 
 /* ---------- Varsel ---------- */
@@ -346,21 +409,37 @@
     background: #fff3d6;
     border-left: 6px solid #f5a623;
     border-radius: 8px;
-    padding: 0.75rem 1rem;
+    padding: 0.85rem 1.25rem;
     font-size: 0.95rem;
-    margin: 0 0 1rem;
+    margin: 0 0 1.25rem;
 }
 
 /* ---------- Meny ---------- */
 
 #ordklasser .bottom-menu a.aktiv { background: #4a90e2; }
 
-/* ---------- Større skjerm ---------- */
+/* ---------- Mobil og nettbrett ---------- */
 
-@media screen and (min-width: 600px) {
-    .rutenett { grid-template-columns: repeat(4, 1fr); }
+@media screen and (max-width: 700px) {
+    #ordklasser main { padding: 1rem 1rem 6rem; }
+    .regelkort { padding: 1rem; margin-bottom: 1.5rem; }
+    .regelkort .regel { font-size: 1.25rem; }
+    .sporsmal { font-size: 1.3rem; }
+    .stort-ord { font-size: 2.4rem; padding: 1.75rem 1rem; }
+    .setning { font-size: 1.25rem; line-height: 2.4; padding: 1.25rem 1rem; }
+    .ordknapp { font-size: 1.2rem; }
+    .rutenett { grid-template-columns: repeat(2, 1fr); }
+    .valg { flex-direction: column; }
+}
+
+/* Uten mus er tastemerkene bare støy */
+@media (hover: none) {
+    .tast { display: none; }
+    .hjelp summary::after { content: ''; }
+    .neste-knapp { font-size: 1.1rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
+    #ordklasser button { transition: none; }
     .framdrift-fyll { transition: none; }
 }
