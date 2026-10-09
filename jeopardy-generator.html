@@ -260,7 +260,7 @@ h1 {
 .gruppe { border: 0; margin: 0 0 14px; padding: 0; min-width: 0; }
 .gruppe legend { font-weight: 700; font-size: 15px; padding: 0; margin-bottom: 8px; }
 
-.temaer { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; }
+.temaer { display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: 8px; }
 .tema-knapp {
   display: flex;
   flex-direction: column;
@@ -459,7 +459,7 @@ h1 {
   margin: 0 0 10px;
   text-align: center;
   overflow-wrap: anywhere;
-  text-shadow: 2px 2px 0 rgba(0, 0, 0, .6);
+  text-shadow: var(--pv-tallskygge, 2px 2px 0 rgba(0, 0, 0, .6));
 }
 .mini-brett { display: grid; gap: 5px; min-width: min-content; }
 .mb-kat {
@@ -477,7 +477,7 @@ h1 {
   letter-spacing: .02em;
   text-align: center;
   overflow-wrap: anywhere;
-  text-shadow: 1px 1px 0 rgba(0, 0, 0, .55);
+  text-shadow: var(--pv-tekstskygge, 1px 1px 0 rgba(0, 0, 0, .55));
 }
 .mb-rute {
   padding: 10px 4px;
@@ -488,7 +488,7 @@ h1 {
   line-height: 1.2;
   text-align: center;
   font-variant-numeric: tabular-nums;
-  text-shadow: 2px 2px 0 rgba(0, 0, 0, .55);
+  text-shadow: var(--pv-tallskygge, 2px 2px 0 rgba(0, 0, 0, .55));
   box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .22);
 }
 .mb-rute.tom { background: transparent; box-shadow: none; outline: 1px dashed rgba(255, 255, 255, .14); outline-offset: -1px; }
@@ -593,7 +593,7 @@ h1 {
           <ul class="tips">
             <li>Lag så mange kategorier og spørsmål du vil. Brettet tilpasser seg.</li>
             <li>Står poeng tomt, får spørsmålene 100, 200, 300 … i den rekkefølgen de står.</li>
-            <li>Vil du bruke jokere? Fyll også ut kolonnene <em>Feil svar 1</em>, <em>Feil svar 2</em> og <em>Hint</em>. Tomme celler er greit.</li>
+            <li>Vil du bruke jokere? Fyll også ut kolonnene <em>Feil svar 1</em>, <em>Feil svar 2</em> og <em>Hint</em> (E, F og G). Tomme celler er greit.</li>
             <li>Virker med .xlsx fra Excel, Google Regneark og Numbers, og med .csv.</li>
           </ul>
           <button type="button" class="knapp sekundar" id="last-ned-mal">
@@ -842,6 +842,7 @@ h1 {
   --sp-bg: radial-gradient(130% 90% at 50% 30%, #1533c8 0%, #0e2182 58%, #08134c 100%);
   --joker-bg: #3a4fb0;
   --rute-ramme: rgba(0, 0, 0, .22);
+  --slor: rgba(0, 0, 0, .3);
   --topp-bg: transparent;
   --panel-bg: transparent;
   --tallskygge: 3px 3px 0 rgba(1, 3, 15, .6);
@@ -852,6 +853,8 @@ h1 {
   --svak: #bdc6f0;
   --riktig: #2fd27a;
   --feil: #ff9ca6;
+  --riktig-tekst: #03230f;
+  --feil-tekst: #2b0006;
   --font-tall: "Anton", Impact, "Haettenschweiler", "Arial Narrow Bold", "Arial Narrow", sans-serif;
   --font-ledetekst: "Libre Baskerville", Georgia, "Times New Roman", serif;
   --font-ui: "Lexend", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
@@ -905,7 +908,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   padding: 12px 22px;
   border-radius: 10px;
   border: 2px solid rgba(255, 255, 255, .35);
-  background: rgba(0, 0, 0, .25);
+  background: var(--slor);
   color: var(--hvit);
   font-weight: 700;
   font-size: 18px;
@@ -940,7 +943,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   margin: 0;
   padding: 12px 16px;
   border-radius: 10px;
-  background: rgba(0, 0, 0, .3);
+  background: var(--slor);
   border-left: 4px solid var(--gull);
   font-size: 17px;
 }
@@ -952,7 +955,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   padding: 16px 18px;
   border: 2px solid var(--gull);
   border-radius: 12px;
-  background: rgba(0, 0, 0, .35);
+  background: var(--slor);
 }
 .fortsett p { margin: 0; }
 .legg-til label { display: block; font-weight: 700; font-size: 24px; margin-bottom: 10px; }
@@ -965,7 +968,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   padding: 12px 14px;
   border-radius: 10px;
   border: 2px solid rgba(255, 255, 255, .3);
-  background: rgba(0, 0, 0, .35);
+  background: var(--slor);
   color: var(--hvit);
 }
 .legg-til input::placeholder { color: var(--svak); opacity: .8; }
@@ -990,12 +993,11 @@ button { font: inherit; color: inherit; cursor: pointer; }
   padding: 0 10px;
   border: 0;
   border-radius: 999px;
-  background: rgba(0, 0, 0, .32);
+  background: var(--slor);
   font-size: 16px;
   font-weight: 700;
 }
-.fjern:hover { background: var(--feil); }
-.fjern.bekreft { background: var(--feil); }
+.fjern:hover, .fjern.bekreft { background: var(--feil); color: var(--feil-tekst); }
 .melding { margin: 0; min-height: 1.4em; color: var(--gull); }
 
 /* ---------- Brettet ---------- */
@@ -1026,7 +1028,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   padding: 6px 14px;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, .25);
-  background: rgba(0, 0, 0, .28);
+  background: var(--slor);
   font-size: 15px;
   white-space: nowrap;
   text-decoration: none;
@@ -1057,14 +1059,14 @@ button { font: inherit; color: inherit; cursor: pointer; }
   font-family: var(--font-tall);
   text-transform: uppercase;
   font-size: clamp(14px, 1.8vw, 30px);
-  font-size: min(13cqi, 30cqh);
+  font-size: max(10px, min(13cqi, 30cqh));
   line-height: 1.05;
   letter-spacing: .02em;
   overflow-wrap: anywhere;
   hyphens: auto;
   text-shadow: var(--tekstskygge);
 }
-.kat.lang span { font-size: min(10cqi, 23cqh); }
+.kat.lang span { font-size: max(9px, min(10cqi, 23cqh)); }
 .rute {
   container-type: size;
   min-height: 0;
@@ -1115,6 +1117,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   flex-direction: column;
   align-items: center;
   min-width: 120px;
+  max-width: max(190px, calc(25% - 6px));
   padding: 4px 14px 8px;
   border-radius: 8px;
   background: var(--panel-a);
@@ -1127,7 +1130,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   font-variant-numeric: tabular-nums;
 }
 .pb-navn {
-  max-width: 16ch;
+  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1226,7 +1229,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   padding: 12px 26px;
   border-radius: 999px;
   border: 3px solid var(--gull);
-  background: rgba(0, 0, 0, .35);
+  background: var(--slor);
   font-family: var(--font-ledetekst);
   font-weight: 700;
   font-size: clamp(20px, 2.6vw, 42px);
@@ -1245,7 +1248,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   max-width: 46ch;
   padding: 10px 18px;
   border-radius: 12px;
-  background: rgba(0, 0, 0, .35);
+  background: var(--slor);
   border-left: 4px solid var(--gull);
   font-size: clamp(17px, 1.7vw, 26px);
   text-align: left;
@@ -1321,7 +1324,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   flex: 1 1 240px;
   height: 16px;
   border-radius: 999px;
-  background: rgba(0, 0, 0, .38);
+  background: var(--slor);
   overflow: hidden;
 }
 #timer-fyll {
@@ -1339,12 +1342,15 @@ button { font: inherit; color: inherit; cursor: pointer; }
   font-variant-numeric: tabular-nums;
 }
 #timer-ute {
+  padding: .12em .4em;
+  border-radius: 6px;
+  background: var(--feil);
+  color: var(--feil-tekst);
   font-family: var(--font-tall);
   text-transform: uppercase;
   letter-spacing: .04em;
   font-size: clamp(24px, 2.6vw, 42px);
   line-height: 1;
-  color: var(--feil);
 }
 .timer.lite #timer-fyll { background: var(--feil); }
 .timer.lite #timer-tall { color: var(--feil); }
@@ -1377,7 +1383,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   margin: 10px auto 0;
   padding: 12px 14px;
   border-radius: 12px;
-  background: rgba(0, 0, 0, .4);
+  background: var(--slor);
   border: 2px solid var(--gull);
   display: flex;
   flex-direction: column;
@@ -1415,7 +1421,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   padding: 8px 10px 10px;
   border-radius: 10px;
   border: 2px solid transparent;
-  background: rgba(0, 0, 0, .3);
+  background: var(--slor);
   transition: background-color .15s, border-color .15s;
 }
 .pg-kort.riktig { border-color: var(--riktig); background: rgba(47, 210, 122, .18); }
@@ -1437,8 +1443,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 .pg-knapp.pluss:hover { border-color: var(--riktig); }
 .pg-knapp.minus:hover { border-color: var(--feil); }
-.pg-knapp.pluss[aria-pressed="true"] { background: var(--riktig); border-color: var(--riktig); color: #03230f; }
-.pg-knapp.minus[aria-pressed="true"] { background: var(--feil); border-color: var(--feil); color: #2b0006; }
+.pg-knapp.pluss[aria-pressed="true"] { background: var(--riktig); border-color: var(--riktig); color: var(--riktig-tekst); }
+.pg-knapp.minus[aria-pressed="true"] { background: var(--feil); border-color: var(--feil); color: var(--feil-tekst); }
 
 .sp-bunn {
   display: flex;
@@ -1489,13 +1495,13 @@ button { font: inherit; color: inherit; cursor: pointer; }
   gap: 12px;
   padding: 10px 18px;
   border-radius: 10px;
-  background: rgba(0, 0, 0, .35);
+  background: var(--slor);
   font-size: 22px;
 }
 .rang-plass { font-family: var(--font-tall); color: var(--svak); }
 .rang-navn { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .rang-poeng { font-family: var(--font-tall); font-variant-numeric: tabular-nums; }
-.rang-1 { font-size: 32px; border: 2px solid var(--gull); background: rgba(0, 0, 0, .45); }
+.rang-1 { font-size: 32px; border: 2px solid var(--gull); background: var(--slor); }
 .rang-1 .rang-plass, .rang-1 .rang-poeng { color: var(--gull); }
 .rang-2, .rang-3 { font-size: 26px; }
 
@@ -1513,6 +1519,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
   color: var(--hvit);
   box-shadow: 0 10px 30px rgba(0, 0, 0, .45);
 }
+.toast a { color: var(--gull); margin-left: 6px; font-weight: 700; }
+.musikk-oppsett a { color: var(--gull); font-weight: 700; }
 
 @media (max-width: 640px) {
   body { font-size: 16px; }
@@ -1746,8 +1754,18 @@ button { font: inherit; color: inherit; cursor: pointer; }
   let S = tomTilstand();
   let lagret = null;
   function lagre() {
-    if (!LAGRE) return;
+    if (!LAGRE || !S.startet || !S.spillere.length) return;
     try { localStorage.setItem(NOKKEL, JSON.stringify(S)); } catch (e) { /* lagring ikke tilgjengelig */ }
+  }
+  // Lagrer mens et spørsmål er åpent: en joker på det åpne spørsmålet regnes som ubrukt,
+  // fordi den gis tilbake hvis spørsmålet lukkes uten poeng.
+  function lagreTrygt() {
+    const j = aktiv && aktiv.joker;
+    const p = j && S.spillere.find(x => x.id === j.id);
+    if (!p || !p.jokere || !p.jokere[j.type]) { lagre(); return; }
+    p.jokere[j.type]--;
+    lagre();
+    p.jokere[j.type]++;
   }
   function hentLagret() {
     if (!LAGRE) return null;
@@ -1816,7 +1834,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
         }
         S.spillere = S.spillere.filter(x => x.id !== s.id);
         fjernVenter = null;
-        if (S.startet) lagre();
+        lagre();
         tegnSpillerliste();
         $('nytt-navn').focus();
       });
@@ -1853,9 +1871,19 @@ button { font: inherit; color: inherit; cursor: pointer; }
       leggTilNavn(tekst);
     }
   });
+  let startVenter = null;
   $('start-knapp').addEventListener('click', () => {
     if (!S.spillere.length) return;
+    if (modus === 'ny' && lagret && !startVenter) {
+      $('start-knapp').textContent = 'Trykk igjen for å slette spillet som ikke er ferdig';
+      startVenter = setTimeout(() => { startVenter = null; $('start-knapp').textContent = 'Start spillet'; }, 4000);
+      return;
+    }
+    clearTimeout(startVenter);
+    startVenter = null;
     if (modus === 'ny') {
+      lagret = null;
+      $('fortsett').hidden = true;
       S.brukt = {};
       S.historikk = [];
       S.femti = {};
@@ -2044,7 +2072,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
     if (aktiv.fasitVist) return { ok: false, grunn: 'Fasit er allerede vist.' };
     if (aktiv.joker) return { ok: false, grunn: 'Det er allerede brukt en joker på dette spørsmålet.' };
     if (TID && timer.igjen <= 0) return { ok: false, grunn: 'Tiden er ute.' };
-    if (id === '5050' && (!s.feil.length || !s.fasit)) return { ok: false, grunn: 'Ingen feil svar er lagt inn for dette spørsmålet.' };
+    if (id === '5050' && !s.fasit) return { ok: false, grunn: 'Spørsmålet har ingen fasit.' };
+    if (id === '5050' && !s.feil.length) return { ok: false, grunn: 'Ingen feil svar er lagt inn for dette spørsmålet.' };
     if (id === 'hint' && !s.hint) return { ok: false, grunn: 'Ingen hint er lagt inn for dette spørsmålet.' };
     if (!S.spillere.some(p => igjen(p, id) > 0)) return { ok: false, grunn: 'Alle har brukt opp denne jokeren.' };
     return { ok: true, grunn: '' };
@@ -2070,8 +2099,10 @@ button { font: inherit; color: inherit; cursor: pointer; }
   let tidForVelger = false;
   function visJokerVelger(id) {
     if (!aktiv || !jokerTilgjengelig(id).ok) return;
-    tidForVelger = timer.kjorer;
-    pauseTimer();
+    if ($('joker-velger').hidden) {
+      tidForVelger = timer.kjorer;
+      pauseTimer();
+    }
     const liste = $('joker-velger-spillere');
     liste.textContent = '';
     $('joker-velger-tekst').textContent = 'Hvem bruker ' + JOKER_INFO[id].navn + '?';
@@ -2112,14 +2143,18 @@ button { font: inherit; color: inherit; cursor: pointer; }
     if (!aktiv || !jokerTilgjengelig(id).ok || igjen(p, id) <= 0) { tidForVelger = false; return; }
     p.jokere = p.jokere || {};
     p.jokere[id] = brukte(p, id) + 1;
-    aktiv.joker = { id: p.id, type: id };
+    aktiv.joker = { id: p.id, type: id, tidFor: { igjen: timer.igjen, total: timer.total, kjorte: tidForVelger } };
     visJokerEffekt();
     if (id === 'venn') startTimer();
-    else if (id === 'tid') { if (tidForVelger || timer.igjen > 0) leggTilTid(TID * 1000); }
-    else if (tidForVelger) fortsettTimer();
+    else if (id === 'tid') {
+      timer.igjen = Math.max(0, timer.igjen) + TID * 1000;
+      timer.total = timer.igjen;
+      if (tidForVelger) fortsettTimer(); else visTimer();
+    } else if (tidForVelger) fortsettTimer();
     tidForVelger = false;
     lyd('joker');
     tegnJokerrad();
+    visBunn();
     try { $('sporsmal').focus({ preventScroll: true }); } catch (e) { /* ignorer */ }
   }
 
@@ -2137,6 +2172,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
     if (j.type === '5050') {
       if (!S.femti[aktiv.key] || !s.feil.includes(S.femti[aktiv.key])) {
         S.femti[aktiv.key] = s.feil[Math.floor(Math.random() * s.feil.length)];
+        lagreTrygt();
       }
       const feil = S.femti[aktiv.key];
       const valg = Math.random() < 0.5 ? [s.fasit, feil] : [feil, s.fasit];
@@ -2168,6 +2204,15 @@ button { font: inherit; color: inherit; cursor: pointer; }
     const j = aktiv.joker;
     const p = S.spillere.find(x => x.id === j.id);
     if (p && p.jokere && p.jokere[j.type]) p.jokere[j.type]--;
+    if (TID && j.tidFor && (j.type === 'tid' || j.type === 'venn')) {
+      // Ta bort tiden jokeren ga, men behold tiden som allerede er brukt
+      const kjorte = timer.kjorer;
+      pauseTimer();
+      if (j.type === 'tid') timer.igjen = Math.max(0, timer.igjen - TID * 1000);
+      else timer.igjen = Math.max(0, j.tidFor.igjen - (TID * 1000 - timer.igjen));
+      timer.total = j.tidFor.total || TID * 1000;
+      if (kjorte && timer.igjen > 0) fortsettTimer(); else visTimer();
+    }
     aktiv.joker = null;
     $('joker-visning').textContent = '';
     $('joker-banner').hidden = true;
@@ -2205,6 +2250,13 @@ button { font: inherit; color: inherit; cursor: pointer; }
     $('sp-poenggiving').hidden = false;
     lyd('fasit');
     musikkStyring();
+    visBunn();
+  }
+  function visBunn() {
+    requestAnimationFrame(() => {
+      const bunn = document.querySelector('.sp-bunn');
+      if (bunn && bunn.scrollIntoView) bunn.scrollIntoView({ block: 'end' });
+    });
   }
 
   function tegnPoenggiving() {
@@ -2271,9 +2323,13 @@ button { font: inherit; color: inherit; cursor: pointer; }
       if (jokerTrekk(id)) sum += ' (inkl. joker ' + poengTekst(jokerTrekk(id)) + ')';
       kort.querySelector('.pg-sum').textContent = sum;
       const medJoker = jokerSpiller(id) && KOSTNAD !== 'gratis' ? ' (med joker)' : '';
-      if (v === 1) deler.push(p.navn + ' får ' + tall(poengFor(id, 1)) + medJoker);
+      const avgift = v && jokerTrekk(id) ? ' (' + (v === 1 ? '+' : '−') + tall(poengFor(id, v)) + ' og −' + tall(TREKK) + ' for jokeren)' : '';
+      if (v === 1) {
+        const netto = jokerTrekk(id) ? d : poengFor(id, 1);
+        deler.push(p.navn + (netto < 0 ? ' mister ' : ' får ') + tall(netto) + (avgift || medJoker));
+      }
       if (v === -1) {
-        if (jokerSpiller(id)) deler.push(p.navn + ' mister ' + tall(-poengFor(id, -1)) + medJoker);
+        if (jokerSpiller(id)) deler.push(p.navn + ' mister ' + tall(jokerTrekk(id) ? d : poengFor(id, -1)) + (avgift || medJoker));
         else minus.push(p.navn);
       }
       if (!v && jokerTrekk(id)) deler.push(p.navn + ' betaler ' + tall(TREKK) + ' for jokeren');
@@ -2469,7 +2525,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   }
   $('knapp-lyd').addEventListener('click', () => {
     S.lyd = !S.lyd;
-    lagre();
+    lagreTrygt();
     oppdaterLydknapp();
     if (S.lyd) lyd('tikk');
   });
@@ -2520,12 +2576,19 @@ button { font: inherit; color: inherit; cursor: pointer; }
     lydfil.volume = MODUS === 'alltid' && aktiv ? grunn * 0.5 : grunn;
     if (spill && lydfil.paused) {
       const p = lydfil.play();
-      if (p && p.catch) p.catch(() => { oppdaterMusikkknapp(true); });
+      if (p && p.catch) p.catch(e => {
+        if ((e && e.name === 'NotSupportedError') || lydfil.error) {
+          musikkFeil = true;
+          lydfil.pause();
+          oppdaterMusikkknapp();
+          toast('Musikkfilen kan ikke spilles av på denne maskinen.');
+        } else oppdaterMusikkknapp(true);
+      });
     } else if (!spill && !lydfil.paused) lydfil.pause();
   }
   function oppdaterMusikkknapp(trengerKlikk) {
     const k = $('knapp-musikk');
-    k.hidden = !HAR_LYDFIL;
+    k.hidden = !HAR_LYDFIL || musikkFeil;
     if (trengerKlikk === true && S.musikk) k.textContent = 'Klikk for å starte musikken';
     else k.textContent = S.musikk ? 'Musikk: på' : 'Musikk: av';
     k.setAttribute('aria-pressed', String(!!S.musikk));
@@ -2538,16 +2601,17 @@ button { font: inherit; color: inherit; cursor: pointer; }
       return;
     }
     S.musikk = !S.musikk;
-    lagre();
+    lagreTrygt();
     oppdaterMusikkknapp();
     musikkStyring();
   });
   document.addEventListener('keydown', e => {
-    if ((e.key === 'm' || e.key === 'M') && HAR_LYDFIL && !e.ctrlKey && !e.metaKey && !e.altKey) {
+    if ((e.key === 'm' || e.key === 'M') && HAR_LYDFIL && !musikkFeil && !e.ctrlKey && !e.metaKey && !e.altKey) {
       const t = e.target;
       if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+      if (!S.startet || !$('oppsett').hidden) return;
       S.musikk = !S.musikk;
-      lagre();
+      lagreTrygt();
       oppdaterMusikkknapp();
       musikkStyring();
     }
@@ -2558,7 +2622,19 @@ button { font: inherit; color: inherit; cursor: pointer; }
     const url = 'https://www.youtube.com/watch?v=' + M.youtube + (start ? '&t=' + start + 's' : '');
     let vindu = null;
     try { vindu = window.open(url, 'jeopardy-musikk', 'popup,width=520,height=360'); } catch (e) { vindu = null; }
-    if (!vindu) toast('Nettleseren stoppet vinduet. Tillat sprettoppvinduer for denne filen, eller åpne lenken selv: ' + url);
+    if (!vindu) {
+      const tekst = 'Nettleseren stoppet vinduet. Tillat sprettoppvinduer for denne filen, eller bruk lenken: ';
+      toast(tekst, url);
+      if (!$('oppsett').hidden) {
+        const m = $('musikk-oppsett-tekst');
+        m.textContent = tekst;
+        const a = lag('a', null, 'Åpne musikken på YouTube');
+        a.href = url;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        m.append(a);
+      }
+    }
   }
   $('musikk-vindu').addEventListener('click', apneYoutube);
   $('knapp-yt').addEventListener('click', apneYoutube);
@@ -2600,7 +2676,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
     }
     $('resultat-over').textContent = ferdigSpilt ? 'Alle spørsmålene er brukt' : 'Stillingen etter ' + antallBrukt() + ' av ' + ANTALL + ' spørsmål';
     $('resultat-tittel').textContent = tittel;
-    $('tilbake-til-brett').hidden = ferdigSpilt;
+    $('tilbake-til-brett').textContent = ferdigSpilt ? 'Tilbake til brettet (angre siste)' : 'Tilbake til brettet';
+    $('tilbake-til-brett').hidden = ferdigSpilt && !S.historikk.length;
     visSkjerm('resultat');
     if (ferdigSpilt && sortert.length) {
       konfetti();
@@ -2627,7 +2704,10 @@ button { font: inherit; color: inherit; cursor: pointer; }
   }
   const spilletPagar = () => antallBrukt() > 0 && antallBrukt() < ANTALL;
 
-  $('tilbake-til-brett').addEventListener('click', visBrett);
+  $('tilbake-til-brett').addEventListener('click', () => {
+    visBrett();
+    if (antallBrukt() >= ANTALL && S.historikk.length) toast('Trykk «Angre siste» hvis du vil rette det siste spørsmålet.');
+  });
   bekreftKlikk($('spill-igjen'), spilletPagar, () => {
     S.spillere.forEach(s => { s.poeng = 0; s.jokere = {}; });
     S.brukt = {};
@@ -2688,12 +2768,19 @@ button { font: inherit; color: inherit; cursor: pointer; }
   }
 
   let toastTid = null;
-  function toast(tekst) {
+  function toast(tekst, lenke) {
     const el = $('toast');
     el.textContent = tekst;
+    if (lenke) {
+      const a = lag('a', null, 'Åpne musikken på YouTube');
+      a.href = lenke;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      el.append(a);
+    }
     el.hidden = false;
     clearTimeout(toastTid);
-    toastTid = setTimeout(() => { el.hidden = true; }, 3800);
+    toastTid = setTimeout(() => { el.hidden = true; }, lenke ? 15000 : 3800);
   }
 
   // ---------- Start ----------
@@ -2726,39 +2813,39 @@ button { font: inherit; color: inherit; cursor: pointer; }
 
   // ---------- Eksempelspørsmål (brukes også i Excel-malen) ----------
   const EKSEMPEL = [
-    ['Geografi', 100, 'Hva er hovedstaden i Sverige?', 'Stockholm', 'Göteborg', 'Malmö', 'Uppsala', 'Byen ligger der innsjøen Mälaren møter Østersjøen.'],
-    ['Geografi', 200, 'Hva heter Norges lengste elv?', 'Glomma', 'Gudbrandsdalslågen', 'Numedalslågen', 'Tana', 'Den renner ut i havet ved Fredrikstad.'],
-    ['Geografi', 300, 'I hvilket land ligger byen Kyoto?', 'Japan', 'Kina', 'Sør-Korea', 'Thailand', 'Landet består av mange øyer i Øst-Asia.'],
-    ['Geografi', 400, 'Hva heter verdens største hav?', 'Stillehavet', 'Atlanterhavet', 'Det indiske hav', 'Nordishavet', 'Det ligger mellom Asia og Amerika.'],
-    ['Geografi', 500, 'Hva heter Norges høyeste fjell?', 'Galdhøpiggen', 'Glittertind', 'Snøhetta', 'Store Skagastølstind', 'Det ligger i Jotunheimen og er 2469 meter høyt.'],
-    ['Historie', 100, 'Hvilket år fikk Norge sin grunnlov?', '1814', '1905', '1945', '1884', 'Den ble skrevet under på Eidsvoll.'],
-    ['Historie', 200, 'Hva het skipet som sank på sin første tur over Atlanterhavet i 1912?', 'Titanic', 'Lusitania', 'Britannic', 'Olympic', 'Skipet traff et isfjell.'],
-    ['Historie', 300, 'Hvilket år falt Berlinmuren?', '1989', '1991', '1961', '1985', 'Det var to år før Sovjetunionen ble oppløst.'],
-    ['Historie', 400, 'Hvilken konge falt i slaget på Stiklestad i 1030?', 'Olav Haraldsson (Olav den hellige)', 'Harald Hårfagre', 'Olav Tryggvason', 'Håkon den gode', 'Han ble senere kåret til helgen.'],
-    ['Historie', 500, 'Hvilken by ble begravd i aske da vulkanen Vesuv hadde utbrudd i år 79?', 'Pompeii', 'Roma', 'Napoli', 'Athen', 'Byen ligger i Italia, rett ved foten av vulkanen.'],
-    ['Naturfag', 100, 'Hvilken planet er nærmest sola?', 'Merkur', 'Venus', 'Mars', 'Jorda', 'Den er også den minste planeten i solsystemet.'],
-    ['Naturfag', 200, 'Hva kalles prosessen der planter lager sukker ved hjelp av sollys?', 'Fotosyntese', 'Respirasjon', 'Fordøyelse', 'Fordamping', 'Ordet betyr omtrent «å sette sammen med lys».'],
-    ['Naturfag', 300, 'Hvilket grunnstoff har det kjemiske symbolet Au?', 'Gull', 'Sølv', 'Aluminium', 'Kobber', 'Symbolet kommer fra det latinske ordet aurum.'],
-    ['Naturfag', 400, 'Hvilken gass er det mest av i lufta vi puster inn?', 'Nitrogen (ca. 78 %)', 'Oksygen', 'Karbondioksid', 'Hydrogen', 'Det er ikke oksygen.'],
-    ['Naturfag', 500, 'Hva heter den delen av cellen som inneholder arvestoffet?', 'Cellekjernen', 'Cellemembranen', 'Mitokondriene', 'Cellevæsken', 'Den styrer cellen og ligger ofte midt i den.'],
-    ['Norsk', 100, 'Hva kalles ord som betyr det motsatte av hverandre, som «varm» og «kald»?', 'Antonymer', 'Synonymer', 'Homonymer', 'Adjektiver', 'Det er det motsatte av synonymer.'],
-    ['Norsk', 200, 'Hvilken ordklasse hører ord som «stor» og «rød» til?', 'Adjektiv', 'Verb', 'Substantiv', 'Adverb', 'Ordklassen forteller hvordan noe er.'],
-    ['Norsk', 300, 'Fra hvilket språk kommer hilsenen «bonjour»?', 'Fransk', 'Spansk', 'Italiensk', 'Tysk', 'Språket snakkes i Paris.'],
-    ['Norsk', 400, 'Hva kalles ord som betyr omtrent det samme, som «glad» og «blid»?', 'Synonymer', 'Antonymer', 'Homonymer', 'Pronomener', 'Ordet begynner på S.'],
-    ['Norsk', 500, 'Hvem samlet «Norske folkeeventyr» sammen med Jørgen Moe?', 'Peter Christen Asbjørnsen', 'Henrik Wergeland', 'Ivar Aasen', 'Theodor Kittelsen', 'Fornavnet hans er Peter.'],
-    ['Sport', 100, 'Hvor mange spillere har et fotballag på banen samtidig?', '11', '9', '10', '12', 'Det er like mange som i bandy.'],
-    ['Sport', 200, 'I hvilken idrett bruker man puck?', 'Ishockey', 'Bandy', 'Curling', 'Innebandy', 'Spillerne har skøyter, hjelm og kølle.'],
-    ['Sport', 300, 'Hva heter tennisturneringen som spilles på gress i London?', 'Wimbledon', 'Roland-Garros', 'US Open', 'Australian Open', 'Spillerne må ha på seg hvite klær der.'],
-    ['Sport', 400, 'Hvor mange ringer er det i det olympiske symbolet?', 'Fem', 'Fire', 'Seks', 'Sju', 'Det er én ring for hver verdensdel som er med.'],
-    ['Sport', 500, 'Hvilken norsk by arrangerte vinter-OL i 1994?', 'Lillehammer', 'Oslo', 'Trondheim', 'Hamar', 'Byen ligger ved nordenden av Mjøsa.'],
-    ['Matematikk', 100, 'Hva er 7 · 8?', '56', '54', '48', '63', '7 · 7 = 49. Legg til én sjuer til.'],
-    ['Matematikk', 200, 'Hvor mange grader er vinklene i en trekant til sammen?', '180 grader', '90 grader', '360 grader', '270 grader', 'Det er halvparten av en hel sirkel.'],
-    ['Matematikk', 300, 'Hva er 25 % av 80?', '20', '25', '16', '40', '25 % er det samme som en firedel.'],
-    ['Matematikk', 400, 'Hva kalles en mangekant med seks sider?', 'Sekskant (heksagon)', 'Femkant', 'Åttekant', 'Sjukant', 'Cellene i en bikube har denne formen.'],
-    ['Matematikk', 500, 'Hva er det minste primtallet?', '2', '1', '3', '0', 'Det er det eneste partallet som er et primtall.']
+    ['Geografi', 100, 'Hva er hovedstaden i Sverige?', 'Stockholm', 'Göteborg', 'Malmö', 'Byen ligger der innsjøen Mälaren møter Østersjøen.'],
+    ['Geografi', 200, 'Hva heter Norges lengste elv?', 'Glomma', 'Gudbrandsdalslågen', 'Numedalslågen', 'Den renner ut i havet ved Fredrikstad.'],
+    ['Geografi', 300, 'I hvilket land ligger byen Kyoto?', 'Japan', 'Kina', 'Sør-Korea', 'Landet består av mange øyer i Øst-Asia.'],
+    ['Geografi', 400, 'Hva heter verdens største hav?', 'Stillehavet', 'Atlanterhavet', 'Det indiske hav', 'Det ligger mellom Asia og Amerika.'],
+    ['Geografi', 500, 'Hva heter Norges høyeste fjell?', 'Galdhøpiggen', 'Glittertind', 'Snøhetta', 'Det ligger i Jotunheimen og er 2469 meter høyt.'],
+    ['Historie', 100, 'Hvilket år fikk Norge sin grunnlov?', '1814', '1905', '1945', 'Den ble skrevet under på Eidsvoll.'],
+    ['Historie', 200, 'Hva het skipet som sank på sin første tur over Atlanterhavet i 1912?', 'Titanic', 'Lusitania', 'Britannic', 'Skipet traff et isfjell.'],
+    ['Historie', 300, 'Hvilket år falt Berlinmuren?', '1989', '1991', '1961', 'Det var to år før Sovjetunionen ble oppløst.'],
+    ['Historie', 400, 'Hvilken konge falt i slaget på Stiklestad i 1030?', 'Olav Haraldsson (Olav den hellige)', 'Harald Hårfagre', 'Olav Tryggvason', 'Han ble senere kåret til helgen.'],
+    ['Historie', 500, 'Hvilken by ble begravd i aske da vulkanen Vesuv hadde utbrudd i år 79?', 'Pompeii', 'Roma', 'Napoli', 'Byen ligger i Italia, rett ved foten av vulkanen.'],
+    ['Naturfag', 100, 'Hvilken planet er nærmest sola?', 'Merkur', 'Venus', 'Mars', 'Den er også den minste planeten i solsystemet.'],
+    ['Naturfag', 200, 'Hva kalles prosessen der planter lager sukker ved hjelp av sollys?', 'Fotosyntese', 'Respirasjon', 'Fordøyelse', 'Ordet betyr omtrent «å sette sammen med lys».'],
+    ['Naturfag', 300, 'Hvilket grunnstoff har det kjemiske symbolet Au?', 'Gull', 'Sølv', 'Aluminium', 'Symbolet kommer fra det latinske ordet aurum.'],
+    ['Naturfag', 400, 'Hvilken gass er det mest av i lufta vi puster inn?', 'Nitrogen (ca. 78 %)', 'Oksygen', 'Karbondioksid', 'Det er ikke oksygen.'],
+    ['Naturfag', 500, 'Hva heter den delen av cellen som inneholder arvestoffet?', 'Cellekjernen', 'Cellemembranen', 'Mitokondriene', 'Den styrer cellen og ligger ofte midt i den.'],
+    ['Norsk', 100, 'Hva kalles ord som betyr det motsatte av hverandre, som «varm» og «kald»?', 'Antonymer', 'Synonymer', 'Homonymer', 'Det er det motsatte av synonymer.'],
+    ['Norsk', 200, 'Hvilken ordklasse hører ord som «stor» og «rød» til?', 'Adjektiv', 'Verb', 'Substantiv', 'Ordklassen forteller hvordan noe er.'],
+    ['Norsk', 300, 'Fra hvilket språk kommer hilsenen «bonjour»?', 'Fransk', 'Spansk', 'Italiensk', 'Språket snakkes i Paris.'],
+    ['Norsk', 400, 'Hva kalles ord som betyr omtrent det samme, som «glad» og «blid»?', 'Synonymer', 'Antonymer', 'Homonymer', 'Ordet begynner på S.'],
+    ['Norsk', 500, 'Hvem samlet «Norske folkeeventyr» sammen med Jørgen Moe?', 'Peter Christen Asbjørnsen', 'Henrik Wergeland', 'Ivar Aasen', 'Fornavnet hans er Peter.'],
+    ['Sport', 100, 'Hvor mange spillere har et fotballag på banen samtidig?', '11', '9', '10', 'Det er like mange som i bandy.'],
+    ['Sport', 200, 'I hvilken idrett bruker man puck?', 'Ishockey', 'Bandy', 'Curling', 'Spillerne har skøyter, hjelm og kølle.'],
+    ['Sport', 300, 'Hva heter tennisturneringen som spilles på gress i London?', 'Wimbledon', 'Roland-Garros', 'US Open', 'Spillerne må ha på seg hvite klær der.'],
+    ['Sport', 400, 'Hvor mange ringer er det i det olympiske symbolet?', 'Fem', 'Fire', 'Seks', 'Det er én ring for hver verdensdel som er med.'],
+    ['Sport', 500, 'Hvilken norsk by arrangerte vinter-OL i 1994?', 'Lillehammer', 'Oslo', 'Trondheim', 'Byen ligger ved nordenden av Mjøsa.'],
+    ['Matematikk', 100, 'Hva er 7 · 8?', '56', '54', '48', '7 · 7 = 49. Legg til én sjuer til.'],
+    ['Matematikk', 200, 'Hvor mange grader er vinklene i en trekant til sammen?', '180 grader', '90 grader', '360 grader', 'Det er halvparten av en hel sirkel.'],
+    ['Matematikk', 300, 'Hva er 25 % av 80?', '20', '25', '16', '25 % er det samme som en firedel.'],
+    ['Matematikk', 400, 'Hva kalles en mangekant med seks sider?', 'Sekskant (heksagon)', 'Femkant', 'Åttekant', 'Cellene i en bikube har denne formen.'],
+    ['Matematikk', 500, 'Hva er det minste primtallet?', '2', '1', '3', 'Det er det eneste partallet som er et primtall.']
   ];
-  const OVERSKRIFT_RAD = ['Kategori', 'Poeng', 'Spørsmål', 'Fasit', 'Feil svar 1', 'Feil svar 2', 'Feil svar 3', 'Hint'];
-  const STANDARD_KART = { kategori: 0, poeng: 1, sporsmal: 2, fasit: 3, feil: [4, 5, 6], hint: 7 };
+  const OVERSKRIFT_RAD = ['Kategori', 'Poeng', 'Spørsmål', 'Fasit', 'Feil svar 1', 'Feil svar 2', 'Hint'];
+  const STANDARD_KART = { kategori: 0, poeng: 1, sporsmal: 2, fasit: 3, feil: [4, 5], hint: 6 };
 
   const VEILEDNING = [
     ['Slik bruker du malen', ''],
@@ -2767,7 +2854,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
     ['Poeng', 'Et tall, for eksempel 100, 200, 300. Kan stå tomt. Da får spørsmålene 100, 200, 300 … i den rekkefølgen de står.'],
     ['Spørsmål', 'Teksten som vises på skjermen.'],
     ['Fasit', 'Svaret som vises når du trykker «Vis fasit».'],
-    ['Feil svar 1–3', 'Valgfritt. Brukes av jokeren 50/50, som viser fasit og ett av de feile svarene. Ett feil svar er nok.'],
+    ['Feil svar 1 og 2', 'Valgfritt. Et galt, men troverdig svar i samme stil som fasiten. Brukes av jokeren 50/50, som viser fasit og ett av de feile svarene. Ett feil svar er nok. Har du to, velger spillet ett av dem.'],
     ['Hint', 'Valgfritt. Brukes av jokeren Hint. Skriv et lite tips som hjelper uten å røpe svaret.'],
     ['Tips', 'Du kan ha så mange kategorier og spørsmål du vil. Slett eksemplene og skriv dine egne.'],
     ['Når du er ferdig', 'Lagre filen som Excel-arbeidsbok (.xlsx) og last den opp i Jeopardy-generatoren.']
@@ -3093,7 +3180,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   // Bare «Feil svar 1», «Feil svar 2» … kan ha et tall på slutten.
   // Datarader som «Spørsmål 1 i kategori 2» skal ikke tolkes som overskrift.
   function kolonneType(verdi) {
-    const tekst = String(verdi == null ? '' : verdi).trim();
+    const tekst = String(verdi == null ? '' : verdi).replace(/\s*[([][^)\]]*[)\]]/g, '').trim();
     const m = tekst.match(/^(.*?)\s*\d{1,2}$/);
     const kjerne = m ? m[1] : tekst;
     if (/\d/.test(kjerne)) return null;
@@ -3101,7 +3188,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
     if (!n) return null;
     for (const type of Object.keys(OVERSKRIFTER)) {
       if (OVERSKRIFTER[type].some(o => n.startsWith(o) && n.length <= o.length + 6)) {
-        return m && type !== 'feil' ? null : type;
+        return m && type !== 'feil' && type !== 'hint' ? null : type;
       }
     }
     return null;
@@ -3348,7 +3435,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
         '<Relationship Id="rId3" Type="' + REL_NS + '/styles" Target="styles.xml"/>' +
         '</Relationships>' },
       { navn: 'xl/styles.xml', data: stiler },
-      { navn: 'xl/worksheets/sheet1.xml', data: arkXml([OVERSKRIFT_RAD].concat(EKSEMPEL), { bredder: [18, 8, 56, 28, 20, 20, 20, 44], frys: true, valgt: true }) },
+      { navn: 'xl/worksheets/sheet1.xml', data: arkXml([OVERSKRIFT_RAD].concat(EKSEMPEL), { bredder: [18, 8, 56, 28, 22, 22, 44], frys: true, valgt: true }) },
       { navn: 'xl/worksheets/sheet2.xml', data: arkXml(VEILEDNING, { bredder: [24, 96], fetForsteKolonne: true }) }
     ];
     return lagZip(filer, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -3396,13 +3483,13 @@ button { font: inherit; color: inherit; cursor: pointer; }
     }
     return data;
   }
-  function byggSpillHtml(data) {
+  function byggSpillHtml(data, utenMusikk) {
     const stil = $('spillmal-stil').innerHTML.trim();
     const kropp = $('spillmal-kropp').innerHTML.trim();
     const json = JSON.stringify(data)
       .replace(/</g, '\\u003c').replace(/>/g, '\\u003e').replace(/&/g, '\\u0026')
       .replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029');
-    const musikk = data.musikk && data.musikk.type === 'fil' ? oppsett.musikk.base64 : '';
+    const musikk = data.musikk && data.musikk.type === 'fil' && !utenMusikk ? oppsett.musikk.base64 : '';
     return [
       '<!DOCTYPE html>',
       '<html lang="nb">',
@@ -3546,12 +3633,24 @@ button { font: inherit; color: inherit; cursor: pointer; }
       if (u8[0] === 0x50 && u8[1] === 0x4b) ark = await lesXlsx(buffer);
       else if (u8[0] === 0xD0 && u8[1] === 0xCF) {
         throw new Error('Dette er en eldre Excel-fil (.xls). Åpne den i Excel, velg Fil → Lagre som → Excel-arbeidsbok (.xlsx), og last opp den nye filen.');
-      } else ark = lesCsv(buffer);
+      } else {
+        if (/^(image|audio|video)\//.test(fil.type) || fil.type === 'application/pdf' || u8.subarray(0, 4096).includes(0)) {
+          throw new Error('«' + fil.name + '» er ikke et regneark. Velg en .xlsx- eller .csv-fil.');
+        }
+        ark = lesCsv(buffer);
+      }
       const valg = velgArk(ark);
       if (!valg) throw new Error('Filen er tom. Fant ingen rader med innhold.');
       const res = byggSpill(valg.ark.rader, valg.kart, valg.start);
       if (!valg.overskrift && res.antall) {
-        res.merknader.unshift({ niva: 'info', tekst: 'Fant ingen overskriftsrad. Kolonnene ble lest som A = Kategori, B = Poeng, C = Spørsmål og D = Fasit.' });
+        const rader = valg.ark.rader.slice(valg.start);
+        const har = c => rader.some(r => r && String(r[c] == null ? '' : r[c]).trim());
+        const feilKol = STANDARD_KART.feil.filter(har);
+        let tekst = 'Fant ingen overskriftsrad. Kolonnene ble lest som A = Kategori, B = Poeng, C = Spørsmål, D = Fasit';
+        if (feilKol.length) tekst += ', ' + feilKol.map(c => 'ABCDEFGH'[c]).join(' og ') + ' = Feil svar (til 50/50)';
+        if (har(STANDARD_KART.hint)) tekst += ', ' + 'ABCDEFGH'[STANDARD_KART.hint] + ' = Hint';
+        tekst += '. Legg inn en overskriftsrad hvis dette ikke stemmer.';
+        res.merknader.unshift({ niva: feilKol.length || har(STANDARD_KART.hint) ? 'varsel' : 'info', tekst: tekst });
       }
       if (!res.antall) {
         tilstand.merknader = res.merknader;
@@ -3639,6 +3738,12 @@ button { font: inherit; color: inherit; cursor: pointer; }
     if (luminans(R) > luminans(X)) hover = bland(R, '#000000', 0.10);
     const brukt = luminans(B) > 0.4 ? bland(R, B, 0.75) : bland(R, '#000000', 0.58);
     const skygge = bland(B, '#000000', 0.75);
+    const lysRute = luminans(R) > 0.35;
+    const mot = lysRute ? '#ffffff' : '#000000';
+    const riktig = lysRute ? sikre('#1f9d55', [R], 4.5, '#000000') : sikre('#2fd27a', [R], 4.5, '#ffffff');
+    const feil = lysRute ? sikre('#d62839', [R], 4.5, '#000000') : sikre('#ff5a6a', [R], 4.5, '#ffffff');
+    const tekstPa = (c, mork, lys) => (kontrast(c, lys) > kontrast(c, mork) ? lys : mork);
+    const gullMork = bland(T, '#000000', 0.88);
     const panelA = Math.max(0.70, 1 - 0.35 * tr);
     const hjorneA = t.bilde ? Math.max(0.64, 1 - 0.4 * tr) : 1;
     const S = rgba(skygge, 0.7);
@@ -3652,8 +3757,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
       '--rute-hover-a': rgba(hover, Math.min(1, 1 - tr + 0.15)),
       '--rute-brukt-a': rgba(brukt, Math.max(0.08, Math.pow(1 - tr, 2))),
       '--kat-a': rgba(R, Math.max(0.55, 1 - 0.5 * tr)),
-      '--panel-a': 'linear-gradient(' + rgba(R, panelA) + ', ' + rgba(bland(R, '#000000', 0.35), panelA) + ')',
-      '--sp-bg': 'radial-gradient(130% 90% at 50% 30%, ' + R + ' 0%, ' + bland(R, '#000000', 0.35) + ' 58%, ' + rgba(bland(R, '#000000', 0.62), hjorneA) + ' 100%)',
+      '--panel-a': 'linear-gradient(' + rgba(R, panelA) + ', ' + rgba(bland(R, mot, 0.35), panelA) + ')',
+      '--sp-bg': 'radial-gradient(130% 90% at 50% 30%, ' + R + ' 0%, ' + bland(R, mot, 0.35) + ' 58%, ' + rgba(bland(R, mot, 0.62), hjorneA) + ' 100%)',
       '--joker-bg': bland(R, T, 0.14),
       '--rute-ramme': tr > 0 ? rgba(X, 0.18) : 'rgba(0, 0, 0, .22)',
       '--topp-bg': t.bilde ? rgba(B, 0.75) : 'transparent',
@@ -3661,11 +3766,14 @@ button { font: inherit; color: inherit; cursor: pointer; }
       '--tallskygge': luminans(T) > 0.5 ? (tr >= 0.4 ? omriss : '3px 3px 0 ' + rgba(skygge, 0.6)) : 'none',
       '--tekstskygge': luminans(X) > 0.5 ? (tr >= 0.4 ? omriss : '2px 2px 0 ' + rgba(skygge, 0.6)) : 'none',
       '--gull': T,
-      '--gull-tekst': bland(T, '#000000', 0.88),
+      '--gull-tekst': tekstPa(T, gullMork, '#ffffff'),
       '--hvit': X,
-      '--svak': sikre(bland(X, R, 0.28), [R, B], 4.5, X),
-      '--riktig': sikre('#2fd27a', [R], 4.5, '#ffffff'),
-      '--feil': sikre('#ff5a6a', [R], 4.5, '#ffffff')
+      '--svak': sikre(bland(X, R, 0.28), [R, B, bland(R, mot, 0.62)], 4.5, X),
+      '--slor': lysRute ? 'rgba(255, 255, 255, .6)' : 'rgba(0, 0, 0, .3)',
+      '--riktig': riktig,
+      '--feil': feil,
+      '--riktig-tekst': tekstPa(riktig, '#03230f', '#ffffff'),
+      '--feil-tekst': tekstPa(feil, '#2b0006', '#ffffff')
     };
   }
 
@@ -3701,16 +3809,22 @@ button { font: inherit; color: inherit; cursor: pointer; }
     const ut = [];
     const kTall = kontrast(t.tall, v.rute);
     const kTekst = kontrast(t.tekst, v.kat);
-    if (kTall < 4.5) ut.push({ niva: 'feil', tekst: 'Poengtallene blir vanskelige å lese på rutene (kontrast ' + kontrastTekst(kTall) + ', bør være minst 4,5:1). Velg en lysere tallfarge eller en mørkere rutefarge.' });
+    const lysere = (a, b) => luminans(a) >= luminans(b);
+    if (kTall < 4.5) ut.push({ niva: 'feil', tekst: 'Poengtallene blir vanskelige å lese på rutene (kontrast ' + kontrastTekst(kTall) + ', bør være minst 4,5:1). ' + (lysere(t.tall, v.rute) ? 'Velg en lysere tallfarge eller en mørkere rutefarge.' : 'Velg en mørkere tallfarge eller en lysere rutefarge.') });
     else if (kTall < 5.5) ut.push({ niva: 'info', tekst: 'Poengtallene er lesbare, men kan bli bleke på prosjektor (kontrast ' + kontrastTekst(kTall) + '). Over 5,5:1 er tryggere.' });
-    if (kTekst < 4.5) ut.push({ niva: 'feil', tekst: 'Kategorinavn og spørsmål blir vanskelige å lese (kontrast ' + kontrastTekst(kTekst) + ', bør være minst 4,5:1). Velg lysere tekst eller mørkere ruter.' });
+    if (kTekst < 4.5) ut.push({ niva: 'feil', tekst: 'Kategorinavn og spørsmål blir vanskelige å lese (kontrast ' + kontrastTekst(kTekst) + ', bør være minst 4,5:1). ' + (lysere(t.tekst, v.kat) ? 'Velg lysere tekst eller mørkere ruter.' : 'Velg mørkere tekst eller lysere ruter.') });
     else if (kTekst < 7) ut.push({ niva: 'varsel', tekst: 'Spørsmålsteksten kan bli utydelig for elevene bakerst i klasserommet (kontrast ' + kontrastTekst(kTekst) + '). Vi anbefaler minst 7:1.' });
     if (!t.bilde) {
       const kBg = kontrast(t.tekst, t.bakgrunn);
-      if (kBg < 4.5) ut.push({ niva: 'feil', tekst: 'Tittel og spillernavn blir vanskelige å lese på bakgrunnen (kontrast ' + kontrastTekst(kBg) + ', bør være minst 4,5:1). Gjør bakgrunnen mørkere eller teksten lysere.' });
+      if (kBg < 4.5) ut.push({ niva: 'feil', tekst: 'Tittel og spillernavn blir vanskelige å lese på bakgrunnen (kontrast ' + kontrastTekst(kBg) + ', bør være minst 4,5:1). ' + (lysere(t.tekst, t.bakgrunn) ? 'Gjør bakgrunnen mørkere eller teksten lysere.' : 'Gjør bakgrunnen lysere eller teksten mørkere.') });
       const kRute = kontrast(t.rute, t.bakgrunn);
-      if (kRute < 1.8) ut.push({ niva: 'varsel', tekst: 'Rutene skiller seg lite fra bakgrunnen (kontrast ' + kontrastTekst(kRute) + '). På prosjektor kan brettet se ut som én flate. Gjør bakgrunnen mørkere eller rutene lysere.' });
+      if (kRute < 1.8) ut.push({ niva: 'varsel', tekst: 'Rutene skiller seg lite fra bakgrunnen (kontrast ' + kontrastTekst(kRute) + '). På prosjektor kan brettet se ut som én flate. ' + (lysere(t.rute, t.bakgrunn) ? 'Gjør bakgrunnen mørkere eller rutene lysere.' : 'Gjør bakgrunnen lysere eller rutene mørkere.') });
     }
+    const css = temaVariabler(t);
+    const kKnapp = kontrast(css['--gull-tekst'], t.tall);
+    if (kKnapp < 4.5) ut.push({ niva: 'feil', tekst: 'Teksten på knappene (for eksempel «Vis fasit») blir vanskelig å lese fordi poengfargen er en mellomtone (kontrast ' + kontrastTekst(kKnapp) + '). Velg en lysere eller mørkere poengfarge.' });
+    const kFeil = kontrast(css['--feil'], t.rute);
+    if (kFeil < 3) ut.push({ niva: 'varsel', tekst: 'Minuspoeng og «Tiden er ute» blir svake på denne rutefargen. Velg en lysere eller mørkere rutefarge.' });
     const ta = tilRgb(t.tall);
     const xa = tilRgb(t.tekst);
     const avstand = Math.sqrt(Math.pow(ta.r - xa.r, 2) + Math.pow(ta.g - xa.g, 2) + Math.pow(ta.b - xa.b, 2));
@@ -3802,6 +3916,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
     ramme.style.setProperty('--pv-kant', css['--kant']);
     ramme.style.setProperty('--pv-tall', t.tall);
     ramme.style.setProperty('--pv-tekst', t.tekst);
+    ramme.style.setProperty('--pv-tallskygge', css['--tallskygge'] === 'none' ? 'none' : '2px 2px 0 rgba(0, 0, 0, .55)');
+    ramme.style.setProperty('--pv-tekstskygge', css['--tekstskygge'] === 'none' ? 'none' : '1px 1px 0 rgba(0, 0, 0, .55)');
     if (t.bilde) {
       const d = rgba(t.bakgrunn, t.demping / 100);
       ramme.style.backgroundImage = 'linear-gradient(' + d + ', ' + d + '), url("' + t.bilde + '")';
@@ -3914,8 +4030,6 @@ button { font: inherit; color: inherit; cursor: pointer; }
       lerret.height = hh;
       const ctx = lerret.getContext('2d');
       ctx.imageSmoothingQuality = 'high';
-      ctx.fillStyle = t.bakgrunn;
-      ctx.fillRect(0, 0, bb, hh);
       let tegnKilde = kilde;
       let kx = sx, ky = sy, kw = sw, kh = sh;
       if (kw > bb * 2.5) {
@@ -3931,7 +4045,14 @@ button { font: inherit; color: inherit; cursor: pointer; }
       }
       ctx.drawImage(tegnKilde, kx, ky, kw, kh, 0, 0, bb, hh);
       blob = await tilBlob(lerret, 'image/webp', kvalitet);
-      if (!blob || blob.type !== 'image/webp') blob = await tilBlob(lerret, 'image/jpeg', Math.min(0.9, kvalitet + 0.06));
+      if (!blob || blob.type !== 'image/webp') {
+        // JPEG kan ikke være gjennomsiktig: fyll tomrom med bakgrunnsfargen
+        ctx.globalCompositeOperation = 'destination-over';
+        ctx.fillStyle = t.bakgrunn;
+        ctx.fillRect(0, 0, bb, hh);
+        ctx.globalCompositeOperation = 'source-over';
+        blob = await tilBlob(lerret, 'image/jpeg', Math.min(0.9, kvalitet + 0.06));
+      }
       if (blob && blob.size <= 350 * 1024) break;
     }
     if (!blob) throw new Error('Kunne ikke gjøre klar bildet.');
@@ -3940,6 +4061,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
     liten.width = 96;
     liten.height = 54;
     const lctx = liten.getContext('2d');
+    lctx.fillStyle = t.bakgrunn;
+    lctx.fillRect(0, 0, 96, 54);
     lctx.drawImage(lerret, 0, 0, 96, 54);
     const px = lctx.getImageData(0, 0, 96, 54).data;
     const lum = [];
@@ -4059,10 +4182,11 @@ button { font: inherit; color: inherit; cursor: pointer; }
       fast: 'Jokeren koster et fast antall poeng, uansett hvordan det går.',
       gratis: 'Jokerne koster ingen poeng. De er bare begrenset i antall.'
     }[$('joker-kostnad').value];
-    oppdaterMusikkForklaring();
+    $('dekning-venn').textContent = tid > 0 ? 'Virker på alle spørsmål. Tiden starter på nytt.' : 'Virker på alle spørsmål.';
     const nedtelling = $('musikk-modus').querySelector('option[value="nedtelling"]');
     nedtelling.disabled = tid === 0;
     if (tid === 0 && $('musikk-modus').value === 'nedtelling') $('musikk-modus').value = 'alltid';
+    oppdaterMusikkForklaring();
   }
   ['bruk-jokere', 'joker-kostnad', 'joker-antall', 'joker-trekk', 'tid'].forEach(id => $(id).addEventListener('input', oppdaterJokere));
   $('joker-valg').addEventListener('change', e => {
@@ -4082,6 +4206,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   function visMusikkdeler() {
     const type = document.querySelector('input[name="musikk"]:checked').value;
     oppsett.musikk.type = type;
+    if (type !== 'fil') $('musikk-forhor').pause();
     $('musikk-fil-del').hidden = type !== 'fil';
     $('musikk-yt-del').hidden = type !== 'youtube';
     $('musikk-valg').hidden = type !== 'fil';
@@ -4125,6 +4250,24 @@ button { font: inherit; color: inherit; cursor: pointer; }
       const forhor = $('musikk-forhor');
       forhor.src = m.url;
       forhor.volume = Number($('musikk-volum').value) / 100;
+      const kanSpilles = await new Promise(ok => {
+        const ferdig = svar => { clearTimeout(tid); forhor.removeEventListener('loadedmetadata', ja); forhor.removeEventListener('error', nei); ok(svar); };
+        const ja = () => ferdig(true);
+        const nei = () => ferdig(false);
+        const tid = setTimeout(() => ferdig(true), 5000);
+        forhor.addEventListener('loadedmetadata', ja);
+        forhor.addEventListener('error', nei);
+      });
+      if (!kanSpilles) {
+        URL.revokeObjectURL(m.url);
+        Object.assign(m, { base64: '', mime: '', navn: '', storrelse: 0, url: '' });
+        forhor.removeAttribute('src');
+        forhor.hidden = true;
+        $('fjern-musikk').hidden = true;
+        status.textContent = '«' + fil.name + '» kan ikke spilles av i nettleseren. Velg en vanlig MP3-fil.';
+        oppdaterStorrelse();
+        return;
+      }
       forhor.hidden = false;
       $('fjern-musikk').hidden = false;
       status.textContent = '«' + fil.name + '» er lagt inn (' + mb(fil.size) + ').' +
@@ -4156,8 +4299,11 @@ button { font: inherit; color: inherit; cursor: pointer; }
     if (!t) return null;
     let id = null;
     let start = 0;
-    if (/^[\w-]{11}$/.test(t)) id = t;
-    else {
+    if (/^[\w-]{11}$/.test(t)) {
+      // En løs ID må se ut som en ID, ikke som et vanlig ord
+      if (!/[0-9_-]|.[A-Z]/.test(t)) return null;
+      id = t;
+    } else {
       let url;
       try { url = new URL(/^https?:\/\//i.test(t) ? t : 'https://' + t); } catch (e) { return null; }
       const vert = url.hostname.replace(/^www\.|^m\.|^music\./, '');
@@ -4179,7 +4325,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
     if (r) {
       m.youtube = r.id;
       m.start = r.start;
-      settStatus('yt-status', 'Fant videoen' + (r.start ? ', med start etter ' + r.start + ' sekunder' : '') + '. Spillet får en knapp som åpner den i eget vindu.', 'ok');
+      settStatus('yt-status', 'Fant video-ID «' + r.id + '»' + (r.start ? ', med start etter ' + r.start + ' sekunder' : '') + '. Spillet får en knapp som åpner den i eget vindu.', 'ok');
     } else {
       m.youtube = '';
       m.start = 0;
@@ -4192,7 +4338,9 @@ button { font: inherit; color: inherit; cursor: pointer; }
     clearTimeout(storrelseTid);
     storrelseTid = setTimeout(() => {
       if (!tilstand.spill || !tilstand.antall) { $('filstorrelse').textContent = ''; return; }
-      const bytes = new Blob([byggSpillHtml(spillData(false))]).size;
+      const d = spillData(false);
+      const medFil = d.musikk && d.musikk.type === 'fil';
+      const bytes = new Blob([byggSpillHtml(d, true)]).size + (medFil ? oppsett.musikk.base64.length + 52 : 0);
       $('filstorrelse').textContent = 'Spillfilen blir omtrent ' + mb(bytes) + '.';
     }, 250);
   }
@@ -4217,7 +4365,15 @@ button { font: inherit; color: inherit; cursor: pointer; }
     draTeller = 0;
     sone.classList.remove('over');
     const fil = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
-    if (fil) behandleFil(fil);
+    if (!fil) return;
+    if (/^image\//.test(fil.type) || /\.hei[cf]$/i.test(fil.name)) { behandleBilde(fil); return; }
+    if (/^audio\//.test(fil.type) || /\.(mp3|m4a|ogg|wav)$/i.test(fil.name)) {
+      document.querySelector('input[name="musikk"][value="fil"]').checked = true;
+      visMusikkdeler();
+      behandleMusikk(fil);
+      return;
+    }
+    behandleFil(fil);
   });
 
   $('tittel').addEventListener('input', () => {
@@ -4251,6 +4407,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   }
   $('prov-spill').addEventListener('click', () => {
     if (!tilstand.antall) return;
+    $('musikk-forhor').pause();
     ramme.srcdoc = byggSpillHtml(spillData(true));
     fv.hidden = false;
     document.body.classList.add('laast');
