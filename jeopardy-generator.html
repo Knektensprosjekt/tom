@@ -255,9 +255,160 @@ h1 {
   color: var(--tekst);
 }
 .hjelp { color: var(--dempet); font-size: 15px; margin: 12px 0 0 !important; }
+.liten-tekst { font-size: 14px; margin-top: 6px !important; }
+.felt-etikett { font-weight: 700; font-size: 15px; }
+.gruppe { border: 0; margin: 0 0 14px; padding: 0; min-width: 0; }
+.gruppe legend { font-weight: 700; font-size: 15px; padding: 0; margin-bottom: 8px; }
+
+.temaer { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; }
+.tema-knapp {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  padding: 6px;
+  border: 2px solid var(--linje);
+  border-radius: 10px;
+  background: var(--flate);
+  color: var(--tekst);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+}
+.tema-knapp:hover { border-color: var(--aksent); }
+.tema-knapp[aria-pressed="true"] { border-color: var(--aksent); box-shadow: 0 0 0 2px var(--aksent); }
+.tema-prove {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  padding: 4px;
+  border-radius: 5px;
+}
+.tema-prove span {
+  display: grid;
+  place-items: center;
+  height: 22px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.farger { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-bottom: 12px; }
+@media (max-width: 480px) { .farger { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.farge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--dempet);
+  cursor: pointer;
+}
+.farge input[type="color"] {
+  width: 100%;
+  height: 40px;
+  padding: 2px;
+  border: 1px solid var(--linje);
+  border-radius: 8px;
+  background: var(--flate);
+  cursor: pointer;
+}
+
+.knapp.liten { padding: 8px 14px; font-size: 15px; }
+.knapp.tekstknapp { background: transparent; color: var(--feil); border-color: transparent; padding-inline: 6px; }
+.knapp.tekstknapp:hover { text-decoration: underline; }
+.filknapp { position: relative; overflow: hidden; }
+.filknapp input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.filknapp:focus-within { outline: 3px solid var(--fokus); outline-offset: 2px; }
+
+.glider label { display: flex; justify-content: space-between; gap: 8px; }
+.glider output { font-weight: 400; color: var(--dempet); font-variant-numeric: tabular-nums; }
+.glider input[type="range"] { width: 100%; accent-color: var(--aksent); padding: 0; border: 0; }
+
+.bryter {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--linje);
+  border-radius: 10px;
+  background: var(--flate-2);
+  cursor: pointer;
+}
+.bryter input { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--aksent); flex: none; }
+.bryter span { display: flex; flex-direction: column; font-size: 15px; color: var(--dempet); }
+.bryter strong { color: var(--tekst); font-size: 16px; }
+.joker-oppsett { margin-top: 16px; }
+.avkryss { display: grid; gap: 6px; }
+.avkryss label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--linje);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.avkryss input { width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--aksent); flex: none; }
+.avkryss span { display: flex; flex-direction: column; font-size: 15px; }
+.avkryss em { font-style: normal; font-size: 14px; color: var(--dempet); }
+.avkryss label.uten-data { opacity: .55; cursor: not-allowed; }
+.regelkort {
+  margin: 4px 0 0;
+  padding: 10px 12px;
+  border-left: 4px solid var(--brett-tall);
+  border-radius: 6px;
+  background: var(--flate-2);
+  font-size: 15px;
+}
+
+.valg-rad { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.valg-rad label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--linje);
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.valg-rad label:has(input:checked) { border-color: var(--aksent); background: var(--info-bg); color: var(--info); }
+.valg-rad input { accent-color: var(--aksent); margin: 0; }
+.musikk-del { margin-bottom: 12px; }
+.advarsler { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 6px; }
+.advarsler:empty { display: none; }
+.advarsler li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 8px;
+  align-items: baseline;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--flate-2);
+  font-size: 14px;
+}
+.advarsler .knapp { grid-column: 2; justify-self: start; margin-top: 4px; }
+.advarsler li[data-niva="feil"] .merke { background: var(--feil-bg); color: var(--feil); }
+.advarsler li[data-niva="varsel"] .merke { background: var(--varsel-bg); color: var(--varsel); }
+.advarsler li[data-niva="info"] .merke { background: var(--info-bg); color: var(--info); }
+.bildevalg { margin-bottom: 4px; }
+.enkel-avkryss { display: flex; align-items: center; gap: 8px; font-size: 15px; margin-bottom: 14px; cursor: pointer; }
+.enkel-avkryss input { width: 18px; height: 18px; margin: 0; accent-color: var(--aksent); }
+.glider input[type="range"]:disabled { opacity: .45; }
+#nedlasting-advarsel ul { margin: 6px 0 0; padding-left: 18px; }
+.musikk-del audio { width: 100%; margin-top: 10px; }
 
 /* ---------- Studioskjerm ---------- */
 .skjerm { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+@media (min-width: 921px) {
+  .skjerm { position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow: auto; padding-bottom: 4px; }
+}
 .skjerm-topp { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap; }
 .skjerm-topp h2 {
   font-family: var(--font-display);
@@ -284,7 +435,15 @@ h1 {
 .kilde[data-type="fil"] { background: var(--ok-bg); color: var(--ok); }
 
 .brett-ramme {
-  background: var(--brett-kant);
+  --pv-bg: var(--brett-kant);
+  --pv-rute: var(--brett-rute);
+  --pv-rute-a: var(--brett-rute);
+  --pv-kant: rgba(0, 0, 0, .35);
+  --pv-tall: var(--brett-tall);
+  --pv-tekst: var(--brett-tekst);
+  background-color: var(--pv-bg);
+  background-size: cover;
+  background-position: center;
   border-radius: 14px;
   padding: 12px;
   box-shadow: 0 20px 40px -26px rgba(5, 12, 69, .7);
@@ -293,7 +452,7 @@ h1 {
 .brett-navn {
   font-family: var(--font-display);
   text-transform: uppercase;
-  color: var(--brett-tall);
+  color: var(--pv-tall);
   font-size: 20px;
   letter-spacing: .03em;
   line-height: 1.1;
@@ -308,9 +467,9 @@ h1 {
   place-items: center;
   min-height: 60px;
   padding: 8px 6px;
-  background: var(--brett-rute);
-  border-bottom: 3px solid var(--brett-kant);
-  color: var(--brett-tekst);
+  background: var(--pv-kat-a, var(--pv-rute-a));
+  border-bottom: 3px solid var(--pv-kant);
+  color: var(--pv-tekst);
   font-family: var(--font-display);
   text-transform: uppercase;
   font-size: 14px;
@@ -322,8 +481,8 @@ h1 {
 }
 .mb-rute {
   padding: 10px 4px;
-  background: var(--brett-rute);
-  color: var(--brett-tall);
+  background: var(--pv-rute-a);
+  color: var(--pv-tall);
   font-family: var(--font-display);
   font-size: 24px;
   line-height: 1.2;
@@ -333,7 +492,7 @@ h1 {
   box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .22);
 }
 .mb-rute.tom { background: transparent; box-shadow: none; outline: 1px dashed rgba(255, 255, 255, .14); outline-offset: -1px; }
-.tomt-brett { color: #c9d1ff; margin: 24px 8px; text-align: center; }
+.tomt-brett { color: var(--pv-tekst); margin: 24px 8px; text-align: center; }
 
 .merknader { display: grid; gap: 8px; }
 .merknader:empty { display: none; }
@@ -434,6 +593,7 @@ h1 {
           <ul class="tips">
             <li>Lag så mange kategorier og spørsmål du vil. Brettet tilpasser seg.</li>
             <li>Står poeng tomt, får spørsmålene 100, 200, 300 … i den rekkefølgen de står.</li>
+            <li>Vil du bruke jokere? Fyll også ut kolonnene <em>Feil svar 1</em>, <em>Feil svar 2</em> og <em>Hint</em>. Tomme celler er greit.</li>
             <li>Virker med .xlsx fra Excel, Google Regneark og Numbers, og med .csv.</li>
           </ul>
           <button type="button" class="knapp sekundar" id="last-ned-mal">
@@ -461,11 +621,56 @@ h1 {
       <li class="trinn">
         <span class="trinn-nr" aria-hidden="true">3</span>
         <div class="trinn-innhold">
-          <h2>Velg innstillinger</h2>
+          <h2>Velg utseende</h2>
           <div class="felt">
             <label for="tittel">Navn på spillet</label>
             <input type="text" id="tittel" maxlength="80" value="Jeopardy" autocomplete="off">
           </div>
+          <fieldset class="gruppe">
+            <legend>Fargetema</legend>
+            <div class="temaer" id="temaer"></div>
+          </fieldset>
+          <div class="farger">
+            <label class="farge"><input type="color" id="farge-bakgrunn" value="#050b3a"><span>Bakgrunn</span></label>
+            <label class="farge"><input type="color" id="farge-rute" value="#1533c8"><span>Ruter</span></label>
+            <label class="farge"><input type="color" id="farge-tall" value="#ffcc3a"><span>Poengtall</span></label>
+            <label class="farge"><input type="color" id="farge-tekst" value="#ffffff"><span>Tekst</span></label>
+          </div>
+          <ul class="advarsler" id="tema-advarsler" aria-live="polite"></ul>
+          <div class="felt">
+            <span class="felt-etikett" id="bilde-etikett">Bakgrunnsbilde</span>
+            <div class="knapperad">
+              <label class="knapp sekundar liten filknapp" for="bilde">Velg bilde<input type="file" id="bilde" accept="image/*" aria-labelledby="bilde-etikett"></label>
+              <button type="button" class="knapp tekstknapp liten" id="fjern-bilde" hidden>Fjern bildet</button>
+            </div>
+            <p class="hjelp" id="bilde-status">Ingen bilde valgt.</p>
+          </div>
+          <div class="bildevalg" id="bildevalg" hidden>
+            <div class="felt">
+              <label for="bilde-tilpasning">Bildet skal</label>
+              <select id="bilde-tilpasning">
+                <option value="fyll" selected>Fylle hele skjermen</option>
+                <option value="hele">Vises helt, med fargekanter</option>
+              </select>
+            </div>
+            <div class="felt glider">
+              <label for="demping">Demp bildet <output id="demping-verdi" for="demping">60 %</output></label>
+              <input type="range" id="demping" min="30" max="85" step="5" value="60">
+            </div>
+            <label class="enkel-avkryss"><input type="checkbox" id="myk-bakgrunn"> Myk bakgrunn (gjør bildet litt uskarpt)</label>
+          </div>
+          <div class="felt glider">
+            <label for="gjennomsiktighet">Gjennomsiktige ruter <output id="gjennomsiktighet-verdi" for="gjennomsiktighet">0 %</output></label>
+            <input type="range" id="gjennomsiktighet" min="0" max="90" step="5" value="0" disabled>
+            <p class="hjelp liten-tekst" id="gjennomsiktighet-hjelp">Gjennomsiktighet virker bare når du har valgt et bakgrunnsbilde.</p>
+          </div>
+        </div>
+      </li>
+
+      <li class="trinn">
+        <span class="trinn-nr" aria-hidden="true">4</span>
+        <div class="trinn-innhold">
+          <h2>Velg tid og jokere</h2>
           <div class="felt">
             <label for="tid">Tid per spørsmål</label>
             <select id="tid">
@@ -478,11 +683,93 @@ h1 {
               <option value="0">Ingen nedtelling</option>
             </select>
           </div>
+          <label class="bryter">
+            <input type="checkbox" id="bruk-jokere">
+            <span><strong>Bruk jokere</strong> Spillerne kan få hjelp, men det koster.</span>
+          </label>
+          <div class="joker-oppsett" id="joker-oppsett" hidden>
+            <fieldset class="gruppe">
+              <legend>Hvilke jokere?</legend>
+              <div class="avkryss" id="joker-valg">
+                <label><input type="checkbox" value="5050" checked><span><strong>50/50</strong> <em id="dekning-5050"></em></span></label>
+                <label><input type="checkbox" value="hint" checked><span><strong>Hint</strong> <em id="dekning-hint"></em></span></label>
+                <label><input type="checkbox" value="venn" checked><span><strong>Spør en venn</strong> <em id="dekning-venn">Virker på alle spørsmål. Tiden starter på nytt.</em></span></label>
+                <label><input type="checkbox" value="tid"><span><strong>Ekstra tid</strong> <em id="dekning-tid"></em></span></label>
+              </div>
+            </fieldset>
+            <div class="felt">
+              <label for="joker-kostnad">Hva koster en joker?</label>
+              <select id="joker-kostnad">
+                <option value="halv" selected>Halv verdi (anbefalt)</option>
+                <option value="halvgevinst">Halv gevinst, full straff</option>
+                <option value="fast">Fast pris</option>
+                <option value="gratis">Gratis</option>
+              </select>
+              <p class="hjelp liten-tekst" id="joker-kostnad-forklaring"></p>
+            </div>
+            <div class="felt" id="joker-trekk-felt" hidden>
+              <label for="joker-trekk">Pris i poeng</label>
+              <input type="number" id="joker-trekk" min="0" max="10000" step="50" value="100">
+            </div>
+            <div class="felt">
+              <label for="joker-antall">Hvor mange jokere får hver spiller?</label>
+              <select id="joker-antall">
+                <option value="1" selected>1 av hver (anbefalt)</option>
+                <option value="2">2 av hver</option>
+                <option value="total">1 joker totalt, spilleren velger hvilken</option>
+              </select>
+              <p class="hjelp liten-tekst">Har du mer enn 6 spillere, passer «1 joker totalt» best.</p>
+            </div>
+            <p class="regelkort" id="joker-regel"></p>
+          </div>
         </div>
       </li>
 
       <li class="trinn">
-        <span class="trinn-nr" aria-hidden="true">4</span>
+        <span class="trinn-nr" aria-hidden="true">5</span>
+        <div class="trinn-innhold">
+          <h2>Legg til musikk</h2>
+          <div class="valg-rad" role="radiogroup" aria-label="Musikk">
+            <label><input type="radio" name="musikk" value="ingen" checked><span>Ingen musikk</span></label>
+            <label><input type="radio" name="musikk" value="fil"><span>Lydfil (MP3)</span></label>
+            <label><input type="radio" name="musikk" value="youtube"><span>YouTube-lenke</span></label>
+          </div>
+          <div class="musikk-del" id="musikk-fil-del" hidden>
+            <div class="knapperad">
+              <label class="knapp sekundar liten filknapp" for="musikkfil">Velg lydfil<input type="file" id="musikkfil" accept="audio/mpeg,audio/mp3,audio/mp4,audio/x-m4a,audio/aac,audio/ogg,audio/wav,audio/webm,.mp3,.m4a,.ogg,.wav"></label>
+              <button type="button" class="knapp tekstknapp liten" id="fjern-musikk" hidden>Fjern lydfilen</button>
+            </div>
+            <p class="hjelp" id="musikk-status">Musikken legges inn i spillfilen og virker uten nett. Hold filen under 10 MB.</p>
+            <audio id="musikk-forhor" controls hidden></audio>
+          </div>
+          <div class="musikk-del" id="musikk-yt-del" hidden>
+            <div class="felt">
+              <label for="yt-lenke">Lenke til YouTube-videoen</label>
+              <input type="url" id="yt-lenke" placeholder="https://www.youtube.com/watch?v=…" autocomplete="off">
+            </div>
+            <p class="status" id="yt-status" role="status" aria-live="polite"></p>
+            <p class="hjelp">YouTube kan ikke spille inne i en fil som åpnes fra PC-en. Spillet får derfor en knapp som åpner musikken i et eget vindu ved siden av, og det kan komme reklame. Vil du være sikker på at musikken virker, velg en lydfil.</p>
+          </div>
+          <div class="musikk-del" id="musikk-valg" hidden>
+            <div class="felt">
+              <label for="musikk-modus">Når skal musikken spille?</label>
+              <select id="musikk-modus">
+                <option value="alltid" selected>Hele tiden</option>
+                <option value="brett">Bare på brettet</option>
+                <option value="nedtelling">Bare under nedtellingen</option>
+              </select>
+              <p class="hjelp liten-tekst" id="musikk-modus-forklaring"></p>
+            </div>
+            <div class="felt glider">
+              <label for="musikk-volum">Volum <output id="musikk-volum-verdi" for="musikk-volum">40 %</output></label>
+              <input type="range" id="musikk-volum" min="5" max="100" step="5" value="40">
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <li class="trinn">
+        <span class="trinn-nr" aria-hidden="true">6</span>
         <div class="trinn-innhold">
           <h2>Last ned spillet</h2>
           <div class="knapperad">
@@ -492,6 +779,8 @@ h1 {
             </button>
             <button type="button" class="knapp sekundar" id="prov-spill">Prøv spillet her</button>
           </div>
+          <div class="status" id="nedlasting-advarsel" data-niva="feil" hidden></div>
+          <p class="hjelp" id="filstorrelse"></p>
           <p class="hjelp">Dobbeltklikk på filen for å åpne den i nettleseren. Navnene på spillerne skriver du inn når spillet starter.</p>
           <p class="status" id="nedlasting-status" role="status" aria-live="polite"></p>
         </div>
@@ -539,17 +828,30 @@ h1 {
 <!-- ===================== MAL FOR DET FERDIGE SPILLET ===================== -->
 <template id="spillmal-stil">
 <style>
+/* Standardverdiene er temaet «Klassisk». Spillet overstyrer dem fra spilldataene ved oppstart. */
 :root {
   --natt: #050b3a;
+  --natt-lys: #10279d;
+  --kant: #040829;
   --rute: #1533c8;
-  --rute-hover: #2045ea;
-  --rute-brukt: #0a166c;
-  --kant: #040a33;
+  --rute-a: rgba(21, 51, 200, 1);
+  --rute-hover-a: rgba(49, 75, 207, 1);
+  --rute-brukt-a: rgba(9, 21, 84, 1);
+  --kat-a: rgba(21, 51, 200, 1);
+  --panel-a: linear-gradient(#1533c8, #0e2182);
+  --sp-bg: radial-gradient(130% 90% at 50% 30%, #1533c8 0%, #0e2182 58%, #08134c 100%);
+  --joker-bg: #3a4fb0;
+  --rute-ramme: rgba(0, 0, 0, .22);
+  --topp-bg: transparent;
+  --panel-bg: transparent;
+  --tallskygge: 3px 3px 0 rgba(1, 3, 15, .6);
+  --tekstskygge: 2px 2px 0 rgba(1, 3, 15, .6);
   --gull: #ffcc3a;
+  --gull-tekst: #1e1807;
   --hvit: #ffffff;
-  --svak: #bcc6ff;
+  --svak: #bdc6f0;
   --riktig: #2fd27a;
-  --feil: #ff5a6a;
+  --feil: #ff9ca6;
   --font-tall: "Anton", Impact, "Haettenschweiler", "Arial Narrow Bold", "Arial Narrow", sans-serif;
   --font-ledetekst: "Libre Baskerville", Georgia, "Times New Roman", serif;
   --font-ui: "Lexend", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
@@ -569,12 +871,24 @@ body {
 button { font: inherit; color: inherit; cursor: pointer; }
 :focus-visible { outline: 3px solid var(--gull); outline-offset: 3px; }
 
+#bakgrunn {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(120% 85% at 50% 0%, var(--natt-lys) 0%, var(--natt) 72%);
+  background-color: var(--natt);
+  background-position: center;
+  background-repeat: no-repeat;
+}
+#bakgrunn.myk { inset: -12px; filter: blur(3px); }
+#demp { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.skjerm.bak-sporsmal { visibility: hidden; }
 .skjerm {
   position: fixed;
   inset: 0;
+  z-index: 1;
   display: flex;
   flex-direction: column;
-  background: radial-gradient(120% 85% at 50% 0%, #11249c 0%, var(--natt) 72%);
 }
 .overtittel {
   margin: 0;
@@ -591,15 +905,15 @@ button { font: inherit; color: inherit; cursor: pointer; }
   padding: 12px 22px;
   border-radius: 10px;
   border: 2px solid rgba(255, 255, 255, .35);
-  background: rgba(255, 255, 255, .08);
+  background: rgba(0, 0, 0, .25);
   color: var(--hvit);
   font-weight: 700;
   font-size: 18px;
   line-height: 1.2;
 }
-.knapp:hover:not(:disabled) { background: rgba(255, 255, 255, .16); }
-.knapp.gull { background: var(--gull); border-color: var(--gull); color: #1e1500; }
-.knapp.gull:hover:not(:disabled) { background: #ffd966; }
+.knapp:hover:not(:disabled) { background: rgba(255, 255, 255, .14); }
+.knapp.gull { background: var(--gull); border-color: var(--gull); color: var(--gull-tekst); }
+.knapp.gull:hover:not(:disabled) { filter: brightness(1.08); background: var(--gull); }
 .knapp.stor { font-size: 22px; padding: 14px 34px; }
 .knapp:disabled { opacity: .4; cursor: not-allowed; }
 .knapperad { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -607,6 +921,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 /* ---------- Oppsett ---------- */
 .oppsett { overflow: auto; align-items: center; padding: clamp(28px, 7vh, 80px) 16px 40px; }
 .oppsett-innhold { width: min(760px, 100%); display: flex; flex-direction: column; gap: 22px; }
+.med-bilde .oppsett-innhold, .med-bilde .resultat-innhold { padding: clamp(18px, 3vw, 32px); border-radius: 16px; background: var(--panel-bg); }
 #spilltittel {
   margin: 0;
   font-family: var(--font-tall);
@@ -616,11 +931,20 @@ button { font: inherit; color: inherit; cursor: pointer; }
   line-height: .98;
   letter-spacing: .01em;
   color: var(--gull);
-  text-shadow: 4px 4px 0 rgba(0, 0, 0, .55);
+  text-shadow: var(--tallskygge);
   text-wrap: balance;
   overflow-wrap: anywhere;
 }
 .spillinfo { margin: -10px 0 0; color: var(--svak); font-size: 18px; }
+.regler {
+  margin: 0;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, .3);
+  border-left: 4px solid var(--gull);
+  font-size: 17px;
+}
+.regler strong { color: var(--gull); }
 .fortsett {
   display: flex;
   flex-direction: column;
@@ -628,7 +952,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   padding: 16px 18px;
   border: 2px solid var(--gull);
   border-radius: 12px;
-  background: rgba(255, 204, 58, .1);
+  background: rgba(0, 0, 0, .35);
 }
 .fortsett p { margin: 0; }
 .legg-til label { display: block; font-weight: 700; font-size: 24px; margin-bottom: 10px; }
@@ -641,10 +965,10 @@ button { font: inherit; color: inherit; cursor: pointer; }
   padding: 12px 14px;
   border-radius: 10px;
   border: 2px solid rgba(255, 255, 255, .3);
-  background: rgba(0, 0, 0, .3);
+  background: rgba(0, 0, 0, .35);
   color: var(--hvit);
 }
-.legg-til input::placeholder { color: #8f9bd8; }
+.legg-til input::placeholder { color: var(--svak); opacity: .8; }
 .hint { margin: 8px 0 0; color: var(--svak); font-size: 15px; }
 .spillerliste { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
 .spillerliste:empty::before { content: "Ingen spillere ennå."; color: var(--svak); }
@@ -682,6 +1006,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   gap: 8px 16px;
   flex-wrap: wrap;
   padding: 10px clamp(8px, 1.2vw, 16px);
+  background: var(--topp-bg);
 }
 .toppfelt-tittel {
   margin: 0;
@@ -693,7 +1018,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   font-size: clamp(20px, 2.4vw, 34px);
   line-height: 1.1;
   color: var(--gull);
-  text-shadow: 2px 2px 0 rgba(0, 0, 0, .55);
+  text-shadow: var(--tallskygge);
 }
 .verktoy { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .fremdrift { color: var(--svak); font-size: 15px; margin-right: 6px; font-variant-numeric: tabular-nums; }
@@ -701,9 +1026,11 @@ button { font: inherit; color: inherit; cursor: pointer; }
   padding: 6px 14px;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, .25);
-  background: rgba(255, 255, 255, .08);
+  background: rgba(0, 0, 0, .28);
   font-size: 15px;
   white-space: nowrap;
+  text-decoration: none;
+  color: var(--hvit);
 }
 .verktoy-knapp:hover:not(:disabled) { background: rgba(255, 255, 255, .18); }
 .verktoy-knapp:disabled { opacity: .35; cursor: default; }
@@ -720,9 +1047,9 @@ button { font: inherit; color: inherit; cursor: pointer; }
   display: grid;
   place-items: center;
   padding: 4px 8px;
-  background: var(--rute);
+  background: var(--kat-a);
   border-bottom: 5px solid var(--kant);
-  box-shadow: inset 0 0 0 2px rgba(0, 0, 0, .22);
+  box-shadow: inset 0 0 0 2px var(--rute-ramme);
   text-align: center;
   overflow: hidden;
 }
@@ -735,7 +1062,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   letter-spacing: .02em;
   overflow-wrap: anywhere;
   hyphens: auto;
-  text-shadow: 2px 2px 0 rgba(0, 0, 0, .6);
+  text-shadow: var(--tekstskygge);
 }
 .kat.lang span { font-size: min(10cqi, 23cqh); }
 .rute {
@@ -746,9 +1073,9 @@ button { font: inherit; color: inherit; cursor: pointer; }
   border: 0;
   display: grid;
   place-items: center;
-  background: var(--rute);
+  background: var(--rute-a);
   color: var(--gull);
-  box-shadow: inset 0 0 0 2px rgba(0, 0, 0, .22), inset 0 -6px 0 rgba(0, 0, 0, .18);
+  box-shadow: inset 0 0 0 2px var(--rute-ramme), inset 0 -6px 0 rgba(0, 0, 0, .18);
   transition: background-color .15s, transform .15s;
 }
 .rute span {
@@ -757,13 +1084,13 @@ button { font: inherit; color: inherit; cursor: pointer; }
   font-size: min(54cqh, 30cqi);
   line-height: 1;
   letter-spacing: .01em;
-  text-shadow: 3px 3px 0 rgba(0, 0, 0, .65);
+  text-shadow: var(--tallskygge);
 }
 .rute.smal span { font-size: min(48cqh, 22cqi); }
-.rute:hover:not(:disabled) { background: var(--rute-hover); }
+.rute:hover:not(:disabled) { background: var(--rute-hover-a); }
 .rute:active:not(:disabled) { transform: scale(.97); }
-.rute:disabled { background: var(--rute-brukt); cursor: default; box-shadow: inset 0 0 0 2px rgba(0, 0, 0, .3); }
-.rute.tom { background: transparent; box-shadow: none; outline: 1px dashed rgba(255, 255, 255, .08); outline-offset: -1px; }
+.rute:disabled { background: var(--rute-brukt-a); cursor: default; box-shadow: inset 0 0 0 2px var(--rute-ramme); }
+.rute.tom { background: transparent; box-shadow: none; outline: 1px dashed rgba(255, 255, 255, .1); outline-offset: -1px; }
 
 .poengtavle {
   display: flex;
@@ -790,8 +1117,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
   min-width: 120px;
   padding: 4px 14px 8px;
   border-radius: 8px;
-  background: linear-gradient(#1533c8, #0c2196);
-  border: 2px solid rgba(255, 255, 255, .14);
+  background: var(--panel-a);
+  border: 2px solid var(--rute-ramme);
 }
 .pb-poeng {
   font-family: var(--font-tall);
@@ -807,6 +1134,19 @@ button { font: inherit; color: inherit; cursor: pointer; }
   font-weight: 700;
   font-size: clamp(14px, 1.25vw, 20px);
 }
+.pb-jokere { display: flex; gap: 4px; margin-top: 4px; flex-wrap: wrap; justify-content: center; }
+.pb-joker {
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 3px 6px;
+  border-radius: 999px;
+  background: var(--joker-bg);
+  border: 1px solid var(--gull);
+  color: var(--hvit);
+  white-space: nowrap;
+}
+.pb-joker.brukt { opacity: .4; text-decoration: line-through; }
 .poeng-brikke.leder { border-color: var(--gull); box-shadow: 0 0 22px rgba(255, 204, 58, .3); }
 .poeng-brikke.leder .pb-poeng { color: var(--gull); }
 .poeng-brikke.minus .pb-poeng { color: var(--feil); }
@@ -826,9 +1166,17 @@ button { font: inherit; color: inherit; cursor: pointer; }
   flex-direction: column;
   padding: clamp(14px, 2.2vw, 30px) clamp(16px, 4vw, 64px);
   overflow: auto;
-  background: radial-gradient(130% 90% at 50% 30%, #1b3de2 0%, #0c1c8c 58%, #071062 100%);
+  background: var(--natt);
   outline: none;
 }
+.sporsmal::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: var(--sp-bg);
+}
+.sporsmal.med-bilde { background: transparent; }
 .sp-innhold { flex: 1; display: flex; flex-direction: column; min-height: 0; animation: inn .3s .18s both; }
 @keyframes inn { from { opacity: 0; } to { opacity: 1; } }
 .sp-topp {
@@ -862,13 +1210,76 @@ button { font: inherit; color: inherit; cursor: pointer; }
   line-height: 1.25;
   text-wrap: balance;
   overflow-wrap: anywhere;
-  text-shadow: 3px 3px 0 rgba(0, 0, 0, .55);
+  text-shadow: var(--tekstskygge);
 }
 .sp-tekst.lang { max-width: 34ch; font-size: clamp(22px, 3.3vw, 56px); }
 .sp-tekst.svaert-lang { max-width: 46ch; font-size: clamp(19px, 2.5vw, 42px); }
-.med-fasit .sp-tekst { font-size: clamp(22px, 3.3vw, 56px); }
-.med-fasit .sp-tekst.lang { font-size: clamp(20px, 2.6vw, 44px); }
-.med-fasit .sp-tekst.svaert-lang { font-size: clamp(17px, 2vw, 34px); }
+.med-fasit .sp-tekst, .med-joker .sp-tekst { font-size: clamp(22px, 3.3vw, 56px); }
+.med-fasit .sp-tekst.lang, .med-joker .sp-tekst.lang { font-size: clamp(20px, 2.6vw, 44px); }
+.med-fasit .sp-tekst.svaert-lang, .med-joker .sp-tekst.svaert-lang { font-size: clamp(17px, 2vw, 34px); }
+
+.joker-visning { display: flex; flex-direction: column; align-items: center; gap: 12px; width: min(1000px, 100%); }
+.joker-visning:empty { display: none; }
+.alternativer { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(10px, 2vw, 28px); }
+.alternativ {
+  min-width: min(320px, 80vw);
+  padding: 12px 26px;
+  border-radius: 999px;
+  border: 3px solid var(--gull);
+  background: rgba(0, 0, 0, .35);
+  font-family: var(--font-ledetekst);
+  font-weight: 700;
+  font-size: clamp(20px, 2.6vw, 42px);
+  line-height: 1.2;
+  animation: inn .35s both;
+}
+.alternativ-merke {
+  display: inline-block;
+  margin-right: .5em;
+  font-family: var(--font-tall);
+  font-weight: 400;
+  color: var(--gull);
+}
+.joker-melding {
+  margin: 0;
+  max-width: 46ch;
+  padding: 10px 18px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, .35);
+  border-left: 4px solid var(--gull);
+  font-size: clamp(17px, 1.7vw, 26px);
+  text-align: left;
+  animation: inn .35s both;
+}
+.joker-melding strong { color: var(--gull); }
+.joker-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: var(--gull);
+  color: var(--gull-tekst);
+  font-weight: 700;
+  font-size: clamp(15px, 1.4vw, 21px);
+  animation: inn .3s both;
+}
+.joker-banner .lenkeknapp { color: var(--gull-tekst); padding: 2px 4px; font-size: 15px; }
+.alternativ.riktig { border-color: var(--riktig); background: rgba(47, 210, 122, .25); }
+.alternativ.feil { border-color: rgba(255, 255, 255, .25); opacity: .55; text-decoration: line-through; }
+.pg-kort.laast { opacity: .5; }
+.pg-knapp:disabled { cursor: not-allowed; opacity: .5; }
+.laast-tekst { color: var(--svak) !important; font-weight: 400 !important; }
+.joker-etikett {
+  font-family: var(--font-tall);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-size: clamp(13px, 1.1vw, 17px);
+  color: var(--gull);
+}
+
 .sp-fasit {
   display: flex;
   flex-direction: column;
@@ -895,7 +1306,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   color: var(--gull);
   text-wrap: balance;
   overflow-wrap: anywhere;
-  text-shadow: 3px 3px 0 rgba(0, 0, 0, .55);
+  text-shadow: var(--tallskygge);
 }
 
 .timer {
@@ -940,6 +1351,50 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .timer.ute #timer-ute { animation: blink 1s steps(2, start) 3; }
 @keyframes blink { to { visibility: hidden; } }
 
+.jokerrad {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 10px;
+  flex-wrap: wrap;
+  width: min(980px, 100%);
+  margin: 12px auto 0;
+}
+.jokerrad-tittel { font-family: var(--font-tall); text-transform: uppercase; letter-spacing: .08em; color: var(--svak); font-size: 15px; }
+.joker-knapp {
+  padding: 7px 16px;
+  border-radius: 999px;
+  border: 2px solid var(--gull);
+  background: var(--joker-bg);
+  color: var(--hvit);
+  font-weight: 700;
+  font-size: 16px;
+}
+.joker-knapp:hover:not(:disabled) { background: var(--gull); color: var(--gull-tekst); }
+.joker-knapp:disabled { opacity: .35; cursor: not-allowed; border-color: rgba(255, 255, 255, .3); color: var(--svak); }
+.joker-velger {
+  width: min(980px, 100%);
+  margin: 10px auto 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, .4);
+  border: 2px solid var(--gull);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.joker-velger p { margin: 0; font-weight: 700; }
+.joker-velger-spillere { display: flex; flex-wrap: wrap; gap: 8px; }
+.joker-velger-spillere button {
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, .35);
+  background: var(--rute);
+  font-weight: 700;
+}
+.joker-velger-spillere button:hover { background: var(--gull); color: var(--gull-tekst); }
+.joker-velger-spillere button small { font-weight: 400; opacity: .8; margin-left: 4px; }
+
 .poenggiving { width: min(1400px, 100%); margin: 0 auto; }
 .poenggiving h2 {
   margin: 0 0 10px;
@@ -960,13 +1415,14 @@ button { font: inherit; color: inherit; cursor: pointer; }
   padding: 8px 10px 10px;
   border-radius: 10px;
   border: 2px solid transparent;
-  background: rgba(0, 0, 0, .26);
+  background: rgba(0, 0, 0, .3);
   transition: background-color .15s, border-color .15s;
 }
-.pg-kort.riktig { border-color: var(--riktig); background: rgba(47, 210, 122, .16); }
-.pg-kort.feil { border-color: var(--feil); background: rgba(255, 90, 106, .16); }
+.pg-kort.riktig { border-color: var(--riktig); background: rgba(47, 210, 122, .18); }
+.pg-kort.feil { border-color: var(--feil); background: rgba(255, 90, 106, .18); }
 .pg-info { grid-column: 1 / -1; min-width: 0; display: flex; flex-direction: column; text-align: left; }
 .pg-navn { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pg-joker { font-size: 13px; color: var(--gull); font-weight: 700; }
 .pg-sum { font-size: 15px; color: var(--svak); font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pg-knapp {
   min-width: 0;
@@ -1005,6 +1461,10 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 .lenkeknapp:hover { color: var(--hvit); }
 
+/* ---------- Musikk ---------- */
+.musikk-oppsett { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+.musikk-oppsett .hint { margin: 0; flex: 1 1 260px; }
+
 /* ---------- Resultat ---------- */
 .resultat { overflow: auto; align-items: center; padding: clamp(28px, 7vh, 72px) 16px 40px; }
 #konfetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; }
@@ -1017,7 +1477,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   font-size: clamp(38px, 6vw, 84px);
   line-height: 1;
   color: var(--gull);
-  text-shadow: 4px 4px 0 rgba(0, 0, 0, .55);
+  text-shadow: var(--tallskygge);
   text-wrap: balance;
   overflow-wrap: anywhere;
 }
@@ -1029,13 +1489,13 @@ button { font: inherit; color: inherit; cursor: pointer; }
   gap: 12px;
   padding: 10px 18px;
   border-radius: 10px;
-  background: rgba(0, 0, 0, .26);
+  background: rgba(0, 0, 0, .35);
   font-size: 22px;
 }
 .rang-plass { font-family: var(--font-tall); color: var(--svak); }
 .rang-navn { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .rang-poeng { font-family: var(--font-tall); font-variant-numeric: tabular-nums; }
-.rang-1 { font-size: 32px; border: 2px solid var(--gull); background: linear-gradient(90deg, rgba(255, 204, 58, .3), rgba(255, 204, 58, .06)); }
+.rang-1 { font-size: 32px; border: 2px solid var(--gull); background: rgba(0, 0, 0, .45); }
 .rang-1 .rang-plass, .rang-1 .rang-poeng { color: var(--gull); }
 .rang-2, .rang-3 { font-size: 26px; }
 
@@ -1049,7 +1509,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   padding: 10px 18px;
   border-radius: 10px;
   border: 1px solid var(--gull);
-  background: #0a0f2c;
+  background: var(--kant);
   color: var(--hvit);
   box-shadow: 0 10px 30px rgba(0, 0, 0, .45);
 }
@@ -1066,11 +1526,19 @@ button { font: inherit; color: inherit; cursor: pointer; }
 </template>
 
 <template id="spillmal-kropp">
+<div id="bakgrunn" aria-hidden="true"></div>
+<div id="demp" aria-hidden="true"></div>
+
 <section class="skjerm oppsett" id="oppsett">
   <div class="oppsett-innhold">
     <p class="overtittel">Jeopardy</p>
     <h1 id="spilltittel"></h1>
     <p class="spillinfo" id="spillinfo"></p>
+    <p class="regler" id="regler" hidden></p>
+    <div class="musikk-oppsett" id="musikk-oppsett" hidden>
+      <button type="button" class="knapp" id="musikk-vindu">Åpne musikken i eget vindu</button>
+      <p class="hint" id="musikk-oppsett-tekst"></p>
+    </div>
     <div class="fortsett" id="fortsett" hidden>
       <p id="fortsett-tekst"></p>
       <div class="knapperad">
@@ -1098,7 +1566,9 @@ button { font: inherit; color: inherit; cursor: pointer; }
     <div class="verktoy">
       <span class="fremdrift" id="fremdrift"></span>
       <button type="button" class="verktoy-knapp" id="knapp-spillere">Spillere</button>
-      <button type="button" class="verktoy-knapp" id="knapp-lyd" aria-pressed="true">Lyd: på</button>
+      <button type="button" class="verktoy-knapp" id="knapp-musikk" aria-pressed="true" hidden>Musikk: på</button>
+      <button type="button" class="verktoy-knapp" id="knapp-yt" hidden>Musikk (YouTube)</button>
+      <button type="button" class="verktoy-knapp" id="knapp-lyd" aria-pressed="true">Lydeffekter: på</button>
       <button type="button" class="verktoy-knapp" id="knapp-fullskjerm">Fullskjerm</button>
       <button type="button" class="verktoy-knapp" id="knapp-resultat">Se resultater</button>
     </div>
@@ -1118,6 +1588,11 @@ button { font: inherit; color: inherit; cursor: pointer; }
     </header>
     <div class="sp-midt">
       <p class="sp-tekst" id="sp-tekst"></p>
+      <div class="joker-banner" id="joker-banner" hidden>
+        <span id="joker-banner-tekst"></span>
+        <button type="button" class="lenkeknapp" id="joker-angre">Angre joker</button>
+      </div>
+      <div class="joker-visning" id="joker-visning"></div>
       <div class="sp-fasit" id="sp-fasit" hidden>
         <span class="etikett">Fasit</span>
         <p id="sp-fasit-tekst"></p>
@@ -1130,8 +1605,14 @@ button { font: inherit; color: inherit; cursor: pointer; }
       <button type="button" class="verktoy-knapp" id="timer-pause">Pause</button>
       <button type="button" class="verktoy-knapp" id="timer-restart">Start tiden på nytt</button>
     </div>
+    <div class="jokerrad" id="jokerrad" hidden></div>
+    <div class="joker-velger" id="joker-velger" hidden>
+      <p id="joker-velger-tekst"></p>
+      <div class="joker-velger-spillere" id="joker-velger-spillere"></div>
+      <div><button type="button" class="lenkeknapp" id="joker-velger-avbryt">Avbryt</button></div>
+    </div>
     <div class="poenggiving" id="sp-poenggiving" hidden>
-      <h2>Hvem svarte riktig, og hvem svarte feil?</h2>
+      <h2 id="sp-poenggiving-tittel">Hvem svarte riktig, og hvem svarte feil?</h2>
       <div class="pg-rutenett" id="sp-spillere"></div>
     </div>
     <footer class="sp-bunn">
@@ -1173,6 +1654,10 @@ button { font: inherit; color: inherit; cursor: pointer; }
   }
 
   const KAT = DATA.kategorier;
+  KAT.forEach(k => k.sporsmal.forEach(s => {
+    s.feil = Array.isArray(s.feil) ? s.feil.filter(Boolean) : [];
+    s.hint = s.hint || '';
+  }));
   const TID = Math.max(0, Number(DATA.tid) || 0);
   const LAGRE = !DATA.forhandsvisning;
   const NOKKEL = 'jeopardy-spill:' + (DATA.id || DATA.tittel);
@@ -1202,9 +1687,61 @@ button { font: inherit; color: inherit; cursor: pointer; }
     return el;
   }
 
+  // ---------- Fargetema ----------
+  // Generatoren regner ut alle fargene. Spillet setter dem bare inn.
+  const TEMA = Object.assign({ bakgrunn: '#050b3a', bilde: '', demping: 60, tilpasning: 'fyll', myk: false, css: {} }, DATA.tema || {});
+  function brukTema() {
+    const rot = document.documentElement.style;
+    Object.keys(TEMA.css || {}).forEach(k => {
+      if (/^--[a-z-]+$/.test(k)) rot.setProperty(k, String(TEMA.css[k]));
+    });
+    if (TEMA.bilde && /^data:image\//.test(TEMA.bilde)) {
+      const flate = $('bakgrunn');
+      flate.style.backgroundImage = 'url("' + TEMA.bilde + '")';
+      flate.style.backgroundSize = TEMA.tilpasning === 'hele' ? 'contain' : 'cover';
+      flate.classList.toggle('myk', !!TEMA.myk);
+      const d = Math.min(0.95, Math.max(0, Number(TEMA.demping) || 0) / 100);
+      const m = /^#?([0-9a-f]{6})$/i.exec(String(TEMA.bakgrunn || ''));
+      const n = m ? parseInt(m[1], 16) : 0x050b3a;
+      $('demp').style.background = 'rgba(' + ((n >> 16) & 255) + ', ' + ((n >> 8) & 255) + ', ' + (n & 255) + ', ' + d + ')';
+      document.body.classList.add('med-bilde');
+      $('sporsmal').classList.add('med-bilde');
+    }
+  }
+  brukTema();
+
+  // ---------- Jokere ----------
+  const JOKER_INFO = {
+    '5050': { navn: '50/50', kort: '50/50', forklaring: 'Se to svar. Ett av dem er riktig.' },
+    'hint': { navn: 'Hint', kort: 'Hint', forklaring: 'Få et lite hint på skjermen.' },
+    'venn': { navn: 'Spør en venn', kort: 'Venn', forklaring: 'Spør én i klassen. Tiden starter på nytt.' },
+    'tid': { navn: 'Ekstra tid', kort: '+tid', forklaring: 'Få ' + TID + ' sekunder ekstra.' }
+  };
+  const JK = Object.assign({ valgt: [], antall: '1', kostnad: 'halv', trekk: 100 }, DATA.jokere || {});
+  const JOKERE = (Array.isArray(JK.valgt) ? JK.valgt : []).filter(id => JOKER_INFO[id] && (id !== 'tid' || TID));
+  const EN_TOTALT = String(JK.antall) === 'total';
+  const JOKER_ANTALL = EN_TOTALT ? 1 : Math.max(1, Math.min(9, Number(JK.antall) || 1));
+  const KOSTNAD = ['halv', 'halvgevinst', 'fast', 'gratis'].includes(JK.kostnad) ? JK.kostnad : 'halv';
+  const TREKK = Math.max(0, Math.round(Number(JK.trekk) || 0));
+  const brukte = (p, id) => (p.jokere && p.jokere[id]) || 0;
+  const bruktTotalt = p => Object.keys(p.jokere || {}).reduce((sum, k) => sum + (p.jokere[k] || 0), 0);
+  const igjen = (p, id) => (EN_TOTALT ? 1 - bruktTotalt(p) : JOKER_ANTALL - brukte(p, id));
+  const halv = n => Math.ceil(n / 2);
+
+  function kostnadTekst() {
+    if (KOSTNAD === 'halv') return 'Bruker du en joker, svarer du alene, og spørsmålet teller halvparten, både pluss og minus.';
+    if (KOSTNAD === 'halvgevinst') return 'Bruker du en joker, svarer du alene. Riktig svar gir halve poeng, men feil svar koster fullt.';
+    if (KOSTNAD === 'fast') return 'Bruker du en joker, svarer du alene, og jokeren koster ' + tall(TREKK) + ' poeng uansett hvordan det går.';
+    return 'Bruker du en joker, svarer du alene. Jokeren koster ingen poeng.';
+  }
+  function antallTekst() {
+    if (EN_TOTALT) return 'Alle har én joker til sammen og velger selv hvilken.';
+    return JOKER_ANTALL === 1 ? 'Alle har én av hver.' : 'Alle har ' + JOKER_ANTALL + ' av hver.';
+  }
+
   // ---------- Tilstand og lagring ----------
-  function tomTilstand(spillere, lyd) {
-    return { spillere: spillere || [], brukt: {}, historikk: [], lyd: lyd !== false, startet: false };
+  function tomTilstand(spillere, lyd, musikk) {
+    return { spillere: spillere || [], brukt: {}, historikk: [], femti: {}, lyd: lyd !== false, musikk: musikk !== false, startet: false };
   }
   let S = tomTilstand();
   let lagret = null;
@@ -1218,6 +1755,9 @@ button { font: inherit; color: inherit; cursor: pointer; }
       const t = JSON.parse(localStorage.getItem(NOKKEL) || 'null');
       if (t && t.startet && Array.isArray(t.spillere) && t.spillere.length && t.brukt) {
         t.historikk = Array.isArray(t.historikk) ? t.historikk : [];
+        t.spillere.forEach(p => { p.jokere = p.jokere || {}; });
+        t.musikk = t.musikk !== false;
+        t.femti = t.femti || {};
         return t;
       }
     } catch (e) { /* ignorer */ }
@@ -1228,10 +1768,12 @@ button { font: inherit; color: inherit; cursor: pointer; }
   }
   let teller = 0;
   const nyId = () => 's' + Date.now().toString(36) + (teller++).toString(36);
+  const nySpiller = navn => ({ id: nyId(), navn: navn, poeng: 0, jokere: {} });
   const antallBrukt = () => Object.keys(S.brukt).length;
 
   function visSkjerm(id) {
     ['oppsett', 'spill', 'resultat'].forEach(s => { $(s).hidden = s !== id; });
+    musikkStyring();
   }
 
   // ---------- Oppsett ----------
@@ -1290,7 +1832,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
     navn.forEach(n => {
       const liten = n.toLocaleLowerCase('nb');
       if (S.spillere.some(s => s.navn.toLocaleLowerCase('nb') === liten)) finnes.push(n);
-      else S.spillere.push({ id: nyId(), navn: n, poeng: 0 });
+      else S.spillere.push(nySpiller(n));
     });
     $('oppsett-melding').textContent = finnes.length ? navneliste(finnes) + ' er allerede med.' : '';
     if (S.startet) lagre();
@@ -1316,21 +1858,24 @@ button { font: inherit; color: inherit; cursor: pointer; }
     if (modus === 'ny') {
       S.brukt = {};
       S.historikk = [];
-      S.spillere.forEach(s => { s.poeng = 0; });
+      S.femti = {};
+      S.spillere.forEach(s => { s.poeng = 0; s.jokere = {}; });
     }
     S.startet = true;
     lagre();
+    lydKontekst();
     visBrett();
   });
   $('fortsett-knapp').addEventListener('click', () => {
     if (!lagret) return;
     S = lagret;
     lagret = null;
+    lydKontekst();
     visBrett();
   });
   $('forkast-knapp').addEventListener('click', () => {
     if (lagret) {
-      S = tomTilstand(lagret.spillere.map(s => ({ id: s.id, navn: s.navn, poeng: 0 })), lagret.lyd);
+      S = tomTilstand(lagret.spillere.map(s => ({ id: s.id, navn: s.navn, poeng: 0, jokere: {} })), lagret.lyd, lagret.musikk);
     }
     slettLagret();
     lagret = null;
@@ -1348,6 +1893,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
     tegnBrett();
     tegnPoeng();
     oppdaterLydknapp();
+    oppdaterMusikkknapp();
   }
 
   function tegnBrett() {
@@ -1388,6 +1934,23 @@ button { font: inherit; color: inherit; cursor: pointer; }
       if (s.poeng < 0) li.classList.add('minus');
       if (sistEndret.has(s.id)) li.classList.add('endret');
       li.append(lag('span', 'pb-poeng', poengTekst(s.poeng)), lag('span', 'pb-navn', s.navn));
+      if (JOKERE.length) {
+        const rad = lag('span', 'pb-jokere');
+        if (EN_TOTALT) {
+          const rest = igjen(s, JOKERE[0]);
+          const merke = lag('span', 'pb-joker' + (rest <= 0 ? ' brukt' : ''), 'Joker');
+          merke.title = rest > 0 ? 'Har jokeren igjen' : 'Jokeren er brukt';
+          rad.append(merke);
+        } else {
+          JOKERE.forEach(id => {
+            const rest = igjen(s, id);
+            const merke = lag('span', 'pb-joker' + (rest <= 0 ? ' brukt' : ''), JOKER_INFO[id].kort + (JOKER_ANTALL > 1 && rest > 0 ? ' ×' + rest : ''));
+            merke.title = JOKER_INFO[id].navn + (rest > 0 ? ': ' + rest + ' igjen' : ': brukt opp');
+            rad.append(merke);
+          });
+        }
+        li.append(rad);
+      }
       ol.append(li);
     });
     sistEndret = new Set();
@@ -1402,27 +1965,37 @@ button { font: inherit; color: inherit; cursor: pointer; }
       const p = S.spillere.find(x => x.id === e.id);
       if (p) { p.poeng -= e.d; sistEndret.add(p.id); }
     });
+    let jokerTekst = '';
+    if (h.joker) {
+      const p = S.spillere.find(x => x.id === h.joker.id);
+      if (p && p.jokere && p.jokere[h.joker.type]) {
+        p.jokere[h.joker.type]--;
+        jokerTekst = ' ' + p.navn + ' fikk ' + JOKER_INFO[h.joker.type].navn + ' tilbake.';
+      }
+    }
     delete S.brukt[h.key];
     lagre();
     tegnBrett();
     tegnPoeng();
     const [ki, r] = h.key.split('-').map(Number);
-    toast('Angret ' + KAT[ki].navn + ' for ' + tall(KAT[ki].sporsmal[r].poeng) + '. Spørsmålet er åpent igjen.');
+    toast('Angret ' + KAT[ki].navn + ' for ' + tall(KAT[ki].sporsmal[r].poeng) + '.' + jokerTekst + ' Spørsmålet er åpent igjen.');
   });
   $('knapp-spillere').addEventListener('click', () => visOppsett('rediger'));
   $('knapp-resultat').addEventListener('click', () => visResultat());
 
   // ---------- Spørsmålet ----------
   let aktiv = null;
+  let skjulTid = null;
+  const aktivtSporsmal = () => KAT[aktiv.ki].sporsmal[aktiv.r];
 
   function apneSporsmal(ki, r, kilde) {
     if (aktiv) return;
     lydKontekst();
     const k = KAT[ki];
     const s = k.sporsmal[r];
-    aktiv = { ki: ki, r: r, key: ki + '-' + r, valg: {}, fasitVist: false };
+    aktiv = { ki: ki, r: r, key: ki + '-' + r, valg: {}, fasitVist: false, joker: null };
     const ov = $('sporsmal');
-    ov.classList.remove('med-fasit');
+    ov.classList.remove('med-fasit', 'med-joker');
     $('sp-kategori').textContent = k.navn;
     $('sp-poeng').textContent = tall(s.poeng) + ' poeng';
     const tekst = $('sp-tekst');
@@ -1431,16 +2004,24 @@ button { font: inherit; color: inherit; cursor: pointer; }
     tekst.classList.toggle('svaert-lang', s.tekst.length > 240);
     $('sp-fasit-tekst').textContent = s.fasit || 'Ingen fasit er lagt inn for dette spørsmålet.';
     $('sp-fasit').hidden = true;
+    $('joker-visning').textContent = '';
+    $('joker-velger').hidden = true;
+    $('joker-banner').hidden = true;
+    $('joker-angre').hidden = false;
     $('sp-poenggiving').hidden = true;
     $('sp-vis-fasit').hidden = false;
     $('sp-ferdig').hidden = true;
     $('sp-oppsummering').textContent = '';
     $('sp-timer').hidden = !TID;
+    tegnJokerrad();
     ov.hidden = false;
     ov.scrollTop = 0;
     zoom(ov, kilde);
+    clearTimeout(skjulTid);
+    skjulTid = setTimeout(() => { if (aktiv) $('spill').classList.add('bak-sporsmal'); }, 450);
     try { ov.focus({ preventScroll: true }); } catch (e) { /* ignorer */ }
     if (TID) startTimer();
+    musikkStyring();
   }
 
   function zoom(ov, kilde) {
@@ -1457,36 +2038,201 @@ button { font: inherit; color: inherit; cursor: pointer; }
     ], { duration: 420, easing: 'cubic-bezier(.2, .8, .2, 1)' });
   }
 
+  // ---------- Jokere i spørsmålet ----------
+  function jokerTilgjengelig(id) {
+    const s = aktivtSporsmal();
+    if (aktiv.fasitVist) return { ok: false, grunn: 'Fasit er allerede vist.' };
+    if (aktiv.joker) return { ok: false, grunn: 'Det er allerede brukt en joker på dette spørsmålet.' };
+    if (TID && timer.igjen <= 0) return { ok: false, grunn: 'Tiden er ute.' };
+    if (id === '5050' && (!s.feil.length || !s.fasit)) return { ok: false, grunn: 'Ingen feil svar er lagt inn for dette spørsmålet.' };
+    if (id === 'hint' && !s.hint) return { ok: false, grunn: 'Ingen hint er lagt inn for dette spørsmålet.' };
+    if (!S.spillere.some(p => igjen(p, id) > 0)) return { ok: false, grunn: 'Alle har brukt opp denne jokeren.' };
+    return { ok: true, grunn: '' };
+  }
+
+  function tegnJokerrad() {
+    const rad = $('jokerrad');
+    rad.textContent = '';
+    rad.hidden = !JOKERE.length || !aktiv || aktiv.fasitVist;
+    if (rad.hidden) return;
+    rad.append(lag('span', 'jokerrad-tittel', 'Jokere'));
+    JOKERE.forEach(id => {
+      const t = jokerTilgjengelig(id);
+      const knapp = lag('button', 'joker-knapp', JOKER_INFO[id].navn);
+      knapp.type = 'button';
+      knapp.disabled = !t.ok;
+      knapp.title = t.ok ? JOKER_INFO[id].forklaring : t.grunn;
+      knapp.addEventListener('click', () => visJokerVelger(id));
+      rad.append(knapp);
+    });
+  }
+
+  let tidForVelger = false;
+  function visJokerVelger(id) {
+    if (!aktiv || !jokerTilgjengelig(id).ok) return;
+    tidForVelger = timer.kjorer;
+    pauseTimer();
+    const liste = $('joker-velger-spillere');
+    liste.textContent = '';
+    $('joker-velger-tekst').textContent = 'Hvem bruker ' + JOKER_INFO[id].navn + '?';
+    S.spillere.forEach(p => {
+      const rest = igjen(p, id);
+      const b = lag('button', null, p.navn);
+      b.type = 'button';
+      if (rest <= 0) {
+        b.disabled = true;
+        b.append(lag('small', null, '(brukt)'));
+      } else if (JOKER_ANTALL > 1) b.append(lag('small', null, '(' + rest + ' igjen)'));
+      b.addEventListener('click', () => brukJoker(id, p));
+      liste.append(b);
+    });
+    $('joker-velger').hidden = false;
+    const forste = liste.querySelector('button:not(:disabled)');
+    if (forste) forste.focus({ preventScroll: true });
+  }
+  function lukkJokerVelger() {
+    if ($('joker-velger').hidden) return;
+    $('joker-velger').hidden = true;
+    if (tidForVelger) fortsettTimer();
+    tidForVelger = false;
+    try { $('sporsmal').focus({ preventScroll: true }); } catch (e) { /* ignorer */ }
+  }
+  $('joker-velger-avbryt').addEventListener('click', lukkJokerVelger);
+
+  function verdiTekst() {
+    const p = aktivtSporsmal().poeng;
+    if (KOSTNAD === 'halv') return 'Spørsmålet er nå verdt ' + tall(halv(p)) + '.';
+    if (KOSTNAD === 'halvgevinst') return 'Riktig gir ' + tall(halv(p)) + ', feil koster ' + tall(p) + '.';
+    if (KOSTNAD === 'fast') return 'Jokeren koster ' + tall(TREKK) + ' poeng.';
+    return 'Jokeren er gratis.';
+  }
+
+  function brukJoker(id, p) {
+    $('joker-velger').hidden = true;
+    if (!aktiv || !jokerTilgjengelig(id).ok || igjen(p, id) <= 0) { tidForVelger = false; return; }
+    p.jokere = p.jokere || {};
+    p.jokere[id] = brukte(p, id) + 1;
+    aktiv.joker = { id: p.id, type: id };
+    visJokerEffekt();
+    if (id === 'venn') startTimer();
+    else if (id === 'tid') { if (tidForVelger || timer.igjen > 0) leggTilTid(TID * 1000); }
+    else if (tidForVelger) fortsettTimer();
+    tidForVelger = false;
+    lyd('joker');
+    tegnJokerrad();
+    try { $('sporsmal').focus({ preventScroll: true }); } catch (e) { /* ignorer */ }
+  }
+
+  function visJokerEffekt() {
+    const j = aktiv.joker;
+    const p = S.spillere.find(x => x.id === j.id);
+    const navn = p ? p.navn : '';
+    const s = aktivtSporsmal();
+    const vis = $('joker-visning');
+    vis.textContent = '';
+    $('sporsmal').classList.add('med-joker');
+    const banner = $('joker-banner');
+    $('joker-banner-tekst').textContent = 'Joker · ' + navn + ' bruker ' + JOKER_INFO[j.type].navn + ' · ' + navn + ' svarer alene · ' + verdiTekst();
+    banner.hidden = false;
+    if (j.type === '5050') {
+      if (!S.femti[aktiv.key] || !s.feil.includes(S.femti[aktiv.key])) {
+        S.femti[aktiv.key] = s.feil[Math.floor(Math.random() * s.feil.length)];
+      }
+      const feil = S.femti[aktiv.key];
+      const valg = Math.random() < 0.5 ? [s.fasit, feil] : [feil, s.fasit];
+      const boks = lag('div', 'alternativer');
+      valg.forEach((v, i) => {
+        const a = lag('div', 'alternativ');
+        a.dataset.riktig = String(v === s.fasit);
+        a.append(lag('span', 'alternativ-merke', i === 0 ? 'A' : 'B'), document.createTextNode(v));
+        boks.append(a);
+      });
+      vis.append(lag('span', 'joker-etikett', '50/50 for ' + navn), boks);
+    } else if (j.type === 'hint') {
+      const m = lag('p', 'joker-melding');
+      m.append(lag('strong', null, 'Hint for ' + navn + ': '), document.createTextNode(s.hint));
+      vis.append(m);
+    } else if (j.type === 'venn') {
+      const m = lag('p', 'joker-melding');
+      m.append(lag('strong', null, navn + ' spør en venn. '), document.createTextNode('Velg én i klassen å hviske med.' + (TID ? ' Tiden starter på nytt.' : '')));
+      vis.append(m);
+    } else if (j.type === 'tid') {
+      const m = lag('p', 'joker-melding');
+      m.append(lag('strong', null, navn + ' '), document.createTextNode('fikk ' + TID + ' sekunder ekstra.'));
+      vis.append(m);
+    }
+  }
+
+  function angreJoker() {
+    if (!aktiv || !aktiv.joker || aktiv.fasitVist) return;
+    const j = aktiv.joker;
+    const p = S.spillere.find(x => x.id === j.id);
+    if (p && p.jokere && p.jokere[j.type]) p.jokere[j.type]--;
+    aktiv.joker = null;
+    $('joker-visning').textContent = '';
+    $('joker-banner').hidden = true;
+    $('sporsmal').classList.remove('med-joker');
+    tegnJokerrad();
+    if (p) toast(p.navn + ' fikk ' + JOKER_INFO[j.type].navn + ' tilbake.');
+  }
+  $('joker-angre').addEventListener('click', angreJoker);
+
+  const jokerSpiller = id => !!(aktiv && aktiv.joker && aktiv.joker.id === id);
+  const last = id => !!(aktiv && aktiv.joker && aktiv.joker.id !== id);
+  function poengFor(id, verdi) {
+    const p = aktivtSporsmal().poeng;
+    if (!jokerSpiller(id)) return verdi * p;
+    if (KOSTNAD === 'halv') return verdi * halv(p);
+    if (KOSTNAD === 'halvgevinst') return verdi === 1 ? halv(p) : -p;
+    return verdi * p;
+  }
+  const jokerTrekk = id => (KOSTNAD === 'fast' && jokerSpiller(id) ? -TREKK : 0);
+
   function visFasit() {
     if (!aktiv || aktiv.fasitVist) return;
+    lukkJokerVelger();
     aktiv.fasitVist = true;
     stoppTimer();
     $('sporsmal').classList.add('med-fasit');
     $('sp-fasit').hidden = false;
     $('sp-timer').hidden = true;
+    $('jokerrad').hidden = true;
+    $('joker-angre').hidden = true;
+    document.querySelectorAll('.alternativ').forEach(a => a.classList.add(a.dataset.riktig === 'true' ? 'riktig' : 'feil'));
     $('sp-vis-fasit').hidden = true;
     $('sp-ferdig').hidden = false;
     tegnPoenggiving();
     $('sp-poenggiving').hidden = false;
     lyd('fasit');
+    musikkStyring();
   }
 
   function tegnPoenggiving() {
-    const s = KAT[aktiv.ki].sporsmal[aktiv.r];
     const g = $('sp-spillere');
     g.textContent = '';
-    S.spillere.forEach(p => {
+    const j = aktiv.joker;
+    const jp = j && S.spillere.find(x => x.id === j.id);
+    $('sp-poenggiving-tittel').textContent = jp ? 'Svarte ' + jp.navn + ' riktig?' : 'Hvem svarte riktig, og hvem svarte feil?';
+    const rekkefolge = jp ? [jp].concat(S.spillere.filter(x => x !== jp)) : S.spillere;
+    rekkefolge.forEach(p => {
       const kort = lag('div', 'pg-kort');
       kort.dataset.id = p.id;
+      const laast = last(p.id);
+      if (laast) kort.classList.add('laast');
       const info = lag('div', 'pg-info');
-      info.append(lag('span', 'pg-navn', p.navn), lag('span', 'pg-sum', poengTekst(p.poeng)));
-      const pluss = lag('button', 'pg-knapp pluss', '+' + tall(s.poeng));
+      info.append(lag('span', 'pg-navn', p.navn));
+      if (jokerSpiller(p.id)) info.append(lag('span', 'pg-joker', 'Joker: ' + JOKER_INFO[j.type].navn));
+      if (laast) info.append(lag('span', 'pg-joker laast-tekst', 'Låst – ' + jp.navn + ' brukte joker'));
+      info.append(lag('span', 'pg-sum', poengTekst(p.poeng)));
+      const pluss = lag('button', 'pg-knapp pluss', '+' + tall(poengFor(p.id, 1)));
       pluss.type = 'button';
-      pluss.setAttribute('aria-label', 'Riktig svar: ' + p.navn + ' får ' + tall(s.poeng) + ' poeng');
+      pluss.disabled = laast;
+      pluss.setAttribute('aria-label', 'Riktig svar: ' + p.navn + ' får ' + tall(poengFor(p.id, 1)) + ' poeng');
       pluss.addEventListener('click', () => velg(p.id, 1));
-      const minus = lag('button', 'pg-knapp minus', '−' + tall(s.poeng));
+      const minus = lag('button', 'pg-knapp minus', '−' + tall(poengFor(p.id, -1)));
       minus.type = 'button';
-      minus.setAttribute('aria-label', 'Feil svar: ' + p.navn + ' mister ' + tall(s.poeng) + ' poeng');
+      minus.disabled = laast;
+      minus.setAttribute('aria-label', 'Feil svar: ' + p.navn + ' mister ' + tall(poengFor(p.id, -1)) + ' poeng');
       minus.addEventListener('click', () => velg(p.id, -1));
       kort.append(info, pluss, minus);
       g.append(kort);
@@ -1495,80 +2241,107 @@ button { font: inherit; color: inherit; cursor: pointer; }
   }
 
   function velg(id, verdi) {
-    if (!aktiv) return;
+    if (!aktiv || last(id)) return;
     aktiv.valg[id] = aktiv.valg[id] === verdi ? 0 : verdi;
     oppdaterKort();
     if (aktiv.valg[id] === 1) lyd('riktig');
     else if (aktiv.valg[id] === -1) lyd('feil');
   }
 
+  function endringFor(id) {
+    if (last(id)) return 0;
+    const v = aktiv.valg[id] || 0;
+    return (v ? poengFor(id, v) : 0) + jokerTrekk(id);
+  }
+
   function oppdaterKort() {
-    const s = KAT[aktiv.ki].sporsmal[aktiv.r];
-    const pluss = [];
+    const deler = [];
     const minus = [];
     document.querySelectorAll('.pg-kort').forEach(kort => {
       const id = kort.dataset.id;
       const v = aktiv.valg[id] || 0;
       const p = S.spillere.find(x => x.id === id);
       if (!p) return;
+      const d = endringFor(id);
       kort.classList.toggle('riktig', v === 1);
       kort.classList.toggle('feil', v === -1);
       kort.querySelector('.pluss').setAttribute('aria-pressed', String(v === 1));
       kort.querySelector('.minus').setAttribute('aria-pressed', String(v === -1));
-      kort.querySelector('.pg-sum').textContent = v
-        ? poengTekst(p.poeng) + ' → ' + poengTekst(p.poeng + v * s.poeng)
-        : poengTekst(p.poeng);
-      if (v === 1) pluss.push(p.navn);
-      if (v === -1) minus.push(p.navn);
+      let sum = d ? poengTekst(p.poeng) + ' → ' + poengTekst(p.poeng + d) : poengTekst(p.poeng);
+      if (jokerTrekk(id)) sum += ' (inkl. joker ' + poengTekst(jokerTrekk(id)) + ')';
+      kort.querySelector('.pg-sum').textContent = sum;
+      const medJoker = jokerSpiller(id) && KOSTNAD !== 'gratis' ? ' (med joker)' : '';
+      if (v === 1) deler.push(p.navn + ' får ' + tall(poengFor(id, 1)) + medJoker);
+      if (v === -1) {
+        if (jokerSpiller(id)) deler.push(p.navn + ' mister ' + tall(-poengFor(id, -1)) + medJoker);
+        else minus.push(p.navn);
+      }
+      if (!v && jokerTrekk(id)) deler.push(p.navn + ' betaler ' + tall(TREKK) + ' for jokeren');
     });
-    const deler = [];
-    if (pluss.length) deler.push(navneliste(pluss) + ' får ' + tall(s.poeng));
-    if (minus.length) deler.push(navneliste(minus) + ' mister ' + tall(s.poeng));
+    if (minus.length) deler.push(navneliste(minus) + ' mister ' + tall(aktivtSporsmal().poeng));
     $('sp-oppsummering').textContent = deler.length ? deler.join('. ') + '.' : 'Ingen får poeng.';
   }
 
   function ferdig() {
     if (!aktiv) return;
-    const s = KAT[aktiv.ki].sporsmal[aktiv.r];
     const endringer = [];
-    Object.keys(aktiv.valg).forEach(id => {
-      const v = aktiv.valg[id];
-      const p = S.spillere.find(x => x.id === id);
-      if (!v || !p) return;
-      const d = v * s.poeng;
+    S.spillere.forEach(p => {
+      const d = endringFor(p.id);
+      if (!d) return;
       p.poeng += d;
-      endringer.push({ id: id, d: d });
-      sistEndret.add(id);
+      endringer.push({ id: p.id, d: d });
+      sistEndret.add(p.id);
     });
     S.brukt[aktiv.key] = true;
-    S.historikk.push({ key: aktiv.key, endringer: endringer });
+    S.historikk.push({ key: aktiv.key, endringer: endringer, joker: aktiv.joker });
     lagre();
     lukkSporsmal();
     if (antallBrukt() >= ANTALL) setTimeout(visResultat, 700);
   }
 
+  function avbryt() {
+    // Spørsmålet blir ikke brukt, så en joker som ble brukt på det, gis tilbake.
+    if (aktiv && aktiv.joker) {
+      const j = aktiv.joker;
+      const p = S.spillere.find(x => x.id === j.id);
+      if (p && p.jokere && p.jokere[j.type]) {
+        p.jokere[j.type]--;
+        toast('Spørsmålet ble lukket uten poeng. ' + p.navn + ' fikk ' + JOKER_INFO[j.type].navn + ' tilbake.');
+      }
+      lagre();
+    } else if (aktiv && S.femti[aktiv.key]) lagre();
+    lukkSporsmal();
+  }
+
   function lukkSporsmal() {
     stoppTimer();
+    $('joker-velger').hidden = true;
+    tidForVelger = false;
     $('sporsmal').hidden = true;
+    clearTimeout(skjulTid);
+    $('spill').classList.remove('bak-sporsmal');
     const key = aktiv && aktiv.key;
     aktiv = null;
     tegnBrett();
     tegnPoeng();
+    musikkStyring();
     const neste = document.querySelector('.rute[data-key="' + key + '"]:not(:disabled)') || document.querySelector('.rute:not(:disabled)');
     if (neste) { try { neste.focus({ preventScroll: true }); } catch (e) { /* ignorer */ } }
   }
 
   $('sp-vis-fasit').addEventListener('click', visFasit);
   $('sp-ferdig').addEventListener('click', ferdig);
-  $('sp-avbryt').addEventListener('click', lukkSporsmal);
+  $('sp-avbryt').addEventListener('click', avbryt);
 
   // ---------- Nedtelling ----------
-  const timer = { igjen: 0, slutt: 0, kjorer: false, intervall: null, sisteSek: null };
+  const timer = { igjen: 0, total: 0, slutt: 0, kjorer: false, intervall: null, sisteSek: null };
 
   function startTimer() {
     stoppTimer();
     timer.igjen = TID * 1000;
+    timer.total = TID * 1000;
     fortsettTimer();
+    if (aktiv) tegnJokerrad();
   }
   function fortsettTimer() {
     if (timer.igjen <= 0) return;
@@ -1578,17 +2351,26 @@ button { font: inherit; color: inherit; cursor: pointer; }
     clearInterval(timer.intervall);
     timer.intervall = setInterval(tikk, 100);
     visTimer();
+    musikkStyring();
   }
   function pauseTimer() {
     if (!timer.kjorer) return;
     timer.igjen = Math.max(0, timer.slutt - performance.now());
     stoppTimer();
     visTimer();
+    musikkStyring();
   }
   function stoppTimer() {
     clearInterval(timer.intervall);
     timer.intervall = null;
     timer.kjorer = false;
+  }
+  function leggTilTid(ms) {
+    if (timer.kjorer) timer.igjen = Math.max(0, timer.slutt - performance.now());
+    stoppTimer();
+    timer.igjen = Math.max(0, timer.igjen) + ms;
+    timer.total = timer.igjen;
+    fortsettTimer();
   }
   function tikk() {
     timer.igjen = Math.max(0, timer.slutt - performance.now());
@@ -1600,13 +2382,15 @@ button { font: inherit; color: inherit; cursor: pointer; }
     if (timer.igjen <= 0) {
       stoppTimer();
       lyd('slutt');
+      musikkStyring();
+      if (aktiv) tegnJokerrad();
     }
     visTimer();
   }
   function visTimer() {
     const ute = timer.igjen <= 0;
     const sek = Math.ceil(timer.igjen / 1000);
-    $('timer-fyll').style.transform = 'scaleX(' + (TID ? timer.igjen / (TID * 1000) : 0) + ')';
+    $('timer-fyll').style.transform = 'scaleX(' + (timer.total ? Math.min(1, timer.igjen / timer.total) : 0) + ')';
     $('timer-tall').textContent = String(sek);
     $('timer-tall').hidden = ute;
     $('timer-ute').hidden = !ute;
@@ -1621,22 +2405,26 @@ button { font: inherit; color: inherit; cursor: pointer; }
   $('timer-restart').addEventListener('click', startTimer);
 
   document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !$('joker-velger').hidden) {
+      e.preventDefault();
+      lukkJokerVelger();
+      return;
+    }
     if (e.key === 'Escape' && DATA.forhandsvisning && window.parent !== window) {
       try { window.parent.postMessage('jeopardy:lukk-forhandsvisning', '*'); } catch (err) { /* ignorer */ }
       return;
     }
-    if (!aktiv || aktiv.fasitVist || !TID) return;
+    if (!aktiv || aktiv.fasitVist || !TID || !$('joker-velger').hidden) return;
     if (e.key !== ' ' && e.code !== 'Space') return;
     const mal = e.target;
-    if (mal && (mal.tagName === 'BUTTON' || mal.tagName === 'INPUT')) return;
+    if (mal && (mal.tagName === 'BUTTON' || mal.tagName === 'INPUT' || mal.tagName === 'A')) return;
     e.preventDefault();
     if (timer.kjorer) pauseTimer(); else fortsettTimer();
   });
 
-  // ---------- Lyd ----------
+  // ---------- Lydeffekter ----------
   let lydkontekst = null;
   function lydKontekst() {
-    if (!S.lyd) return null;
     try {
       if (!lydkontekst) {
         const AK = window.AudioContext || window.webkitAudioContext;
@@ -1670,12 +2458,13 @@ button { font: inherit; color: inherit; cursor: pointer; }
       else if (type === 'fasit') { tone(659, 0, 0.16, 'triangle', 0.25); tone(988, 0.13, 0.3, 'triangle', 0.25); }
       else if (type === 'riktig') { tone(784, 0, 0.12, 'triangle', 0.2); tone(1175, 0.09, 0.2, 'triangle', 0.2); }
       else if (type === 'feil') tone(220, 0, 0.22, 'square', 0.1);
+      else if (type === 'joker') { tone(523, 0, 0.1, 'triangle', 0.2); tone(784, 0.08, 0.1, 'triangle', 0.2); tone(1047, 0.16, 0.18, 'triangle', 0.2); }
       else if (type === 'seier') [523, 659, 784, 1047].forEach((f, i) => tone(f, i * 0.14, 0.4, 'triangle', 0.22));
     } catch (e) { /* lyd er valgfritt */ }
   }
   function oppdaterLydknapp() {
     const k = $('knapp-lyd');
-    k.textContent = S.lyd ? 'Lyd: på' : 'Lyd: av';
+    k.textContent = S.lyd ? 'Lydeffekter: på' : 'Lydeffekter: av';
     k.setAttribute('aria-pressed', String(!!S.lyd));
   }
   $('knapp-lyd').addEventListener('click', () => {
@@ -1684,6 +2473,95 @@ button { font: inherit; color: inherit; cursor: pointer; }
     oppdaterLydknapp();
     if (S.lyd) lyd('tikk');
   });
+
+  // ---------- Bakgrunnsmusikk ----------
+  // Lydfilen ligger som base64 i en egen blokk og gjøres om til en blob-adresse én gang.
+  // YouTube kan ikke bygges inn i en fil som åpnes fra disk, så den åpnes i et eget vindu.
+  const M = Object.assign({ type: 'ingen', mime: 'audio/mpeg', navn: '', youtube: '', start: 0, volum: 40, modus: 'alltid' }, DATA.musikk || {});
+  const musikkBlokk = $('musikk-data');
+  const HAR_LYDFIL = M.type === 'fil' && !!musikkBlokk && musikkBlokk.textContent.trim().length > 0;
+  const HAR_YT = M.type === 'youtube' && /^[\w-]{11}$/.test(M.youtube || '');
+  const MODUS = M.modus === 'nedtelling' && !TID ? 'alltid' : M.modus;
+  let lydfil = null;
+  let musikkFeil = false;
+
+  function lagLydfil() {
+    try {
+      const bin = atob(musikkBlokk.textContent.replace(/\s+/g, ''));
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      const url = URL.createObjectURL(new Blob([bytes], { type: M.mime || 'audio/mpeg' }));
+      const a = new Audio(url);
+      a.loop = true;
+      a.preload = 'auto';
+      return a;
+    } catch (e) {
+      musikkFeil = true;
+      return null;
+    }
+  }
+  function skalSpille() {
+    if (!HAR_LYDFIL || !S.musikk || !S.startet) return false;
+    const brettSynlig = !$('spill').hidden || !$('resultat').hidden;
+    const sporsmalApent = !!aktiv;
+    if (MODUS === 'nedtelling') return sporsmalApent && timer.kjorer;
+    if (MODUS === 'brett') return brettSynlig && !sporsmalApent;
+    return brettSynlig || sporsmalApent;
+  }
+  function musikkStyring() {
+    if (!HAR_LYDFIL || musikkFeil) return;
+    const spill = skalSpille();
+    if (!lydfil) {
+      if (!spill) return;
+      lydfil = lagLydfil();
+      if (!lydfil) return;
+    }
+    const grunn = Math.min(1, Math.max(0, (Number(M.volum) || 0) / 100));
+    lydfil.volume = MODUS === 'alltid' && aktiv ? grunn * 0.5 : grunn;
+    if (spill && lydfil.paused) {
+      const p = lydfil.play();
+      if (p && p.catch) p.catch(() => { oppdaterMusikkknapp(true); });
+    } else if (!spill && !lydfil.paused) lydfil.pause();
+  }
+  function oppdaterMusikkknapp(trengerKlikk) {
+    const k = $('knapp-musikk');
+    k.hidden = !HAR_LYDFIL;
+    if (trengerKlikk === true && S.musikk) k.textContent = 'Klikk for å starte musikken';
+    else k.textContent = S.musikk ? 'Musikk: på' : 'Musikk: av';
+    k.setAttribute('aria-pressed', String(!!S.musikk));
+    $('knapp-yt').hidden = !HAR_YT;
+  }
+  $('knapp-musikk').addEventListener('click', () => {
+    if (lydfil && lydfil.paused && S.musikk && skalSpille()) {
+      musikkStyring();
+      oppdaterMusikkknapp();
+      return;
+    }
+    S.musikk = !S.musikk;
+    lagre();
+    oppdaterMusikkknapp();
+    musikkStyring();
+  });
+  document.addEventListener('keydown', e => {
+    if ((e.key === 'm' || e.key === 'M') && HAR_LYDFIL && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      const t = e.target;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+      S.musikk = !S.musikk;
+      lagre();
+      oppdaterMusikkknapp();
+      musikkStyring();
+    }
+  });
+
+  function apneYoutube() {
+    const start = Math.max(0, Math.floor(Number(M.start) || 0));
+    const url = 'https://www.youtube.com/watch?v=' + M.youtube + (start ? '&t=' + start + 's' : '');
+    let vindu = null;
+    try { vindu = window.open(url, 'jeopardy-musikk', 'popup,width=520,height=360'); } catch (e) { vindu = null; }
+    if (!vindu) toast('Nettleseren stoppet vinduet. Tillat sprettoppvinduer for denne filen, eller åpne lenken selv: ' + url);
+  }
+  $('musikk-vindu').addEventListener('click', apneYoutube);
+  $('knapp-yt').addEventListener('click', apneYoutube);
 
   // ---------- Fullskjerm ----------
   const fullskjerm = $('knapp-fullskjerm');
@@ -1751,15 +2629,16 @@ button { font: inherit; color: inherit; cursor: pointer; }
 
   $('tilbake-til-brett').addEventListener('click', visBrett);
   bekreftKlikk($('spill-igjen'), spilletPagar, () => {
-    S.spillere.forEach(s => { s.poeng = 0; });
+    S.spillere.forEach(s => { s.poeng = 0; s.jokere = {}; });
     S.brukt = {};
     S.historikk = [];
+    S.femti = {};
     S.startet = true;
     lagre();
     visBrett();
   });
   bekreftKlikk($('nye-spillere'), spilletPagar, () => {
-    S = tomTilstand([], S.lyd);
+    S = tomTilstand([], S.lyd, S.musikk);
     slettLagret();
     visOppsett('ny');
   });
@@ -1775,7 +2654,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
     lerret.width = B * dpr;
     lerret.height = H * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const farger = ['#ffcc3a', '#ffffff', '#2fd27a', '#ff5a6a', '#8aa4ff'];
+    const stil = getComputedStyle(document.documentElement);
+    const farger = [stil.getPropertyValue('--gull').trim() || '#ffcc3a', '#ffffff', '#2fd27a', '#ff5a6a', stil.getPropertyValue('--rute').trim() || '#8aa4ff'];
     const biter = Array.from({ length: 170 }, () => ({
       x: Math.random() * B,
       y: -20 - Math.random() * H * 0.6,
@@ -1821,6 +2701,18 @@ button { font: inherit; color: inherit; cursor: pointer; }
   $('topp-tittel').textContent = DATA.tittel;
   $('spillinfo').textContent = KAT.length + ' kategorier · ' + ANTALL + ' spørsmål' +
     (TID ? ' · ' + TID + ' sekunder per spørsmål' : '');
+  if (JOKERE.length) {
+    const r = $('regler');
+    r.textContent = '';
+    r.append(lag('strong', null, 'Jokere: '), document.createTextNode(
+      navneliste(JOKERE.map(id => JOKER_INFO[id].navn)) + '. ' + antallTekst() + ' Si «joker» før du svarer. ' + kostnadTekst()));
+    r.hidden = false;
+  }
+  if (HAR_YT) {
+    $('musikk-oppsett').hidden = false;
+    $('musikk-oppsett-tekst').textContent = 'Musikken spilles fra YouTube i et eget vindu. Åpne den før du setter spillet i fullskjerm. Det kan komme reklame.';
+  }
+  oppdaterMusikkknapp();
   visOppsett('ny');
 })();
 </script>
@@ -1834,37 +2726,39 @@ button { font: inherit; color: inherit; cursor: pointer; }
 
   // ---------- Eksempelspørsmål (brukes også i Excel-malen) ----------
   const EKSEMPEL = [
-    ['Geografi', 100, 'Hva er hovedstaden i Sverige?', 'Stockholm'],
-    ['Geografi', 200, 'Hva heter Norges lengste elv?', 'Glomma'],
-    ['Geografi', 300, 'I hvilket land ligger byen Kyoto?', 'Japan'],
-    ['Geografi', 400, 'Hva heter verdens største hav?', 'Stillehavet'],
-    ['Geografi', 500, 'Hva heter Norges høyeste fjell?', 'Galdhøpiggen'],
-    ['Historie', 100, 'Hvilket år fikk Norge sin grunnlov?', '1814'],
-    ['Historie', 200, 'Hva het skipet som sank på sin første tur over Atlanterhavet i 1912?', 'Titanic'],
-    ['Historie', 300, 'Hvilket år falt Berlinmuren?', '1989'],
-    ['Historie', 400, 'Hvilken konge falt i slaget på Stiklestad i 1030?', 'Olav Haraldsson (Olav den hellige)'],
-    ['Historie', 500, 'Hvilken by ble begravd i aske da vulkanen Vesuv hadde utbrudd i år 79?', 'Pompeii'],
-    ['Naturfag', 100, 'Hvilken planet er nærmest sola?', 'Merkur'],
-    ['Naturfag', 200, 'Hva kalles prosessen der planter lager sukker ved hjelp av sollys?', 'Fotosyntese'],
-    ['Naturfag', 300, 'Hvilket grunnstoff har det kjemiske symbolet Au?', 'Gull'],
-    ['Naturfag', 400, 'Hvilken gass er det mest av i lufta vi puster inn?', 'Nitrogen (ca. 78 %)'],
-    ['Naturfag', 500, 'Hva heter den delen av cellen som inneholder arvestoffet?', 'Cellekjernen'],
-    ['Norsk', 100, 'Hva kalles ord som betyr det motsatte av hverandre, som «varm» og «kald»?', 'Antonymer'],
-    ['Norsk', 200, 'Hvilken ordklasse hører ord som «stor» og «rød» til?', 'Adjektiv'],
-    ['Norsk', 300, 'Fra hvilket språk kommer hilsenen «bonjour»?', 'Fransk'],
-    ['Norsk', 400, 'Hva kalles ord som betyr omtrent det samme, som «glad» og «blid»?', 'Synonymer'],
-    ['Norsk', 500, 'Hvem samlet «Norske folkeeventyr» sammen med Jørgen Moe?', 'Peter Christen Asbjørnsen'],
-    ['Sport', 100, 'Hvor mange spillere har et fotballag på banen samtidig?', '11'],
-    ['Sport', 200, 'I hvilken idrett bruker man puck?', 'Ishockey'],
-    ['Sport', 300, 'Hva heter tennisturneringen som spilles på gress i London?', 'Wimbledon'],
-    ['Sport', 400, 'Hvor mange ringer er det i det olympiske symbolet?', 'Fem'],
-    ['Sport', 500, 'Hvilken norsk by arrangerte vinter-OL i 1994?', 'Lillehammer'],
-    ['Matematikk', 100, 'Hva er 7 · 8?', '56'],
-    ['Matematikk', 200, 'Hvor mange grader er vinklene i en trekant til sammen?', '180 grader'],
-    ['Matematikk', 300, 'Hva er 25 % av 80?', '20'],
-    ['Matematikk', 400, 'Hva kalles en mangekant med seks sider?', 'Sekskant (heksagon)'],
-    ['Matematikk', 500, 'Hva er det minste primtallet?', '2']
+    ['Geografi', 100, 'Hva er hovedstaden i Sverige?', 'Stockholm', 'Göteborg', 'Malmö', 'Uppsala', 'Byen ligger der innsjøen Mälaren møter Østersjøen.'],
+    ['Geografi', 200, 'Hva heter Norges lengste elv?', 'Glomma', 'Gudbrandsdalslågen', 'Numedalslågen', 'Tana', 'Den renner ut i havet ved Fredrikstad.'],
+    ['Geografi', 300, 'I hvilket land ligger byen Kyoto?', 'Japan', 'Kina', 'Sør-Korea', 'Thailand', 'Landet består av mange øyer i Øst-Asia.'],
+    ['Geografi', 400, 'Hva heter verdens største hav?', 'Stillehavet', 'Atlanterhavet', 'Det indiske hav', 'Nordishavet', 'Det ligger mellom Asia og Amerika.'],
+    ['Geografi', 500, 'Hva heter Norges høyeste fjell?', 'Galdhøpiggen', 'Glittertind', 'Snøhetta', 'Store Skagastølstind', 'Det ligger i Jotunheimen og er 2469 meter høyt.'],
+    ['Historie', 100, 'Hvilket år fikk Norge sin grunnlov?', '1814', '1905', '1945', '1884', 'Den ble skrevet under på Eidsvoll.'],
+    ['Historie', 200, 'Hva het skipet som sank på sin første tur over Atlanterhavet i 1912?', 'Titanic', 'Lusitania', 'Britannic', 'Olympic', 'Skipet traff et isfjell.'],
+    ['Historie', 300, 'Hvilket år falt Berlinmuren?', '1989', '1991', '1961', '1985', 'Det var to år før Sovjetunionen ble oppløst.'],
+    ['Historie', 400, 'Hvilken konge falt i slaget på Stiklestad i 1030?', 'Olav Haraldsson (Olav den hellige)', 'Harald Hårfagre', 'Olav Tryggvason', 'Håkon den gode', 'Han ble senere kåret til helgen.'],
+    ['Historie', 500, 'Hvilken by ble begravd i aske da vulkanen Vesuv hadde utbrudd i år 79?', 'Pompeii', 'Roma', 'Napoli', 'Athen', 'Byen ligger i Italia, rett ved foten av vulkanen.'],
+    ['Naturfag', 100, 'Hvilken planet er nærmest sola?', 'Merkur', 'Venus', 'Mars', 'Jorda', 'Den er også den minste planeten i solsystemet.'],
+    ['Naturfag', 200, 'Hva kalles prosessen der planter lager sukker ved hjelp av sollys?', 'Fotosyntese', 'Respirasjon', 'Fordøyelse', 'Fordamping', 'Ordet betyr omtrent «å sette sammen med lys».'],
+    ['Naturfag', 300, 'Hvilket grunnstoff har det kjemiske symbolet Au?', 'Gull', 'Sølv', 'Aluminium', 'Kobber', 'Symbolet kommer fra det latinske ordet aurum.'],
+    ['Naturfag', 400, 'Hvilken gass er det mest av i lufta vi puster inn?', 'Nitrogen (ca. 78 %)', 'Oksygen', 'Karbondioksid', 'Hydrogen', 'Det er ikke oksygen.'],
+    ['Naturfag', 500, 'Hva heter den delen av cellen som inneholder arvestoffet?', 'Cellekjernen', 'Cellemembranen', 'Mitokondriene', 'Cellevæsken', 'Den styrer cellen og ligger ofte midt i den.'],
+    ['Norsk', 100, 'Hva kalles ord som betyr det motsatte av hverandre, som «varm» og «kald»?', 'Antonymer', 'Synonymer', 'Homonymer', 'Adjektiver', 'Det er det motsatte av synonymer.'],
+    ['Norsk', 200, 'Hvilken ordklasse hører ord som «stor» og «rød» til?', 'Adjektiv', 'Verb', 'Substantiv', 'Adverb', 'Ordklassen forteller hvordan noe er.'],
+    ['Norsk', 300, 'Fra hvilket språk kommer hilsenen «bonjour»?', 'Fransk', 'Spansk', 'Italiensk', 'Tysk', 'Språket snakkes i Paris.'],
+    ['Norsk', 400, 'Hva kalles ord som betyr omtrent det samme, som «glad» og «blid»?', 'Synonymer', 'Antonymer', 'Homonymer', 'Pronomener', 'Ordet begynner på S.'],
+    ['Norsk', 500, 'Hvem samlet «Norske folkeeventyr» sammen med Jørgen Moe?', 'Peter Christen Asbjørnsen', 'Henrik Wergeland', 'Ivar Aasen', 'Theodor Kittelsen', 'Fornavnet hans er Peter.'],
+    ['Sport', 100, 'Hvor mange spillere har et fotballag på banen samtidig?', '11', '9', '10', '12', 'Det er like mange som i bandy.'],
+    ['Sport', 200, 'I hvilken idrett bruker man puck?', 'Ishockey', 'Bandy', 'Curling', 'Innebandy', 'Spillerne har skøyter, hjelm og kølle.'],
+    ['Sport', 300, 'Hva heter tennisturneringen som spilles på gress i London?', 'Wimbledon', 'Roland-Garros', 'US Open', 'Australian Open', 'Spillerne må ha på seg hvite klær der.'],
+    ['Sport', 400, 'Hvor mange ringer er det i det olympiske symbolet?', 'Fem', 'Fire', 'Seks', 'Sju', 'Det er én ring for hver verdensdel som er med.'],
+    ['Sport', 500, 'Hvilken norsk by arrangerte vinter-OL i 1994?', 'Lillehammer', 'Oslo', 'Trondheim', 'Hamar', 'Byen ligger ved nordenden av Mjøsa.'],
+    ['Matematikk', 100, 'Hva er 7 · 8?', '56', '54', '48', '63', '7 · 7 = 49. Legg til én sjuer til.'],
+    ['Matematikk', 200, 'Hvor mange grader er vinklene i en trekant til sammen?', '180 grader', '90 grader', '360 grader', '270 grader', 'Det er halvparten av en hel sirkel.'],
+    ['Matematikk', 300, 'Hva er 25 % av 80?', '20', '25', '16', '40', '25 % er det samme som en firedel.'],
+    ['Matematikk', 400, 'Hva kalles en mangekant med seks sider?', 'Sekskant (heksagon)', 'Femkant', 'Åttekant', 'Sjukant', 'Cellene i en bikube har denne formen.'],
+    ['Matematikk', 500, 'Hva er det minste primtallet?', '2', '1', '3', '0', 'Det er det eneste partallet som er et primtall.']
   ];
+  const OVERSKRIFT_RAD = ['Kategori', 'Poeng', 'Spørsmål', 'Fasit', 'Feil svar 1', 'Feil svar 2', 'Feil svar 3', 'Hint'];
+  const STANDARD_KART = { kategori: 0, poeng: 1, sporsmal: 2, fasit: 3, feil: [4, 5, 6], hint: 7 };
 
   const VEILEDNING = [
     ['Slik bruker du malen', ''],
@@ -1873,6 +2767,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
     ['Poeng', 'Et tall, for eksempel 100, 200, 300. Kan stå tomt. Da får spørsmålene 100, 200, 300 … i den rekkefølgen de står.'],
     ['Spørsmål', 'Teksten som vises på skjermen.'],
     ['Fasit', 'Svaret som vises når du trykker «Vis fasit».'],
+    ['Feil svar 1–3', 'Valgfritt. Brukes av jokeren 50/50, som viser fasit og ett av de feile svarene. Ett feil svar er nok.'],
+    ['Hint', 'Valgfritt. Brukes av jokeren Hint. Skriv et lite tips som hjelper uten å røpe svaret.'],
     ['Tips', 'Du kan ha så mange kategorier og spørsmål du vil. Slett eksemplene og skriv dine egne.'],
     ['Når du er ferdig', 'Lagre filen som Excel-arbeidsbok (.xlsx) og last den opp i Jeopardy-generatoren.']
   ];
@@ -2189,26 +3085,35 @@ button { font: inherit; color: inherit; cursor: pointer; }
     kategori: ['kategori', 'category', 'categories', 'tema', 'emne'],
     poeng: ['poeng', 'verdi', 'point', 'value', 'score', 'belop'],
     sporsmal: ['sporsmal', 'sporsmaal', 'spm', 'question', 'oppgave', 'clue', 'ledetrad'],
-    fasit: ['fasit', 'svar', 'answer', 'losning', 'riktigsvar']
+    fasit: ['fasit', 'svar', 'answer', 'losning', 'riktigsvar', 'riktig'],
+    feil: ['feilsvar', 'feilalternativ', 'feil', 'galtsvar', 'galtalternativ', 'galt', 'alternativ', 'wronganswer', 'wrong', 'distraktor'],
+    hint: ['hint', 'tips', 'hjelp']
   };
   // En overskrift er kort og uten tall, f.eks. «Spørsmål» eller «Kategorier».
+  // Bare «Feil svar 1», «Feil svar 2» … kan ha et tall på slutten.
   // Datarader som «Spørsmål 1 i kategori 2» skal ikke tolkes som overskrift.
   function kolonneType(verdi) {
-    if (/\d/.test(String(verdi == null ? '' : verdi))) return null;
-    const n = normaliser(verdi);
+    const tekst = String(verdi == null ? '' : verdi).trim();
+    const m = tekst.match(/^(.*?)\s*\d{1,2}$/);
+    const kjerne = m ? m[1] : tekst;
+    if (/\d/.test(kjerne)) return null;
+    const n = normaliser(kjerne);
     if (!n) return null;
     for (const type of Object.keys(OVERSKRIFTER)) {
-      if (OVERSKRIFTER[type].some(o => n.startsWith(o) && n.length <= o.length + 6)) return type;
+      if (OVERSKRIFTER[type].some(o => n.startsWith(o) && n.length <= o.length + 6)) {
+        return m && type !== 'feil' ? null : type;
+      }
     }
     return null;
   }
   function finnOverskrift(rader) {
     for (let r = 0; r < Math.min(rader.length, 10); r++) {
       const rad = rader[r] || [];
-      const kart = {};
+      const kart = { feil: [] };
       rad.forEach((v, c) => {
         const t = kolonneType(v);
-        if (t && kart[t] === undefined) kart[t] = c;
+        if (t === 'feil') kart.feil.push(c);
+        else if (t && kart[t] === undefined) kart[t] = c;
       });
       if (kart.sporsmal !== undefined && (kart.kategori !== undefined || kart.fasit !== undefined)) return { rad: r, kart: kart };
     }
@@ -2234,14 +3139,14 @@ button { font: inherit; color: inherit; cursor: pointer; }
     const r0 = a.rader[forste];
     const b = String(r0[1] == null ? '' : r0[1]).trim();
     const serUtSomOverskrift = b !== '' && tolkPoeng(b) === null;
-    return { ark: a, kart: { kategori: 0, poeng: 1, sporsmal: 2, fasit: 3 }, start: forste + (serUtSomOverskrift ? 1 : 0), overskrift: false };
+    return { ark: a, kart: STANDARD_KART, start: forste + (serUtSomOverskrift ? 1 : 0), overskrift: false };
   }
 
   function byggSpill(rader, kart, start) {
     const merknader = [];
     const kategorier = [];
     const indeks = new Map();
-    const mangler = { sporsmal: [], fasit: [], arvet: [], diverse: [], ugyldigPoeng: [] };
+    const mangler = { sporsmal: [], fasit: [], arvet: [], diverse: [], ugyldigPoeng: [], likFasit: [], avslorer: [] };
     let tomPoeng = 0;
     let forrigeKat = '';
     for (let r = start; r < rader.length; r++) {
@@ -2251,6 +3156,17 @@ button { font: inherit; color: inherit; cursor: pointer; }
       const poengTekst = hent('poeng');
       const tekst = hent('sporsmal');
       const fasit = hent('fasit');
+      const hint = hent('hint');
+      const feil = [];
+      let likFasit = false;
+      for (const c of kart.feil || []) {
+        String(rad[c] == null ? '' : rad[c]).split(/\s*[;|]\s*/).map(x => x.trim()).forEach(x => {
+          const liten = x.toLocaleLowerCase('nb');
+          if (!x) return;
+          if (fasit && liten === fasit.toLocaleLowerCase('nb')) { likFasit = true; return; }
+          if (!feil.some(f => f.toLocaleLowerCase('nb') === liten)) feil.push(x);
+        });
+      }
       if (!kat && !poengTekst && !tekst && !fasit) continue;
       const radnr = r + 1;
       if (!tekst) { mangler.sporsmal.push(radnr); continue; }
@@ -2263,10 +3179,12 @@ button { font: inherit; color: inherit; cursor: pointer; }
       if (poengTekst && poeng === null) mangler.ugyldigPoeng.push(radnr);
       else if (!poengTekst) tomPoeng++;
       if (!fasit) mangler.fasit.push(radnr);
+      if (likFasit) mangler.likFasit.push(radnr);
+      if (feil.length && fasit.length > 40 && fasit.length > 2.5 * Math.max(...feil.map(f => f.length))) mangler.avslorer.push(radnr);
       const nokkel = kat.toLocaleLowerCase('nb');
       let k = indeks.get(nokkel);
       if (!k) { k = { navn: kat, sporsmal: [] }; indeks.set(nokkel, k); kategorier.push(k); }
-      k.sporsmal.push({ poeng: poeng, tekst: tekst, fasit: fasit });
+      k.sporsmal.push({ poeng: poeng, tekst: tekst, fasit: fasit, feil: feil, hint: hint });
     }
     for (const k of kategorier) {
       k.sporsmal.forEach((s, i) => { if (s.poeng === null) s.poeng = (i + 1) * 100; });
@@ -2292,6 +3210,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
     if (lengder.size > 1) merknader.push({ niva: 'info', tekst: 'Kategoriene har ulikt antall spørsmål. Plasser uten spørsmål blir stående tomme på brettet.' });
     const lange = kategorier.reduce((s, k) => s + k.sporsmal.filter(x => x.tekst.length > 240).length, 0);
     if (lange) merknader.push({ niva: 'info', tekst: lange + ' spørsmål er lengre enn 240 tegn. De vises med mindre skrift.' });
+    if (mangler.likFasit.length) merknader.push({ niva: 'varsel', tekst: radliste(mangler.likFasit) + ' har et feil svar som er det samme som fasiten. Det blir ikke brukt i 50/50.' });
+    if (mangler.avslorer.length) merknader.push({ niva: 'info', tekst: radliste(mangler.avslorer) + ' har en fasit som er mye lengre enn de feile svarene. Da kan 50/50 avsløre svaret. Skriv dem i samme stil.' });
 
     return { spill: { kategorier: kategorier }, antall: antall, merknader: merknader };
   }
@@ -2428,7 +3348,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
         '<Relationship Id="rId3" Type="' + REL_NS + '/styles" Target="styles.xml"/>' +
         '</Relationships>' },
       { navn: 'xl/styles.xml', data: stiler },
-      { navn: 'xl/worksheets/sheet1.xml', data: arkXml([['Kategori', 'Poeng', 'Spørsmål', 'Fasit']].concat(EKSEMPEL), { bredder: [22, 10, 70, 36], frys: true, valgt: true }) },
+      { navn: 'xl/worksheets/sheet1.xml', data: arkXml([OVERSKRIFT_RAD].concat(EKSEMPEL), { bredder: [18, 8, 56, 28, 20, 20, 20, 44], frys: true, valgt: true }) },
       { navn: 'xl/worksheets/sheet2.xml', data: arkXml(VEILEDNING, { bredder: [24, 96], fetForsteKolonne: true }) }
     ];
     return lagZip(filer, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -2440,17 +3360,41 @@ button { font: inherit; color: inherit; cursor: pointer; }
     return 'j' + Date.now().toString(36) + tilfeldig;
   }
   function spillData(forhandsvisning) {
-    return {
-      versjon: 1,
+    const tid = Number($('tid').value) || 0;
+    const data = {
+      versjon: 2,
       id: lagId(),
       tittel: hentTittel(),
-      tid: Number($('tid').value) || 0,
+      tid: tid,
       forhandsvisning: !!forhandsvisning,
+      tema: {
+        bakgrunn: oppsett.tema.bakgrunn,
+        rute: oppsett.tema.rute,
+        tall: oppsett.tema.tall,
+        tekst: oppsett.tema.tekst,
+        gjennomsiktighet: oppsett.tema.bilde ? oppsett.tema.gjennomsiktighet : 0,
+        demping: oppsett.tema.demping,
+        tilpasning: oppsett.tema.tilpasning,
+        myk: oppsett.tema.myk,
+        bilde: oppsett.tema.bilde || '',
+        css: temaVariabler(oppsett.tema)
+      },
       kategorier: tilstand.spill.kategorier.map(k => ({
         navn: k.navn,
-        sporsmal: k.sporsmal.map(s => ({ poeng: s.poeng, tekst: s.tekst, fasit: s.fasit }))
+        sporsmal: k.sporsmal.map(s => ({ poeng: s.poeng, tekst: s.tekst, fasit: s.fasit, feil: s.feil || [], hint: s.hint || '' }))
       }))
     };
+    const jokere = valgteJokere();
+    if (jokere.length) {
+      data.jokere = { valgt: jokere, antall: $('joker-antall').value, kostnad: $('joker-kostnad').value, trekk: Math.max(0, Math.round(Number($('joker-trekk').value) || 0)) };
+    }
+    const m = oppsett.musikk;
+    if (m.type === 'fil' && m.base64) {
+      data.musikk = { type: 'fil', mime: m.mime, navn: m.navn, volum: Number($('musikk-volum').value), modus: $('musikk-modus').value };
+    } else if (m.type === 'youtube' && m.youtube) {
+      data.musikk = { type: 'youtube', youtube: m.youtube, start: m.start };
+    }
+    return data;
   }
   function byggSpillHtml(data) {
     const stil = $('spillmal-stil').innerHTML.trim();
@@ -2458,6 +3402,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
     const json = JSON.stringify(data)
       .replace(/</g, '\\u003c').replace(/>/g, '\\u003e').replace(/&/g, '\\u0026')
       .replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029');
+    const musikk = data.musikk && data.musikk.type === 'fil' ? oppsett.musikk.base64 : '';
     return [
       '<!DOCTYPE html>',
       '<html lang="nb">',
@@ -2470,6 +3415,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
       '</head>',
       '<body>',
       '<script type="application/json" id="spilldata">' + json + '<\/script>',
+      musikk ? '<script type="text/plain" id="musikk-data">' + musikk + '<\/script>' : '',
       kropp,
       '</body>',
       '</html>',
@@ -2577,6 +3523,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
     }
     $('alle-sporsmal-tittel').textContent = 'Se alle spørsmålene (' + tilstand.antall + ')';
 
+    oppdaterJokere();
+    oppdaterStorrelse();
     const kanLages = tilstand.antall > 0;
     $('last-ned-spill').disabled = !kanLages;
     $('prov-spill').disabled = !kanLages;
@@ -2624,6 +3572,629 @@ button { font: inherit; color: inherit; cursor: pointer; }
     } finally {
       $('fil').value = '';
     }
+  }
+
+  // ---------- Utseende, jokere og musikk ----------
+  const TEMAER = [
+    { navn: 'Klassisk', bakgrunn: '#050b3a', rute: '#1533c8', tall: '#ffcc3a', tekst: '#ffffff' },
+    { navn: 'Høst', bakgrunn: '#1e0d05', rute: '#8c2f0c', tall: '#ffd166', tekst: '#fff7ea' },
+    { navn: 'Jul', bakgrunn: '#06240f', rute: '#a3121f', tall: '#ffe28a', tekst: '#ffffff' },
+    { navn: 'Vår', bakgrunn: '#06200f', rute: '#17603a', tall: '#fff06a', tekst: '#ffffff' },
+    { navn: 'Verdensrommet', bakgrunn: '#04020e', rute: '#4520a6', tall: '#5ef2ff', tekst: '#ffffff' },
+    { navn: 'Solnedgang', bakgrunn: '#1c0828', rute: '#962248', tall: '#ffd27a', tekst: '#fff4ec' }
+  ];
+  const oppsett = {
+    tema: { bakgrunn: '#050b3a', rute: '#1533c8', tall: '#ffcc3a', tekst: '#ffffff', gjennomsiktighet: 0, demping: 60, tilpasning: 'fyll', myk: false, bilde: '', bildeInfo: null },
+    bildeKilde: null,
+    bildeNavn: '',
+    musikk: { type: 'ingen', base64: '', mime: '', navn: '', storrelse: 0, youtube: '', start: 0, url: '' }
+  };
+
+  // ---------- Farger ----------
+  function tilRgb(h) {
+    const m = /^#?([0-9a-f]{6})$/i.exec(String(h || '').trim());
+    if (!m) return { r: 0, g: 0, b: 0 };
+    const n = parseInt(m[1], 16);
+    return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+  }
+  const tilHex = c => '#' + [c.r, c.g, c.b].map(v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join('');
+  // bland(a, b, p): a·(1−p) + b·p per kanal, som color-mix i sRGB
+  function bland(a, b, p) {
+    const x = tilRgb(a);
+    const y = tilRgb(b);
+    return tilHex({ r: x.r + (y.r - x.r) * p, g: x.g + (y.g - x.g) * p, b: x.b + (y.b - x.b) * p });
+  }
+  function luminans(h) {
+    const c = tilRgb(h);
+    const f = v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+    return 0.2126 * f(c.r) + 0.7152 * f(c.g) + 0.0722 * f(c.b);
+  }
+  function kontrast(a, b) {
+    const la = luminans(a);
+    const lb = luminans(b);
+    return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+  }
+  // Flytt fargen mot «retning» i små steg til kontrasten mot alle fargene i «mot» er god nok
+  function sikre(farge, mot, mal, retning) {
+    let f = farge;
+    for (let i = 1; i <= 50 && mot.some(m => kontrast(f, m) < mal); i++) f = bland(farge, retning, i * 0.02);
+    return f;
+  }
+  const rgba = (h, a) => { const c = tilRgb(h); return 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', ' + (Math.round(a * 1000) / 1000) + ')'; };
+  function graaMedLuminans(l) {
+    const v = l <= 0.0031308 ? 12.92 * l : 1.055 * Math.pow(l, 1 / 2.4) - 0.055;
+    return tilHex({ r: v * 255, g: v * 255, b: v * 255 });
+  }
+  const kontrastTekst = x => x.toLocaleString('nb-NO', { maximumFractionDigits: 1 }) + ':1';
+
+  // Alle fargene spillet trenger, regnet ut fra de fire grunnfargene
+  function temaVariabler(t) {
+    const B = t.bakgrunn;
+    const R = t.rute;
+    const T = t.tall;
+    const X = t.tekst;
+    const tr = t.bilde ? t.gjennomsiktighet / 100 : 0;
+    let hover = bland(R, '#ffffff', 0.12);
+    if (kontrast(T, hover) < 4.5) hover = bland(R, '#ffffff', 0.06);
+    if (luminans(R) > luminans(X)) hover = bland(R, '#000000', 0.10);
+    const brukt = luminans(B) > 0.4 ? bland(R, B, 0.75) : bland(R, '#000000', 0.58);
+    const skygge = bland(B, '#000000', 0.75);
+    const panelA = Math.max(0.70, 1 - 0.35 * tr);
+    const hjorneA = t.bilde ? Math.max(0.64, 1 - 0.4 * tr) : 1;
+    const S = rgba(skygge, 0.7);
+    const omriss = '0 0 3px ' + S + ', 2px 2px 0 ' + S + ', -1px -1px 0 ' + S;
+    return {
+      '--natt': B,
+      '--natt-lys': bland(R, B, 0.30),
+      '--kant': bland(B, '#000000', 0.30),
+      '--rute': R,
+      '--rute-a': rgba(R, 1 - tr),
+      '--rute-hover-a': rgba(hover, Math.min(1, 1 - tr + 0.15)),
+      '--rute-brukt-a': rgba(brukt, Math.max(0.08, Math.pow(1 - tr, 2))),
+      '--kat-a': rgba(R, Math.max(0.55, 1 - 0.5 * tr)),
+      '--panel-a': 'linear-gradient(' + rgba(R, panelA) + ', ' + rgba(bland(R, '#000000', 0.35), panelA) + ')',
+      '--sp-bg': 'radial-gradient(130% 90% at 50% 30%, ' + R + ' 0%, ' + bland(R, '#000000', 0.35) + ' 58%, ' + rgba(bland(R, '#000000', 0.62), hjorneA) + ' 100%)',
+      '--joker-bg': bland(R, T, 0.14),
+      '--rute-ramme': tr > 0 ? rgba(X, 0.18) : 'rgba(0, 0, 0, .22)',
+      '--topp-bg': t.bilde ? rgba(B, 0.75) : 'transparent',
+      '--panel-bg': t.bilde ? rgba(B, 0.85) : 'transparent',
+      '--tallskygge': luminans(T) > 0.5 ? (tr >= 0.4 ? omriss : '3px 3px 0 ' + rgba(skygge, 0.6)) : 'none',
+      '--tekstskygge': luminans(X) > 0.5 ? (tr >= 0.4 ? omriss : '2px 2px 0 ' + rgba(skygge, 0.6)) : 'none',
+      '--gull': T,
+      '--gull-tekst': bland(T, '#000000', 0.88),
+      '--hvit': X,
+      '--svak': sikre(bland(X, R, 0.28), [R, B], 4.5, X),
+      '--riktig': sikre('#2fd27a', [R], 4.5, '#ffffff'),
+      '--feil': sikre('#ff5a6a', [R], 4.5, '#ffffff')
+    };
+  }
+
+  // Fargen under rutene: bakgrunnen, eller et lyst punkt i bildet dempet med bakgrunnsfargen
+  function underlag(demping) {
+    const t = oppsett.tema;
+    if (!t.bilde || !t.bildeInfo) return t.bakgrunn;
+    return bland(graaMedLuminans(t.bildeInfo.p95), t.bakgrunn, demping / 100);
+  }
+  function synlige(demping) {
+    const t = oppsett.tema;
+    const tr = t.bilde ? t.gjennomsiktighet / 100 : 0;
+    const u = underlag(demping);
+    return {
+      rute: bland(u, t.rute, 1 - tr),
+      kat: bland(u, t.rute, Math.max(0.55, 1 - 0.5 * tr)),
+      panel: bland(u, t.rute, Math.max(0.70, 1 - 0.35 * tr))
+    };
+  }
+  function minDemping() {
+    const t = oppsett.tema;
+    if (!t.bilde || !t.bildeInfo) return null;
+    for (let o = 30; o <= 85; o += 5) {
+      const v = synlige(o);
+      if (kontrast(t.tall, v.rute) >= 4.5 && kontrast(t.tekst, v.kat) >= 4.5 && kontrast(t.tekst, v.panel) >= 4.5) return o;
+    }
+    return 85;
+  }
+
+  function temaAdvarsler() {
+    const t = oppsett.tema;
+    const v = synlige(t.demping);
+    const ut = [];
+    const kTall = kontrast(t.tall, v.rute);
+    const kTekst = kontrast(t.tekst, v.kat);
+    if (kTall < 4.5) ut.push({ niva: 'feil', tekst: 'Poengtallene blir vanskelige å lese på rutene (kontrast ' + kontrastTekst(kTall) + ', bør være minst 4,5:1). Velg en lysere tallfarge eller en mørkere rutefarge.' });
+    else if (kTall < 5.5) ut.push({ niva: 'info', tekst: 'Poengtallene er lesbare, men kan bli bleke på prosjektor (kontrast ' + kontrastTekst(kTall) + '). Over 5,5:1 er tryggere.' });
+    if (kTekst < 4.5) ut.push({ niva: 'feil', tekst: 'Kategorinavn og spørsmål blir vanskelige å lese (kontrast ' + kontrastTekst(kTekst) + ', bør være minst 4,5:1). Velg lysere tekst eller mørkere ruter.' });
+    else if (kTekst < 7) ut.push({ niva: 'varsel', tekst: 'Spørsmålsteksten kan bli utydelig for elevene bakerst i klasserommet (kontrast ' + kontrastTekst(kTekst) + '). Vi anbefaler minst 7:1.' });
+    if (!t.bilde) {
+      const kBg = kontrast(t.tekst, t.bakgrunn);
+      if (kBg < 4.5) ut.push({ niva: 'feil', tekst: 'Tittel og spillernavn blir vanskelige å lese på bakgrunnen (kontrast ' + kontrastTekst(kBg) + ', bør være minst 4,5:1). Gjør bakgrunnen mørkere eller teksten lysere.' });
+      const kRute = kontrast(t.rute, t.bakgrunn);
+      if (kRute < 1.8) ut.push({ niva: 'varsel', tekst: 'Rutene skiller seg lite fra bakgrunnen (kontrast ' + kontrastTekst(kRute) + '). På prosjektor kan brettet se ut som én flate. Gjør bakgrunnen mørkere eller rutene lysere.' });
+    }
+    const ta = tilRgb(t.tall);
+    const xa = tilRgb(t.tekst);
+    const avstand = Math.sqrt(Math.pow(ta.r - xa.r, 2) + Math.pow(ta.g - xa.g, 2) + Math.pow(ta.b - xa.b, 2));
+    if (avstand < 80) ut.push({ niva: 'info', tekst: 'Poengtallene og teksten har nesten samme farge. Velg en tydelig aksentfarge for poengene, så blir brettet lettere å lese.' });
+    if (t.bilde && t.bildeInfo) {
+      const i = t.bildeInfo;
+      const omin = minDemping();
+      if (omin !== null && t.demping < omin) ut.push({ niva: 'varsel', tekst: 'Bakgrunnsbildet er så lyst at poengtallene kan forsvinne. Øk dempingen til minst ' + omin + ' % eller gjør rutene mindre gjennomsiktige.', knapp: 'Bruk anbefalt (' + omin + ' %)', handling: () => settDemping(omin) });
+      if (t.gjennomsiktighet >= 60) ut.push({ niva: 'info', tekst: 'Med mye gjennomsiktighet blir rutene svake på prosjektor, og brukte og ubrukte ruter ser nesten like ut. Vi anbefaler 20–50 %.' });
+      if (Math.min(i.b0, i.h0) < 720) ut.push({ niva: 'varsel', tekst: 'Bildet er lite (' + i.b0 + ' × ' + i.h0 + ' piksler) og kan se uskarpt ut på storskjerm. Bruk helst et bilde på minst 1280 × 720.' });
+      if (t.tilpasning === 'fyll' && i.beskjaret > 0.35) ut.push({ niva: 'varsel', tekst: 'Mye av bildet blir skåret bort fordi det har en annen form enn skjermen. Velg «Vises helt» eller et bilde i bredformat.' });
+      if (!t.myk && (i.std > 0.22 || t.gjennomsiktighet >= 50)) ut.push({ niva: 'info', tekst: 'Bildet har mange detaljer bak rutene. Slå på «Myk bakgrunn», så blir teksten lettere å lese.' });
+      if (i.kb > 700) ut.push({ niva: 'info', tekst: 'Bakgrunnsbildet gjør spillfilen stor (' + (i.kb / 1024).toLocaleString('nb-NO', { maximumFractionDigits: 1 }) + ' MB). Spillet virker fortsatt, men kan bruke litt lengre tid på å åpne.' });
+    }
+    return ut;
+  }
+
+  function visTemaAdvarsler() {
+    const liste = $('tema-advarsler');
+    liste.textContent = '';
+    const advarsler = temaAdvarsler();
+    const etiketter = { feil: 'Dårlig', varsel: 'Sjekk', info: 'Info' };
+    advarsler.forEach(a => {
+      const li = document.createElement('li');
+      li.dataset.niva = a.niva;
+      const merke = document.createElement('span');
+      merke.className = 'merke';
+      merke.textContent = etiketter[a.niva];
+      const tekst = document.createElement('span');
+      tekst.textContent = a.tekst;
+      li.append(merke, tekst);
+      if (a.knapp) {
+        const k = document.createElement('button');
+        k.type = 'button';
+        k.className = 'knapp sekundar liten';
+        k.textContent = a.knapp;
+        k.addEventListener('click', a.handling);
+        li.append(k);
+      }
+      liste.append(li);
+    });
+    const alvorlige = advarsler.filter(a => a.niva === 'feil');
+    const boks = $('nedlasting-advarsel');
+    boks.textContent = '';
+    boks.hidden = !alvorlige.length;
+    if (alvorlige.length) {
+      boks.append(document.createTextNode('Spillet kan lastes ned, men noe kan bli vanskelig å lese på prosjektor:'));
+      const ul = document.createElement('ul');
+      alvorlige.forEach(a => { const li = document.createElement('li'); li.textContent = a.tekst; ul.append(li); });
+      boks.append(ul);
+    }
+  }
+
+  function tegnTemaer() {
+    const boks = $('temaer');
+    boks.textContent = '';
+    TEMAER.forEach(t => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'tema-knapp';
+      const aktiv = ['bakgrunn', 'rute', 'tall', 'tekst'].every(k => t[k].toLowerCase() === oppsett.tema[k].toLowerCase());
+      b.setAttribute('aria-pressed', String(aktiv));
+      const prove = document.createElement('span');
+      prove.className = 'tema-prove';
+      prove.style.background = t.bakgrunn;
+      for (const tekst of ['100', '200']) {
+        const r = document.createElement('span');
+        r.style.background = t.rute;
+        r.style.color = t.tall;
+        r.textContent = tekst;
+        prove.append(r);
+      }
+      b.append(prove, document.createTextNode(t.navn));
+      b.addEventListener('click', () => {
+        ['bakgrunn', 'rute', 'tall', 'tekst'].forEach(k => { oppsett.tema[k] = t[k]; $('farge-' + k).value = t[k]; });
+        temaEndret();
+      });
+      boks.append(b);
+    });
+  }
+
+  function temaPaForhandsvisning() {
+    const t = oppsett.tema;
+    const css = temaVariabler(t);
+    const ramme = document.querySelector('.brett-ramme');
+    ramme.style.setProperty('--pv-bg', t.bakgrunn);
+    ramme.style.setProperty('--pv-rute-a', css['--rute-a']);
+    ramme.style.setProperty('--pv-kat-a', css['--kat-a']);
+    ramme.style.setProperty('--pv-kant', css['--kant']);
+    ramme.style.setProperty('--pv-tall', t.tall);
+    ramme.style.setProperty('--pv-tekst', t.tekst);
+    if (t.bilde) {
+      const d = rgba(t.bakgrunn, t.demping / 100);
+      ramme.style.backgroundImage = 'linear-gradient(' + d + ', ' + d + '), url("' + t.bilde + '")';
+      ramme.style.backgroundSize = t.tilpasning === 'hele' ? 'auto, contain' : 'auto, cover';
+      ramme.style.backgroundRepeat = 'no-repeat';
+    } else {
+      ramme.style.backgroundImage = '';
+    }
+  }
+
+  function temaEndret() {
+    tegnTemaer();
+    temaPaForhandsvisning();
+    visTemaAdvarsler();
+    oppdaterStorrelse();
+  }
+
+  function settDemping(o) {
+    oppsett.tema.demping = o;
+    $('demping').value = String(o);
+    $('demping-verdi').textContent = o + ' %';
+    temaEndret();
+  }
+  function settGjennomsiktighet(v) {
+    oppsett.tema.gjennomsiktighet = v;
+    $('gjennomsiktighet').value = String(v);
+    $('gjennomsiktighet-verdi').textContent = v + ' %';
+  }
+
+  ['bakgrunn', 'rute', 'tall', 'tekst'].forEach(k => {
+    $('farge-' + k).addEventListener('input', e => {
+      oppsett.tema[k] = e.target.value;
+      temaEndret();
+    });
+  });
+  $('gjennomsiktighet').addEventListener('input', e => {
+    settGjennomsiktighet(Number(e.target.value));
+    temaEndret();
+  });
+  $('demping').addEventListener('input', e => settDemping(Number(e.target.value)));
+  $('myk-bakgrunn').addEventListener('change', e => {
+    oppsett.tema.myk = e.target.checked;
+    temaEndret();
+  });
+  $('bilde-tilpasning').addEventListener('change', async e => {
+    oppsett.tema.tilpasning = e.target.value;
+    if (oppsett.bildeKilde) await lagBilde();
+    temaEndret();
+  });
+
+  // ---------- Bakgrunnsbilde ----------
+  function lastBilde(fil) {
+    return new Promise((ok, feil) => {
+      const url = URL.createObjectURL(fil);
+      const img = new Image();
+      img.onload = () => { URL.revokeObjectURL(url); ok(img); };
+      img.onerror = () => { URL.revokeObjectURL(url); feil(new Error('Kunne ikke lese bildet. Prøv et JPG- eller PNG-bilde.')); };
+      img.src = url;
+    });
+  }
+  async function hentBildekilde(fil) {
+    if (window.createImageBitmap) {
+      try { return await createImageBitmap(fil, { imageOrientation: 'from-image' }); } catch (e) { /* prøv vanlig bilde */ }
+    }
+    return lastBilde(fil);
+  }
+  const kildeBredde = k => k.naturalWidth || k.width;
+  const kildeHoyde = k => k.naturalHeight || k.height;
+  const tilBlob = (lerret, type, kvalitet) => new Promise(ok => lerret.toBlob(ok, type, kvalitet));
+  const tilDataUrl = blob => new Promise((ok, feil) => {
+    const r = new FileReader();
+    r.onload = () => ok(r.result);
+    r.onerror = () => feil(r.error);
+    r.readAsDataURL(blob);
+  });
+
+  async function lagBilde() {
+    const kilde = oppsett.bildeKilde;
+    const t = oppsett.tema;
+    const w = kildeBredde(kilde);
+    const h = kildeHoyde(kilde);
+    let sx = 0;
+    let sy = 0;
+    let sw = w;
+    let sh = h;
+    let dw;
+    let dh;
+    if (t.tilpasning === 'hele') {
+      const sk = Math.min(1, 1920 / w, 1080 / h);
+      dw = Math.round(w * sk);
+      dh = Math.round(h * sk);
+    } else {
+      const sk = Math.min(1, Math.max(1920 / w, 1080 / h));
+      dw = Math.min(1920, Math.round(w * sk));
+      dh = Math.min(1200, Math.round(h * sk));
+      sw = dw / sk;
+      sh = dh / sk;
+      sx = (w - sw) / 2;
+      sy = (h - sh) / 2;
+    }
+    const beskjaret = 1 - (sw * sh) / (w * h);
+    const forsok = [[1, 0.72], [1, 0.62], [1, 0.52], [1600 / 1920, 0.62]];
+    let blob = null;
+    let lerret = null;
+    for (const [faktor, kvalitet] of forsok) {
+      const bb = Math.max(1, Math.round(dw * faktor));
+      const hh = Math.max(1, Math.round(dh * faktor));
+      lerret = document.createElement('canvas');
+      lerret.width = bb;
+      lerret.height = hh;
+      const ctx = lerret.getContext('2d');
+      ctx.imageSmoothingQuality = 'high';
+      ctx.fillStyle = t.bakgrunn;
+      ctx.fillRect(0, 0, bb, hh);
+      let tegnKilde = kilde;
+      let kx = sx, ky = sy, kw = sw, kh = sh;
+      if (kw > bb * 2.5) {
+        // Skaler ned i to steg for jevnere kanter
+        const mel = document.createElement('canvas');
+        mel.width = bb * 2;
+        mel.height = hh * 2;
+        const mctx = mel.getContext('2d');
+        mctx.imageSmoothingQuality = 'high';
+        mctx.drawImage(kilde, sx, sy, sw, sh, 0, 0, mel.width, mel.height);
+        tegnKilde = mel;
+        kx = 0; ky = 0; kw = mel.width; kh = mel.height;
+      }
+      ctx.drawImage(tegnKilde, kx, ky, kw, kh, 0, 0, bb, hh);
+      blob = await tilBlob(lerret, 'image/webp', kvalitet);
+      if (!blob || blob.type !== 'image/webp') blob = await tilBlob(lerret, 'image/jpeg', Math.min(0.9, kvalitet + 0.06));
+      if (blob && blob.size <= 350 * 1024) break;
+    }
+    if (!blob) throw new Error('Kunne ikke gjøre klar bildet.');
+    // Mål lysheten i bildet for å anbefale demping
+    const liten = document.createElement('canvas');
+    liten.width = 96;
+    liten.height = 54;
+    const lctx = liten.getContext('2d');
+    lctx.drawImage(lerret, 0, 0, 96, 54);
+    const px = lctx.getImageData(0, 0, 96, 54).data;
+    const lum = [];
+    for (let i = 0; i < px.length; i += 4) lum.push(luminans(tilHex({ r: px[i], g: px[i + 1], b: px[i + 2] })));
+    lum.sort((a, b) => a - b);
+    const snitt = lum.reduce((a, b) => a + b, 0) / lum.length;
+    const std = Math.sqrt(lum.reduce((a, b) => a + (b - snitt) * (b - snitt), 0) / lum.length);
+    t.bilde = await tilDataUrl(blob);
+    t.bildeInfo = {
+      b0: w, h0: h, b: lerret.width, h: lerret.height,
+      kb: Math.round(blob.size / 1024),
+      p95: lum[Math.floor(lum.length * 0.95)],
+      std: std,
+      beskjaret: beskjaret
+    };
+    $('bilde-status').textContent = '«' + oppsett.bildeNavn + '» er lagt inn (' + lerret.width + ' × ' + lerret.height + ' piksler, ' + t.bildeInfo.kb.toLocaleString('nb-NO') + ' kB).';
+  }
+
+  async function behandleBilde(fil) {
+    if (!fil) return;
+    if (/heic|heif/i.test(fil.type) || /\.hei[cf]$/i.test(fil.name)) {
+      $('bilde-status').textContent = 'Dette bildeformatet (HEIC fra iPhone) kan ikke brukes i nettleseren. Lagre bildet som JPG først, eller ta et skjermbilde av det.';
+      return;
+    }
+    if (!/^image\//.test(fil.type)) { $('bilde-status').textContent = 'Filen er ikke et bilde. Velg et JPG- eller PNG-bilde.'; return; }
+    if (fil.size > 30 * 1048576) { $('bilde-status').textContent = 'Bildet er for stort (over 30 MB). Velg et mindre bilde.'; return; }
+    $('bilde-status').textContent = 'Gjør klar bildet …';
+    try {
+      const forsteBilde = !oppsett.tema.bilde;
+      oppsett.bildeKilde = await hentBildekilde(fil);
+      oppsett.bildeNavn = fil.name;
+      await lagBilde();
+      $('fjern-bilde').hidden = false;
+      $('bildevalg').hidden = false;
+      $('gjennomsiktighet').disabled = false;
+      $('gjennomsiktighet-hjelp').hidden = true;
+      if (forsteBilde) {
+        settGjennomsiktighet(30);
+        const omin = minDemping();
+        settDemping(Math.max(60, omin || 60));
+      }
+      temaEndret();
+    } catch (e) {
+      $('bilde-status').textContent = (e && e.message) || 'Kunne ikke lese bildet. Prøv et JPG- eller PNG-bilde.';
+    } finally {
+      $('bilde').value = '';
+    }
+  }
+  $('bilde').addEventListener('change', e => behandleBilde(e.target.files && e.target.files[0]));
+  $('fjern-bilde').addEventListener('click', () => {
+    oppsett.tema.bilde = '';
+    oppsett.tema.bildeInfo = null;
+    oppsett.bildeKilde = null;
+    $('bilde-status').textContent = 'Ingen bilde valgt.';
+    $('fjern-bilde').hidden = true;
+    $('bildevalg').hidden = true;
+    $('gjennomsiktighet').disabled = true;
+    $('gjennomsiktighet-hjelp').hidden = false;
+    settGjennomsiktighet(0);
+    temaEndret();
+  });
+
+  // ---------- Jokere ----------
+  const JOKER_NAVN = { '5050': '50/50', hint: 'Hint', venn: 'Spør en venn', tid: 'Ekstra tid' };
+  function jokerDekning() {
+    const alle = tilstand.spill ? tilstand.spill.kategorier.flatMap(k => k.sporsmal) : [];
+    return {
+      antall: alle.length,
+      feil: alle.filter(x => x.fasit && x.feil && x.feil.length).length,
+      hint: alle.filter(x => x.hint).length
+    };
+  }
+  function valgteJokere() {
+    if (!$('bruk-jokere').checked) return [];
+    return Array.from(document.querySelectorAll('#joker-valg input:checked:not(:disabled)')).map(i => i.value);
+  }
+  function settJokerTilgjengelig(id, ok, tekst) {
+    const boks = document.querySelector('#joker-valg input[value="' + id + '"]');
+    const label = boks.closest('label');
+    if (!ok && boks.checked) boks.dataset.varValgt = 'ja';
+    if (ok && boks.dataset.varValgt === 'ja') { boks.checked = true; delete boks.dataset.varValgt; }
+    boks.disabled = !ok;
+    if (!ok) boks.checked = false;
+    label.classList.toggle('uten-data', !ok);
+    $('dekning-' + id).textContent = tekst;
+  }
+  function jokerRegeltekst() {
+    const valgt = valgteJokere();
+    if (!valgt.length) return 'Ingen jokere er valgt.';
+    const navn = liste(valgt.map(id => JOKER_NAVN[id]));
+    const antall = $('joker-antall').value;
+    const antallTekst = antall === 'total' ? 'Alle har én joker til sammen og velger selv hvilken.' : (antall === '1' ? 'Alle har én av hver.' : 'Alle har ' + antall + ' av hver.');
+    const k = $('joker-kostnad').value;
+    const trekk = Math.max(0, Math.round(Number($('joker-trekk').value) || 0));
+    const kost = k === 'halv' ? 'Bruker du en joker, svarer du alene, og spørsmålet teller halvparten, både pluss og minus.'
+      : k === 'halvgevinst' ? 'Bruker du en joker, svarer du alene. Riktig svar gir halve poeng, men feil svar koster fullt.'
+      : k === 'fast' ? 'Bruker du en joker, svarer du alene, og jokeren koster ' + trekk.toLocaleString('nb-NO') + ' poeng uansett hvordan det går.'
+      : 'Bruker du en joker, svarer du alene. Jokeren koster ingen poeng.';
+    return 'Jokere: ' + navn + '. ' + antallTekst + ' Si «joker» før du svarer. ' + kost;
+  }
+  function oppdaterJokere() {
+    const d = jokerDekning();
+    const tid = Number($('tid').value) || 0;
+    settJokerTilgjengelig('5050', d.feil > 0, d.feil > 0
+      ? 'Se to svar, ett av dem er riktig. ' + d.feil + ' av ' + d.antall + ' spørsmål har feil svar.'
+      : 'Krever kolonnen «Feil svar 1» i Excel.');
+    settJokerTilgjengelig('hint', d.hint > 0, d.hint > 0
+      ? 'Et lite hint vises på skjermen. ' + d.hint + ' av ' + d.antall + ' spørsmål har hint.'
+      : 'Krever kolonnen «Hint» i Excel.');
+    settJokerTilgjengelig('tid', tid > 0, tid > 0 ? 'Gir ' + tid + ' sekunder ekstra. Passer best når jokerne er gratis.' : 'Krever nedtelling.');
+    $('joker-oppsett').hidden = !$('bruk-jokere').checked;
+    $('joker-trekk-felt').hidden = $('joker-kostnad').value !== 'fast';
+    $('joker-regel').textContent = jokerRegeltekst();
+    $('joker-kostnad-forklaring').textContent = {
+      halv: 'Spørsmålet teller halvparten, både pluss og minus.',
+      halvgevinst: 'Riktig svar gir halve poeng, men feil svar koster fullt.',
+      fast: 'Jokeren koster et fast antall poeng, uansett hvordan det går.',
+      gratis: 'Jokerne koster ingen poeng. De er bare begrenset i antall.'
+    }[$('joker-kostnad').value];
+    oppdaterMusikkForklaring();
+    const nedtelling = $('musikk-modus').querySelector('option[value="nedtelling"]');
+    nedtelling.disabled = tid === 0;
+    if (tid === 0 && $('musikk-modus').value === 'nedtelling') $('musikk-modus').value = 'alltid';
+  }
+  ['bruk-jokere', 'joker-kostnad', 'joker-antall', 'joker-trekk', 'tid'].forEach(id => $(id).addEventListener('input', oppdaterJokere));
+  $('joker-valg').addEventListener('change', e => {
+    if (e.target && e.target.dataset) delete e.target.dataset.varValgt;
+    oppdaterJokere();
+  });
+
+  // ---------- Musikk ----------
+  function tilBase64(buffer) {
+    const bytes = new Uint8Array(buffer);
+    let bin = '';
+    const bit = 0x8000;
+    for (let i = 0; i < bytes.length; i += bit) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + bit));
+    return btoa(bin);
+  }
+  const mb = n => (n < 1048576 ? Math.max(1, Math.round(n / 1024)).toLocaleString('nb-NO') + ' kB' : (n / 1048576).toLocaleString('nb-NO', { maximumFractionDigits: 1 }) + ' MB');
+  function visMusikkdeler() {
+    const type = document.querySelector('input[name="musikk"]:checked').value;
+    oppsett.musikk.type = type;
+    $('musikk-fil-del').hidden = type !== 'fil';
+    $('musikk-yt-del').hidden = type !== 'youtube';
+    $('musikk-valg').hidden = type !== 'fil';
+    oppdaterStorrelse();
+  }
+  document.querySelectorAll('input[name="musikk"]').forEach(r => r.addEventListener('change', visMusikkdeler));
+  function oppdaterMusikkForklaring() {
+    $('musikk-modus-forklaring').textContent = {
+      alltid: 'Musikken spiller hele spillet, litt lavere mens et spørsmål er åpent.',
+      brett: 'Musikken spiller på brettet og tar pause mens et spørsmål er åpent.',
+      nedtelling: 'Musikken spiller bare mens nedtellingen går, som tenkemusikk.'
+    }[$('musikk-modus').value];
+  }
+  $('musikk-modus').addEventListener('change', oppdaterMusikkForklaring);
+  $('musikk-volum').addEventListener('input', e => {
+    $('musikk-volum-verdi').textContent = e.target.value + ' %';
+    $('musikk-forhor').volume = Number(e.target.value) / 100;
+  });
+
+  async function behandleMusikk(fil) {
+    if (!fil) return;
+    const status = $('musikk-status');
+    if (!/^audio\//.test(fil.type) && !/\.(mp3|m4a|ogg|wav)$/i.test(fil.name)) {
+      status.textContent = 'Filen er ikke en lydfil. Velg en MP3-fil.';
+      return;
+    }
+    if (fil.size > 20 * 1048576) {
+      status.textContent = '«' + fil.name + '» er for stor (' + mb(fil.size) + '). Velg en lydfil under 20 MB, for eksempel en kortere MP3.';
+      return;
+    }
+    status.textContent = 'Leser lydfilen …';
+    try {
+      const buffer = await fil.arrayBuffer();
+      const m = oppsett.musikk;
+      m.base64 = tilBase64(buffer);
+      m.mime = fil.type || 'audio/mpeg';
+      m.navn = fil.name;
+      m.storrelse = fil.size;
+      if (m.url) URL.revokeObjectURL(m.url);
+      m.url = URL.createObjectURL(fil);
+      const forhor = $('musikk-forhor');
+      forhor.src = m.url;
+      forhor.volume = Number($('musikk-volum').value) / 100;
+      forhor.hidden = false;
+      $('fjern-musikk').hidden = false;
+      status.textContent = '«' + fil.name + '» er lagt inn (' + mb(fil.size) + ').' +
+        (fil.size > 10 * 1048576 ? ' Filen er stor, så spillet kan bli tungt å sende på e-post.' : '') +
+        ' Bruk musikk du har lov til å bruke.';
+      oppdaterStorrelse();
+    } catch (e) {
+      status.textContent = 'Kunne ikke lese lydfilen.';
+    } finally {
+      $('musikkfil').value = '';
+    }
+  }
+  $('musikkfil').addEventListener('change', e => behandleMusikk(e.target.files && e.target.files[0]));
+  $('fjern-musikk').addEventListener('click', () => {
+    const m = oppsett.musikk;
+    if (m.url) URL.revokeObjectURL(m.url);
+    Object.assign(m, { base64: '', mime: '', navn: '', storrelse: 0, url: '' });
+    const forhor = $('musikk-forhor');
+    forhor.pause();
+    forhor.removeAttribute('src');
+    forhor.hidden = true;
+    $('fjern-musikk').hidden = true;
+    $('musikk-status').textContent = 'Musikken legges inn i spillfilen og virker uten nett. Hold filen under 10 MB.';
+    oppdaterStorrelse();
+  });
+
+  function tolkYoutube(tekst) {
+    const t = String(tekst || '').trim();
+    if (!t) return null;
+    let id = null;
+    let start = 0;
+    if (/^[\w-]{11}$/.test(t)) id = t;
+    else {
+      let url;
+      try { url = new URL(/^https?:\/\//i.test(t) ? t : 'https://' + t); } catch (e) { return null; }
+      const vert = url.hostname.replace(/^www\.|^m\.|^music\./, '');
+      if (vert === 'youtu.be') id = url.pathname.slice(1).split('/')[0];
+      else if (vert === 'youtube.com' || vert === 'youtube-nocookie.com') {
+        id = url.searchParams.get('v');
+        const m = url.pathname.match(/^\/(?:embed|shorts|live|v)\/([\w-]{11})/);
+        if (!id && m) id = m[1];
+      }
+      const tt = url.searchParams.get('t') || url.searchParams.get('start') || '';
+      const deler = tt.match(/^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s?)?$/);
+      if (deler) start = (Number(deler[1]) || 0) * 3600 + (Number(deler[2]) || 0) * 60 + (Number(deler[3]) || 0);
+    }
+    return id && /^[\w-]{11}$/.test(id) ? { id: id, start: start } : null;
+  }
+  $('yt-lenke').addEventListener('input', e => {
+    const r = tolkYoutube(e.target.value);
+    const m = oppsett.musikk;
+    if (r) {
+      m.youtube = r.id;
+      m.start = r.start;
+      settStatus('yt-status', 'Fant videoen' + (r.start ? ', med start etter ' + r.start + ' sekunder' : '') + '. Spillet får en knapp som åpner den i eget vindu.', 'ok');
+    } else {
+      m.youtube = '';
+      m.start = 0;
+      settStatus('yt-status', e.target.value.trim() ? 'Fant ingen YouTube-video i lenken. Kopier adressen fra nettleseren når videoen spilles.' : '', e.target.value.trim() ? 'feil' : null);
+    }
+  });
+
+  let storrelseTid = null;
+  function oppdaterStorrelse() {
+    clearTimeout(storrelseTid);
+    storrelseTid = setTimeout(() => {
+      if (!tilstand.spill || !tilstand.antall) { $('filstorrelse').textContent = ''; return; }
+      const bytes = new Blob([byggSpillHtml(spillData(false))]).size;
+      $('filstorrelse').textContent = 'Spillfilen blir omtrent ' + mb(bytes) + '.';
+    }, 250);
   }
 
   // ---------- Hendelser ----------
@@ -2694,8 +4265,13 @@ button { font: inherit; color: inherit; cursor: pointer; }
   });
 
   // ---------- Start med eksempelspørsmålene ----------
-  brukResultat(byggSpill([['Kategori', 'Poeng', 'Spørsmål', 'Fasit']].concat(EKSEMPEL.map(r => r.map(String))), { kategori: 0, poeng: 1, sporsmal: 2, fasit: 3 }, 1));
+  brukResultat(byggSpill([OVERSKRIFT_RAD].concat(EKSEMPEL.map(r => r.map(String))), STANDARD_KART, 1));
   tegnAlt();
+  tegnTemaer();
+  temaPaForhandsvisning();
+  visTemaAdvarsler();
+  visMusikkdeler();
+  oppdaterJokere();
 })();
 </script>
 </body>
