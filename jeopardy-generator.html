@@ -1,0 +1,2702 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jeopardy-generator</title>
+<style>
+/* Layout: kontrollpult – fire trinn i venstre kolonne, brettet som «studioskjerm» til høyre */
+:root {
+  --bg: #eef1f8;
+  --flate: #ffffff;
+  --flate-2: #f5f7fc;
+  --tekst: #141b3c;
+  --dempet: #566084;
+  --linje: #d4daeb;
+  --aksent: #1a35c2;
+  --aksent-hover: #13299b;
+  --aksent-tekst: #ffffff;
+  --fokus: #e89a00;
+  --ok: #156f44;
+  --ok-bg: #e2f3e9;
+  --varsel: #855600;
+  --varsel-bg: #fff2d3;
+  --feil: #b0202d;
+  --feil-bg: #fde5e7;
+  --info: #2a49b5;
+  --info-bg: #e6ebfb;
+  /* Brettet ser likt ut i begge temaer – det er en TV-skjerm */
+  --brett-kant: #050c45;
+  --brett-rute: #1534c9;
+  --brett-tall: #ffcc3a;
+  --brett-tekst: #ffffff;
+  --font-display: "Anton", Impact, "Haettenschweiler", "Arial Narrow Bold", sans-serif;
+  --font-tekst: "Lexend", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #090e2b;
+    --flate: #111943;
+    --flate-2: #0d1437;
+    --tekst: #e8ebff;
+    --dempet: #9ea8d6;
+    --linje: #27316d;
+    --aksent: #91a5ff;
+    --aksent-hover: #b0bfff;
+    --aksent-tekst: #0a0f2c;
+    --fokus: #ffcc3a;
+    --ok: #74dda3;
+    --ok-bg: #0f3324;
+    --varsel: #ffd06a;
+    --varsel-bg: #3a2c07;
+    --feil: #ff8d97;
+    --feil-bg: #3e1219;
+    --info: #b0bfff;
+    --info-bg: #1a2459;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #090e2b;
+  --flate: #111943;
+  --flate-2: #0d1437;
+  --tekst: #e8ebff;
+  --dempet: #9ea8d6;
+  --linje: #27316d;
+  --aksent: #91a5ff;
+  --aksent-hover: #b0bfff;
+  --aksent-tekst: #0a0f2c;
+  --fokus: #ffcc3a;
+  --ok: #74dda3;
+  --ok-bg: #0f3324;
+  --varsel: #ffd06a;
+  --varsel-bg: #3a2c07;
+  --feil: #ff8d97;
+  --feil-bg: #3e1219;
+  --info: #b0bfff;
+  --info-bg: #1a2459;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--tekst);
+  font-family: var(--font-tekst);
+  font-size: 16px;
+  line-height: 1.55;
+}
+body.laast { overflow: hidden; }
+:focus-visible { outline: 3px solid var(--fokus); outline-offset: 2px; }
+
+.side {
+  max-width: 1240px;
+  margin-inline: auto;
+  padding-inline: 20px;
+  padding-block: 32px 56px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* ---------- Topp ---------- */
+.topp { display: flex; align-items: center; gap: 20px; }
+.logo {
+  flex: none;
+  display: grid;
+  grid-template-columns: repeat(3, 30px);
+  grid-auto-rows: 22px;
+  gap: 3px;
+  padding: 5px;
+  background: var(--brett-kant);
+  border-radius: 6px;
+}
+.logo span {
+  display: grid;
+  place-items: center;
+  background: var(--brett-rute);
+  color: var(--brett-tall);
+  font-family: var(--font-display);
+  font-size: 12px;
+  line-height: 1;
+}
+.logo span.brukt { background: #0b1a7a; }
+h1 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: .01em;
+  font-size: clamp(34px, 5vw, 54px);
+  line-height: 1;
+  margin: 0;
+  text-wrap: balance;
+}
+.ingress { margin: 8px 0 0; color: var(--dempet); max-width: 62ch; font-size: 17px; }
+
+/* ---------- Arbeidsflate ---------- */
+.arbeidsflate {
+  display: grid;
+  grid-template-columns: minmax(0, 440px) minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+@media (max-width: 920px) {
+  .arbeidsflate { grid-template-columns: minmax(0, 1fr); }
+}
+
+.trinn-liste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--flate);
+  border: 1px solid var(--linje);
+  border-radius: 14px;
+}
+.trinn {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  gap: 16px;
+  padding: 22px 22px 24px;
+}
+.trinn + .trinn { border-top: 1px solid var(--linje); }
+.trinn-nr {
+  width: 40px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  background: var(--brett-rute);
+  color: var(--brett-tall);
+  font-family: var(--font-display);
+  font-size: 20px;
+  border-radius: 4px;
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .28);
+}
+.trinn-innhold { min-width: 0; }
+.trinn h2 { font-size: 19px; line-height: 1.3; margin: 4px 0 10px; text-wrap: balance; }
+.trinn p { margin: 0 0 12px; }
+
+.tabell-ramme { overflow-x: auto; }
+.format { border-collapse: collapse; width: 100%; font-size: 13px; line-height: 1.4; }
+.format th, .format td { border: 1px solid var(--linje); padding: 5px 7px; text-align: left; vertical-align: top; }
+.format th { background: var(--flate-2); white-space: nowrap; }
+.format .kol { display: inline-block; min-width: 1.4em; color: var(--dempet); font-weight: 400; }
+.tips { margin: 14px 0 16px; padding-left: 20px; color: var(--dempet); font-size: 15px; display: grid; gap: 4px; }
+
+.knapp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font: inherit;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.2;
+  padding: 11px 18px;
+  border-radius: 9px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+}
+.knapp svg { width: 18px; height: 18px; flex: none; }
+.knapp.primar { background: var(--aksent); color: var(--aksent-tekst); }
+.knapp.primar:hover:not(:disabled) { background: var(--aksent-hover); }
+.knapp.sekundar { background: transparent; color: var(--aksent); border-color: var(--aksent); }
+.knapp.sekundar:hover:not(:disabled) { background: var(--info-bg); }
+.knapp:disabled { opacity: .45; cursor: not-allowed; }
+.knapperad { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.slippsone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  text-align: center;
+  padding: 26px 16px;
+  border: 2px dashed var(--linje);
+  border-radius: 12px;
+  background: var(--flate-2);
+  cursor: pointer;
+  transition: border-color .15s, background-color .15s;
+}
+.slippsone:hover, .slippsone.over { border-color: var(--aksent); background: var(--info-bg); }
+.slippsone:focus-within { outline: 3px solid var(--fokus); outline-offset: 2px; }
+.slippsone input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.slippsone svg { width: 30px; height: 30px; color: var(--aksent); }
+.slippsone strong { font-size: 17px; }
+.slippsone span { color: var(--dempet); font-size: 15px; }
+
+.status {
+  margin: 12px 0 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 15px;
+  background: var(--flate-2);
+  color: var(--dempet);
+}
+.status:empty { display: none; }
+.status[data-niva="ok"] { background: var(--ok-bg); color: var(--ok); }
+.status[data-niva="feil"] { background: var(--feil-bg); color: var(--feil); }
+.status[data-niva="info"] { background: var(--info-bg); color: var(--info); }
+
+.felt { display: grid; gap: 6px; margin-bottom: 14px; }
+.felt:last-child { margin-bottom: 0; }
+.felt label { font-weight: 700; font-size: 15px; }
+.felt input, .felt select {
+  font: inherit;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--linje);
+  border-radius: 8px;
+  background: var(--flate);
+  color: var(--tekst);
+}
+.hjelp { color: var(--dempet); font-size: 15px; margin: 12px 0 0 !important; }
+
+/* ---------- Studioskjerm ---------- */
+.skjerm { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.skjerm-topp { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap; }
+.skjerm-topp h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: 28px;
+  line-height: 1.05;
+  letter-spacing: .01em;
+  margin: 0;
+}
+.meta { margin: 2px 0 0; color: var(--dempet); font-size: 15px; font-variant-numeric: tabular-nums; }
+.kilde {
+  font-size: 13px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--varsel-bg);
+  color: var(--varsel);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.kilde[data-type="fil"] { background: var(--ok-bg); color: var(--ok); }
+
+.brett-ramme {
+  background: var(--brett-kant);
+  border-radius: 14px;
+  padding: 12px;
+  box-shadow: 0 20px 40px -26px rgba(5, 12, 69, .7);
+  overflow-x: auto;
+}
+.brett-navn {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  color: var(--brett-tall);
+  font-size: 20px;
+  letter-spacing: .03em;
+  line-height: 1.1;
+  margin: 0 0 10px;
+  text-align: center;
+  overflow-wrap: anywhere;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, .6);
+}
+.mini-brett { display: grid; gap: 5px; min-width: min-content; }
+.mb-kat {
+  display: grid;
+  place-items: center;
+  min-height: 60px;
+  padding: 8px 6px;
+  background: var(--brett-rute);
+  border-bottom: 3px solid var(--brett-kant);
+  color: var(--brett-tekst);
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: 14px;
+  line-height: 1.1;
+  letter-spacing: .02em;
+  text-align: center;
+  overflow-wrap: anywhere;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, .55);
+}
+.mb-rute {
+  padding: 10px 4px;
+  background: var(--brett-rute);
+  color: var(--brett-tall);
+  font-family: var(--font-display);
+  font-size: 24px;
+  line-height: 1.2;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, .55);
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .22);
+}
+.mb-rute.tom { background: transparent; box-shadow: none; outline: 1px dashed rgba(255, 255, 255, .14); outline-offset: -1px; }
+.tomt-brett { color: #c9d1ff; margin: 24px 8px; text-align: center; }
+
+.merknader { display: grid; gap: 8px; }
+.merknader:empty { display: none; }
+.merknad {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: baseline;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--flate);
+  border: 1px solid var(--linje);
+  font-size: 15px;
+}
+.merke {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.merknad[data-niva="feil"] .merke { background: var(--feil-bg); color: var(--feil); }
+.merknad[data-niva="varsel"] .merke { background: var(--varsel-bg); color: var(--varsel); }
+.merknad[data-niva="info"] .merke { background: var(--info-bg); color: var(--info); }
+
+.alle-sporsmal { background: var(--flate); border: 1px solid var(--linje); border-radius: 12px; }
+.alle-sporsmal summary { cursor: pointer; padding: 12px 16px; font-weight: 700; }
+.liste { width: 100%; border-collapse: collapse; font-size: 14px; }
+.liste th, .liste td { text-align: left; padding: 8px 12px; border-top: 1px solid var(--linje); vertical-align: top; }
+.liste th { color: var(--dempet); font-weight: 700; white-space: nowrap; }
+.liste td.p { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.liste td.k { white-space: nowrap; }
+.liste .mangler { color: var(--varsel); font-style: italic; }
+
+.fot { color: var(--dempet); font-size: 14px; border-top: 1px solid var(--linje); padding-top: 16px; }
+.fot p { margin: 0; max-width: 75ch; }
+
+/* ---------- Prøvespill ---------- */
+.forhandsvisning {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  background: #050b3a;
+}
+.fv-topp {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  padding-top: calc(8px + env(safe-area-inset-top, 0px));
+  background: #0e1650;
+  color: #ffffff;
+  font-size: 15px;
+}
+.fv-topp .knapp { background: #ffcc3a; color: #1e1500; padding: 8px 16px; }
+.forhandsvisning iframe { flex: 1; width: 100%; border: 0; background: #050b3a; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="side">
+  <header class="topp">
+    <div class="logo" aria-hidden="true">
+      <span>100</span><span>100</span><span>100</span>
+      <span>200</span><span class="brukt"></span><span>200</span>
+    </div>
+    <div>
+      <h1>Jeopardy-generator</h1>
+      <p class="ingress">Last opp spørsmålene fra Excel, sjekk brettet og last ned et ferdig spill. Spillet er én HTML&#8209;fil som virker uten internett.</p>
+    </div>
+  </header>
+
+  <div class="arbeidsflate">
+    <ol class="trinn-liste">
+      <li class="trinn">
+        <span class="trinn-nr" aria-hidden="true">1</span>
+        <div class="trinn-innhold">
+          <h2>Skriv spørsmålene i Excel</h2>
+          <p>Én rad per spørsmål, med overskrifter i første rad:</p>
+          <div class="tabell-ramme">
+            <table class="format">
+              <thead>
+                <tr><th><span class="kol">A</span>Kategori</th><th><span class="kol">B</span>Poeng</th><th><span class="kol">C</span>Spørsmål</th><th><span class="kol">D</span>Fasit</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Geografi</td><td>100</td><td>Hovedstaden i Sverige?</td><td>Stockholm</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <ul class="tips">
+            <li>Lag så mange kategorier og spørsmål du vil. Brettet tilpasser seg.</li>
+            <li>Står poeng tomt, får spørsmålene 100, 200, 300 … i den rekkefølgen de står.</li>
+            <li>Virker med .xlsx fra Excel, Google Regneark og Numbers, og med .csv.</li>
+          </ul>
+          <button type="button" class="knapp sekundar" id="last-ned-mal">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg>
+            Last ned Excel-mal
+          </button>
+          <p class="status" id="mal-status" role="status" aria-live="polite"></p>
+        </div>
+      </li>
+
+      <li class="trinn">
+        <span class="trinn-nr" aria-hidden="true">2</span>
+        <div class="trinn-innhold">
+          <h2>Last opp Excel-filen</h2>
+          <label class="slippsone" id="slippsone" for="fil">
+            <input type="file" id="fil" accept=".xlsx,.csv,.tsv,.txt,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V4"/><path d="m7 9 5-5 5 5"/><path d="M5 20h14"/></svg>
+            <strong>Slipp filen her</strong>
+            <span>eller klikk for å velge en fil</span>
+          </label>
+          <p class="status" id="fil-status" data-niva="info" role="status" aria-live="polite">Brettet viser eksempelspørsmål til du laster opp din egen fil.</p>
+        </div>
+      </li>
+
+      <li class="trinn">
+        <span class="trinn-nr" aria-hidden="true">3</span>
+        <div class="trinn-innhold">
+          <h2>Velg innstillinger</h2>
+          <div class="felt">
+            <label for="tittel">Navn på spillet</label>
+            <input type="text" id="tittel" maxlength="80" value="Jeopardy" autocomplete="off">
+          </div>
+          <div class="felt">
+            <label for="tid">Tid per spørsmål</label>
+            <select id="tid">
+              <option value="15">15 sekunder</option>
+              <option value="20">20 sekunder</option>
+              <option value="30" selected>30 sekunder</option>
+              <option value="45">45 sekunder</option>
+              <option value="60">60 sekunder</option>
+              <option value="90">90 sekunder</option>
+              <option value="0">Ingen nedtelling</option>
+            </select>
+          </div>
+        </div>
+      </li>
+
+      <li class="trinn">
+        <span class="trinn-nr" aria-hidden="true">4</span>
+        <div class="trinn-innhold">
+          <h2>Last ned spillet</h2>
+          <div class="knapperad">
+            <button type="button" class="knapp primar" id="last-ned-spill">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg>
+              Last ned spillet
+            </button>
+            <button type="button" class="knapp sekundar" id="prov-spill">Prøv spillet her</button>
+          </div>
+          <p class="hjelp">Dobbeltklikk på filen for å åpne den i nettleseren. Navnene på spillerne skriver du inn når spillet starter.</p>
+          <p class="status" id="nedlasting-status" role="status" aria-live="polite"></p>
+        </div>
+      </li>
+    </ol>
+
+    <section class="skjerm" aria-labelledby="brett-overskrift">
+      <div class="skjerm-topp">
+        <div>
+          <h2 id="brett-overskrift">Brettet</h2>
+          <p class="meta" id="brett-meta"></p>
+        </div>
+        <span class="kilde" id="kilde">Eksempel</span>
+      </div>
+      <div class="brett-ramme">
+        <p class="brett-navn" id="brett-navn"></p>
+        <div class="mini-brett" id="mini-brett"></div>
+      </div>
+      <div class="merknader" id="merknader"></div>
+      <details class="alle-sporsmal" id="alle-sporsmal">
+        <summary id="alle-sporsmal-tittel">Se alle spørsmålene</summary>
+        <div class="tabell-ramme">
+          <table class="liste">
+            <thead><tr><th>Kategori</th><th>Poeng</th><th>Spørsmål</th><th>Fasit</th></tr></thead>
+            <tbody id="sporsmal-tabell"></tbody>
+          </table>
+        </div>
+      </details>
+    </section>
+  </div>
+
+  <footer class="fot">
+    <p>Excel-filen blir ikke sendt noe sted. Alt skjer i nettleseren din. Spillet du laster ned, lagrer poengstillingen på maskinen der det spilles, så du kan fortsette hvis du lukker fanen ved et uhell.</p>
+  </footer>
+</div>
+
+<div class="forhandsvisning" id="forhandsvisning" role="dialog" aria-modal="true" aria-label="Prøv spillet" hidden>
+  <div class="fv-topp">
+    <span>Prøvespill. Spillere og poeng blir ikke lagret.</span>
+    <button type="button" class="knapp" id="lukk-forhandsvisning">Lukk</button>
+  </div>
+  <iframe id="fv-ramme" title="Prøvespill"></iframe>
+</div>
+
+<!-- ===================== MAL FOR DET FERDIGE SPILLET ===================== -->
+<template id="spillmal-stil">
+<style>
+:root {
+  --natt: #050b3a;
+  --rute: #1533c8;
+  --rute-hover: #2045ea;
+  --rute-brukt: #0a166c;
+  --kant: #040a33;
+  --gull: #ffcc3a;
+  --hvit: #ffffff;
+  --svak: #bcc6ff;
+  --riktig: #2fd27a;
+  --feil: #ff5a6a;
+  --font-tall: "Anton", Impact, "Haettenschweiler", "Arial Narrow Bold", "Arial Narrow", sans-serif;
+  --font-ledetekst: "Libre Baskerville", Georgia, "Times New Roman", serif;
+  --font-ui: "Lexend", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { height: 100%; margin: 0; }
+body {
+  background: var(--natt);
+  color: var(--hvit);
+  font-family: var(--font-ui);
+  font-size: 18px;
+  line-height: 1.4;
+  overflow: hidden;
+}
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--gull); outline-offset: 3px; }
+
+.skjerm {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: radial-gradient(120% 85% at 50% 0%, #11249c 0%, var(--natt) 72%);
+}
+.overtittel {
+  margin: 0;
+  font-family: var(--font-tall);
+  text-transform: uppercase;
+  letter-spacing: .22em;
+  font-size: 16px;
+  color: var(--svak);
+}
+.knapp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 22px;
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, .35);
+  background: rgba(255, 255, 255, .08);
+  color: var(--hvit);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.2;
+}
+.knapp:hover:not(:disabled) { background: rgba(255, 255, 255, .16); }
+.knapp.gull { background: var(--gull); border-color: var(--gull); color: #1e1500; }
+.knapp.gull:hover:not(:disabled) { background: #ffd966; }
+.knapp.stor { font-size: 22px; padding: 14px 34px; }
+.knapp:disabled { opacity: .4; cursor: not-allowed; }
+.knapperad { display: flex; flex-wrap: wrap; gap: 10px; }
+
+/* ---------- Oppsett ---------- */
+.oppsett { overflow: auto; align-items: center; padding: clamp(28px, 7vh, 80px) 16px 40px; }
+.oppsett-innhold { width: min(760px, 100%); display: flex; flex-direction: column; gap: 22px; }
+#spilltittel {
+  margin: 0;
+  font-family: var(--font-tall);
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: clamp(42px, 7vw, 96px);
+  line-height: .98;
+  letter-spacing: .01em;
+  color: var(--gull);
+  text-shadow: 4px 4px 0 rgba(0, 0, 0, .55);
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+.spillinfo { margin: -10px 0 0; color: var(--svak); font-size: 18px; }
+.fortsett {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 18px;
+  border: 2px solid var(--gull);
+  border-radius: 12px;
+  background: rgba(255, 204, 58, .1);
+}
+.fortsett p { margin: 0; }
+.legg-til label { display: block; font-weight: 700; font-size: 24px; margin-bottom: 10px; }
+.legg-til-rad { display: flex; gap: 10px; }
+.legg-til input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  font-size: 20px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, .3);
+  background: rgba(0, 0, 0, .3);
+  color: var(--hvit);
+}
+.legg-til input::placeholder { color: #8f9bd8; }
+.hint { margin: 8px 0 0; color: var(--svak); font-size: 15px; }
+.spillerliste { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+.spillerliste:empty::before { content: "Ingen spillere ennå."; color: var(--svak); }
+.spiller-brikke {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 6px 6px 16px;
+  border-radius: 999px;
+  background: var(--rute);
+  border: 1px solid rgba(255, 255, 255, .25);
+  font-weight: 700;
+  font-size: 19px;
+}
+.brikke-poeng { font-family: var(--font-tall); font-weight: 400; color: var(--gull); }
+.fjern {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, .32);
+  font-size: 16px;
+  font-weight: 700;
+}
+.fjern:hover { background: var(--feil); }
+.fjern.bekreft { background: var(--feil); }
+.melding { margin: 0; min-height: 1.4em; color: var(--gull); }
+
+/* ---------- Brettet ---------- */
+.toppfelt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  flex-wrap: wrap;
+  padding: 10px clamp(8px, 1.2vw, 16px);
+}
+.toppfelt-tittel {
+  margin: 0;
+  min-width: 0;
+  font-family: var(--font-tall);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  font-size: clamp(20px, 2.4vw, 34px);
+  line-height: 1.1;
+  color: var(--gull);
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, .55);
+}
+.verktoy { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.fremdrift { color: var(--svak); font-size: 15px; margin-right: 6px; font-variant-numeric: tabular-nums; }
+.verktoy-knapp {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, .25);
+  background: rgba(255, 255, 255, .08);
+  font-size: 15px;
+  white-space: nowrap;
+}
+.verktoy-knapp:hover:not(:disabled) { background: rgba(255, 255, 255, .18); }
+.verktoy-knapp:disabled { opacity: .35; cursor: default; }
+
+.brett {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  gap: clamp(4px, .55vw, 8px);
+  padding: 0 clamp(8px, 1.2vw, 16px);
+}
+.kat {
+  container-type: size;
+  display: grid;
+  place-items: center;
+  padding: 4px 8px;
+  background: var(--rute);
+  border-bottom: 5px solid var(--kant);
+  box-shadow: inset 0 0 0 2px rgba(0, 0, 0, .22);
+  text-align: center;
+  overflow: hidden;
+}
+.kat span {
+  font-family: var(--font-tall);
+  text-transform: uppercase;
+  font-size: clamp(14px, 1.8vw, 30px);
+  font-size: min(13cqi, 30cqh);
+  line-height: 1.05;
+  letter-spacing: .02em;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, .6);
+}
+.kat.lang span { font-size: min(10cqi, 23cqh); }
+.rute {
+  container-type: size;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  display: grid;
+  place-items: center;
+  background: var(--rute);
+  color: var(--gull);
+  box-shadow: inset 0 0 0 2px rgba(0, 0, 0, .22), inset 0 -6px 0 rgba(0, 0, 0, .18);
+  transition: background-color .15s, transform .15s;
+}
+.rute span {
+  font-family: var(--font-tall);
+  font-size: clamp(20px, 4vw, 72px);
+  font-size: min(54cqh, 30cqi);
+  line-height: 1;
+  letter-spacing: .01em;
+  text-shadow: 3px 3px 0 rgba(0, 0, 0, .65);
+}
+.rute.smal span { font-size: min(48cqh, 22cqi); }
+.rute:hover:not(:disabled) { background: var(--rute-hover); }
+.rute:active:not(:disabled) { transform: scale(.97); }
+.rute:disabled { background: var(--rute-brukt); cursor: default; box-shadow: inset 0 0 0 2px rgba(0, 0, 0, .3); }
+.rute.tom { background: transparent; box-shadow: none; outline: 1px dashed rgba(255, 255, 255, .08); outline-offset: -1px; }
+
+.poengtavle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px clamp(8px, 1.2vw, 16px) 14px;
+}
+.poengliste {
+  flex: 1;
+  min-width: 0;
+  max-height: 30vh;
+  overflow: auto;
+  list-style: none;
+  margin: 0;
+  padding: 2px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.poeng-brikke {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 120px;
+  padding: 4px 14px 8px;
+  border-radius: 8px;
+  background: linear-gradient(#1533c8, #0c2196);
+  border: 2px solid rgba(255, 255, 255, .14);
+}
+.pb-poeng {
+  font-family: var(--font-tall);
+  font-size: clamp(22px, 2.3vw, 40px);
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+}
+.pb-navn {
+  max-width: 16ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 700;
+  font-size: clamp(14px, 1.25vw, 20px);
+}
+.poeng-brikke.leder { border-color: var(--gull); box-shadow: 0 0 22px rgba(255, 204, 58, .3); }
+.poeng-brikke.leder .pb-poeng { color: var(--gull); }
+.poeng-brikke.minus .pb-poeng { color: var(--feil); }
+.poeng-brikke.endret { animation: puls .7s ease-out; }
+@keyframes puls {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+/* ---------- Spørsmålet ---------- */
+.sporsmal {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(14px, 2.2vw, 30px) clamp(16px, 4vw, 64px);
+  overflow: auto;
+  background: radial-gradient(130% 90% at 50% 30%, #1b3de2 0%, #0c1c8c 58%, #071062 100%);
+  outline: none;
+}
+.sp-innhold { flex: 1; display: flex; flex-direction: column; min-height: 0; animation: inn .3s .18s both; }
+@keyframes inn { from { opacity: 0; } to { opacity: 1; } }
+.sp-topp {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  font-family: var(--font-tall);
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  font-size: clamp(18px, 2.1vw, 32px);
+}
+#sp-kategori { color: var(--svak); overflow-wrap: anywhere; }
+#sp-poeng { color: var(--gull); white-space: nowrap; }
+.sp-midt {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(14px, 3vh, 36px);
+  padding-block: 18px;
+  text-align: center;
+}
+.sp-tekst {
+  margin: 0;
+  max-width: 28ch;
+  font-family: var(--font-ledetekst);
+  font-weight: 700;
+  font-size: clamp(26px, 4.3vw, 74px);
+  line-height: 1.25;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+  text-shadow: 3px 3px 0 rgba(0, 0, 0, .55);
+}
+.sp-tekst.lang { max-width: 34ch; font-size: clamp(22px, 3.3vw, 56px); }
+.sp-tekst.svaert-lang { max-width: 46ch; font-size: clamp(19px, 2.5vw, 42px); }
+.med-fasit .sp-tekst { font-size: clamp(22px, 3.3vw, 56px); }
+.med-fasit .sp-tekst.lang { font-size: clamp(20px, 2.6vw, 44px); }
+.med-fasit .sp-tekst.svaert-lang { font-size: clamp(17px, 2vw, 34px); }
+.sp-fasit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding-top: 14px;
+  border-top: 3px solid var(--gull);
+  animation: inn .35s both;
+}
+.etikett {
+  font-family: var(--font-tall);
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  font-size: clamp(14px, 1.3vw, 20px);
+  color: var(--gull);
+}
+#sp-fasit-tekst {
+  margin: 0;
+  max-width: 34ch;
+  font-family: var(--font-ledetekst);
+  font-weight: 700;
+  font-size: clamp(24px, 3.5vw, 60px);
+  line-height: 1.2;
+  color: var(--gull);
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+  text-shadow: 3px 3px 0 rgba(0, 0, 0, .55);
+}
+
+.timer {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: min(980px, 100%);
+  margin: 0 auto;
+  flex-wrap: wrap;
+}
+.timer-spor {
+  flex: 1 1 240px;
+  height: 16px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, .38);
+  overflow: hidden;
+}
+#timer-fyll {
+  height: 100%;
+  background: var(--gull);
+  transform-origin: left center;
+  transition: transform .1s linear, background-color .3s;
+}
+#timer-tall {
+  min-width: 2.2ch;
+  font-family: var(--font-tall);
+  font-size: clamp(30px, 3vw, 50px);
+  line-height: 1;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+#timer-ute {
+  font-family: var(--font-tall);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  font-size: clamp(24px, 2.6vw, 42px);
+  line-height: 1;
+  color: var(--feil);
+}
+.timer.lite #timer-fyll { background: var(--feil); }
+.timer.lite #timer-tall { color: var(--feil); }
+.timer.ute #timer-ute { animation: blink 1s steps(2, start) 3; }
+@keyframes blink { to { visibility: hidden; } }
+
+.poenggiving { width: min(1400px, 100%); margin: 0 auto; }
+.poenggiving h2 {
+  margin: 0 0 10px;
+  font-family: var(--font-tall);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  font-size: clamp(16px, 1.5vw, 22px);
+  color: var(--svak);
+  text-align: center;
+}
+.pg-rutenett { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 230px)); justify-content: center; gap: 10px; }
+.pg-kort {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 6px 8px;
+  padding: 8px 10px 10px;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background: rgba(0, 0, 0, .26);
+  transition: background-color .15s, border-color .15s;
+}
+.pg-kort.riktig { border-color: var(--riktig); background: rgba(47, 210, 122, .16); }
+.pg-kort.feil { border-color: var(--feil); background: rgba(255, 90, 106, .16); }
+.pg-info { grid-column: 1 / -1; min-width: 0; display: flex; flex-direction: column; text-align: left; }
+.pg-navn { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pg-sum { font-size: 15px; color: var(--svak); font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pg-knapp {
+  min-width: 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, .3);
+  background: rgba(255, 255, 255, .06);
+  font-family: var(--font-tall);
+  font-size: 20px;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.pg-knapp.pluss:hover { border-color: var(--riktig); }
+.pg-knapp.minus:hover { border-color: var(--feil); }
+.pg-knapp.pluss[aria-pressed="true"] { background: var(--riktig); border-color: var(--riktig); color: #03230f; }
+.pg-knapp.minus[aria-pressed="true"] { background: var(--feil); border-color: var(--feil); color: #2b0006; }
+
+.sp-bunn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 14px;
+}
+.sp-hoyre { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: flex-end; margin-left: auto; }
+.oppsummering { color: var(--svak); font-size: 16px; }
+.lenkeknapp {
+  padding: 8px 4px;
+  border: 0;
+  background: none;
+  color: var(--svak);
+  font-size: 16px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.lenkeknapp:hover { color: var(--hvit); }
+
+/* ---------- Resultat ---------- */
+.resultat { overflow: auto; align-items: center; padding: clamp(28px, 7vh, 72px) 16px 40px; }
+#konfetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; }
+.resultat-innhold { width: min(820px, 100%); display: flex; flex-direction: column; gap: 22px; }
+#resultat-tittel {
+  margin: 0;
+  font-family: var(--font-tall);
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: clamp(38px, 6vw, 84px);
+  line-height: 1;
+  color: var(--gull);
+  text-shadow: 4px 4px 0 rgba(0, 0, 0, .55);
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+.rangering { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.rang {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 18px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, .26);
+  font-size: 22px;
+}
+.rang-plass { font-family: var(--font-tall); color: var(--svak); }
+.rang-navn { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rang-poeng { font-family: var(--font-tall); font-variant-numeric: tabular-nums; }
+.rang-1 { font-size: 32px; border: 2px solid var(--gull); background: linear-gradient(90deg, rgba(255, 204, 58, .3), rgba(255, 204, 58, .06)); }
+.rang-1 .rang-plass, .rang-1 .rang-poeng { color: var(--gull); }
+.rang-2, .rang-3 { font-size: 26px; }
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  z-index: 50;
+  transform: translateX(-50%);
+  max-width: calc(100% - 32px);
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: 1px solid var(--gull);
+  background: #0a0f2c;
+  color: var(--hvit);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .45);
+}
+
+@media (max-width: 640px) {
+  body { font-size: 16px; }
+  .poeng-brikke { min-width: 92px; padding-inline: 10px; }
+  .pg-rutenett { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+</style>
+</template>
+
+<template id="spillmal-kropp">
+<section class="skjerm oppsett" id="oppsett">
+  <div class="oppsett-innhold">
+    <p class="overtittel">Jeopardy</p>
+    <h1 id="spilltittel"></h1>
+    <p class="spillinfo" id="spillinfo"></p>
+    <div class="fortsett" id="fortsett" hidden>
+      <p id="fortsett-tekst"></p>
+      <div class="knapperad">
+        <button type="button" class="knapp gull" id="fortsett-knapp">Fortsett spillet</button>
+        <button type="button" class="knapp" id="forkast-knapp">Start et nytt spill</button>
+      </div>
+    </div>
+    <form class="legg-til" id="legg-til-skjema" autocomplete="off">
+      <label for="nytt-navn">Hvem spiller?</label>
+      <div class="legg-til-rad">
+        <input type="text" id="nytt-navn" maxlength="200" placeholder="Skriv et navn og trykk Enter">
+        <button type="submit" class="knapp">Legg til</button>
+      </div>
+      <p class="hint">Du kan lime inn flere navn på én gang, adskilt med komma eller linjeskift.</p>
+    </form>
+    <ul class="spillerliste" id="spillerliste"></ul>
+    <p class="melding" id="oppsett-melding" role="status" aria-live="polite"></p>
+    <div><button type="button" class="knapp gull stor" id="start-knapp" disabled>Start spillet</button></div>
+  </div>
+</section>
+
+<section class="skjerm spill" id="spill" hidden>
+  <header class="toppfelt">
+    <h1 class="toppfelt-tittel" id="topp-tittel"></h1>
+    <div class="verktoy">
+      <span class="fremdrift" id="fremdrift"></span>
+      <button type="button" class="verktoy-knapp" id="knapp-spillere">Spillere</button>
+      <button type="button" class="verktoy-knapp" id="knapp-lyd" aria-pressed="true">Lyd: på</button>
+      <button type="button" class="verktoy-knapp" id="knapp-fullskjerm">Fullskjerm</button>
+      <button type="button" class="verktoy-knapp" id="knapp-resultat">Se resultater</button>
+    </div>
+  </header>
+  <main class="brett" id="brett" aria-label="Spillebrett"></main>
+  <footer class="poengtavle">
+    <ol class="poengliste" id="poengliste" aria-label="Poengstilling"></ol>
+    <button type="button" class="verktoy-knapp" id="knapp-angre" disabled>Angre siste</button>
+  </footer>
+</section>
+
+<section class="sporsmal" id="sporsmal" role="dialog" aria-modal="true" aria-labelledby="sp-tekst" tabindex="-1" hidden>
+  <div class="sp-innhold">
+    <header class="sp-topp">
+      <span id="sp-kategori"></span>
+      <span id="sp-poeng"></span>
+    </header>
+    <div class="sp-midt">
+      <p class="sp-tekst" id="sp-tekst"></p>
+      <div class="sp-fasit" id="sp-fasit" hidden>
+        <span class="etikett">Fasit</span>
+        <p id="sp-fasit-tekst"></p>
+      </div>
+    </div>
+    <div class="timer" id="sp-timer">
+      <div class="timer-spor"><div id="timer-fyll"></div></div>
+      <span id="timer-tall" aria-hidden="true"></span>
+      <span id="timer-ute" hidden>Tiden er ute!</span>
+      <button type="button" class="verktoy-knapp" id="timer-pause">Pause</button>
+      <button type="button" class="verktoy-knapp" id="timer-restart">Start tiden på nytt</button>
+    </div>
+    <div class="poenggiving" id="sp-poenggiving" hidden>
+      <h2>Hvem svarte riktig, og hvem svarte feil?</h2>
+      <div class="pg-rutenett" id="sp-spillere"></div>
+    </div>
+    <footer class="sp-bunn">
+      <button type="button" class="lenkeknapp" id="sp-avbryt">Lukk uten å bruke spørsmålet</button>
+      <div class="sp-hoyre">
+        <span class="oppsummering" id="sp-oppsummering"></span>
+        <button type="button" class="knapp gull stor" id="sp-vis-fasit">Vis fasit</button>
+        <button type="button" class="knapp gull stor" id="sp-ferdig" hidden>Tilbake til brettet</button>
+      </div>
+    </footer>
+  </div>
+</section>
+
+<section class="skjerm resultat" id="resultat" hidden>
+  <canvas id="konfetti" aria-hidden="true"></canvas>
+  <div class="resultat-innhold">
+    <p class="overtittel" id="resultat-over">Resultater</p>
+    <h1 id="resultat-tittel"></h1>
+    <ol class="rangering" id="rangering"></ol>
+    <div class="knapperad">
+      <button type="button" class="knapp gull" id="tilbake-til-brett">Tilbake til brettet</button>
+      <button type="button" class="knapp" id="spill-igjen">Spill igjen med de samme spillerne</button>
+      <button type="button" class="knapp" id="nye-spillere">Nytt spill med nye spillere</button>
+    </div>
+  </div>
+</section>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+(function () {
+  'use strict';
+
+  var DATA = null;
+  try { DATA = JSON.parse(document.getElementById('spilldata').textContent); } catch (e) { DATA = null; }
+  if (!DATA || !Array.isArray(DATA.kategorier)) {
+    document.body.textContent = 'Spilldataene mangler. Lag spillet på nytt i Jeopardy-generatoren.';
+    return;
+  }
+
+  const KAT = DATA.kategorier;
+  const TID = Math.max(0, Number(DATA.tid) || 0);
+  const LAGRE = !DATA.forhandsvisning;
+  const NOKKEL = 'jeopardy-spill:' + (DATA.id || DATA.tittel);
+  const ANTALL = KAT.reduce((sum, k) => sum + k.sporsmal.length, 0);
+  const RADER = Math.max(1, ...KAT.map(k => k.sporsmal.length));
+  const $ = id => document.getElementById(id);
+  const bevegelse = () => !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+  // Skrifttyper lastes uten å blokkere. Uten nett brukes reserveskriftene.
+  try {
+    const lenke = document.createElement('link');
+    lenke.rel = 'stylesheet';
+    lenke.href = 'https://fonts.googleapis.com/css2?family=Anton&family=Lexend:wght@400;700&family=Libre+Baskerville:wght@700&display=swap';
+    document.head.appendChild(lenke);
+  } catch (e) { /* uten nett */ }
+
+  const tall = n => Math.abs(n).toLocaleString('nb-NO');
+  const poengTekst = n => (n < 0 ? '−' : '') + tall(n);
+  function navneliste(navn) {
+    try { return new Intl.ListFormat('nb', { type: 'conjunction' }).format(navn); }
+    catch (e) { return navn.length < 2 ? navn.join('') : navn.slice(0, -1).join(', ') + ' og ' + navn[navn.length - 1]; }
+  }
+  function lag(tag, klasse, tekst) {
+    const el = document.createElement(tag);
+    if (klasse) el.className = klasse;
+    if (tekst != null) el.textContent = tekst;
+    return el;
+  }
+
+  // ---------- Tilstand og lagring ----------
+  function tomTilstand(spillere, lyd) {
+    return { spillere: spillere || [], brukt: {}, historikk: [], lyd: lyd !== false, startet: false };
+  }
+  let S = tomTilstand();
+  let lagret = null;
+  function lagre() {
+    if (!LAGRE) return;
+    try { localStorage.setItem(NOKKEL, JSON.stringify(S)); } catch (e) { /* lagring ikke tilgjengelig */ }
+  }
+  function hentLagret() {
+    if (!LAGRE) return null;
+    try {
+      const t = JSON.parse(localStorage.getItem(NOKKEL) || 'null');
+      if (t && t.startet && Array.isArray(t.spillere) && t.spillere.length && t.brukt) {
+        t.historikk = Array.isArray(t.historikk) ? t.historikk : [];
+        return t;
+      }
+    } catch (e) { /* ignorer */ }
+    return null;
+  }
+  function slettLagret() {
+    try { localStorage.removeItem(NOKKEL); } catch (e) { /* ignorer */ }
+  }
+  let teller = 0;
+  const nyId = () => 's' + Date.now().toString(36) + (teller++).toString(36);
+  const antallBrukt = () => Object.keys(S.brukt).length;
+
+  function visSkjerm(id) {
+    ['oppsett', 'spill', 'resultat'].forEach(s => { $(s).hidden = s !== id; });
+  }
+
+  // ---------- Oppsett ----------
+  let modus = 'ny';
+  let fjernVenter = null;
+
+  function visOppsett(m) {
+    modus = m;
+    fjernVenter = null;
+    lagret = m === 'ny' ? hentLagret() : null;
+    $('fortsett').hidden = !lagret;
+    if (lagret) {
+      $('fortsett-tekst').textContent = 'Du har et spill som ikke er ferdig. ' +
+        navneliste(lagret.spillere.map(s => s.navn)) + ' har spilt ' +
+        Object.keys(lagret.brukt).length + ' av ' + ANTALL + ' spørsmål.';
+    }
+    $('start-knapp').textContent = m === 'rediger' ? 'Tilbake til brettet' : 'Start spillet';
+    $('oppsett-melding').textContent = '';
+    tegnSpillerliste();
+    visSkjerm('oppsett');
+    try { $('nytt-navn').focus({ preventScroll: true }); } catch (e) { /* ignorer */ }
+  }
+
+  function tegnSpillerliste() {
+    const ul = $('spillerliste');
+    ul.textContent = '';
+    S.spillere.forEach(s => {
+      const li = lag('li', 'spiller-brikke');
+      li.append(lag('span', null, s.navn));
+      if (modus === 'rediger') li.append(lag('span', 'brikke-poeng', poengTekst(s.poeng)));
+      const bekreft = fjernVenter === s.id;
+      const fjern = lag('button', 'fjern' + (bekreft ? ' bekreft' : ''), bekreft ? 'Fjern?' : '×');
+      fjern.type = 'button';
+      fjern.setAttribute('aria-label', bekreft ? 'Trykk igjen for å fjerne ' + s.navn : 'Fjern ' + s.navn);
+      fjern.addEventListener('click', () => {
+        if (modus === 'rediger' && fjernVenter !== s.id) {
+          fjernVenter = s.id;
+          tegnSpillerliste();
+          return;
+        }
+        S.spillere = S.spillere.filter(x => x.id !== s.id);
+        fjernVenter = null;
+        if (S.startet) lagre();
+        tegnSpillerliste();
+        $('nytt-navn').focus();
+      });
+      li.append(fjern);
+      ul.append(li);
+    });
+    $('start-knapp').disabled = S.spillere.length === 0;
+  }
+
+  function leggTilNavn(tekst) {
+    const navn = tekst.split(/[,;\r\n\t]+/).map(s => s.trim().replace(/\s+/g, ' ').slice(0, 40)).filter(Boolean);
+    const finnes = [];
+    navn.forEach(n => {
+      const liten = n.toLocaleLowerCase('nb');
+      if (S.spillere.some(s => s.navn.toLocaleLowerCase('nb') === liten)) finnes.push(n);
+      else S.spillere.push({ id: nyId(), navn: n, poeng: 0 });
+    });
+    $('oppsett-melding').textContent = finnes.length ? navneliste(finnes) + ' er allerede med.' : '';
+    if (S.startet) lagre();
+    tegnSpillerliste();
+  }
+
+  $('legg-til-skjema').addEventListener('submit', e => {
+    e.preventDefault();
+    const felt = $('nytt-navn');
+    leggTilNavn(felt.value);
+    felt.value = '';
+    felt.focus();
+  });
+  $('nytt-navn').addEventListener('paste', e => {
+    const tekst = (e.clipboardData && e.clipboardData.getData('text')) || '';
+    if (/[\r\n\t]/.test(tekst)) {
+      e.preventDefault();
+      leggTilNavn(tekst);
+    }
+  });
+  $('start-knapp').addEventListener('click', () => {
+    if (!S.spillere.length) return;
+    if (modus === 'ny') {
+      S.brukt = {};
+      S.historikk = [];
+      S.spillere.forEach(s => { s.poeng = 0; });
+    }
+    S.startet = true;
+    lagre();
+    visBrett();
+  });
+  $('fortsett-knapp').addEventListener('click', () => {
+    if (!lagret) return;
+    S = lagret;
+    lagret = null;
+    visBrett();
+  });
+  $('forkast-knapp').addEventListener('click', () => {
+    if (lagret) {
+      S = tomTilstand(lagret.spillere.map(s => ({ id: s.id, navn: s.navn, poeng: 0 })), lagret.lyd);
+    }
+    slettLagret();
+    lagret = null;
+    $('fortsett').hidden = true;
+    $('oppsett-melding').textContent = S.spillere.length ? 'Spillerne fra forrige spill står klare. Fjern eller legg til navn før du starter.' : '';
+    tegnSpillerliste();
+    $('nytt-navn').focus();
+  });
+
+  // ---------- Brettet ----------
+  let sistEndret = new Set();
+
+  function visBrett() {
+    visSkjerm('spill');
+    tegnBrett();
+    tegnPoeng();
+    oppdaterLydknapp();
+  }
+
+  function tegnBrett() {
+    const b = $('brett');
+    b.textContent = '';
+    b.style.gridTemplateColumns = 'repeat(' + KAT.length + ', minmax(0, 1fr))';
+    b.style.gridTemplateRows = 'clamp(52px, 14vh, 140px) repeat(' + RADER + ', minmax(0, 1fr))';
+    KAT.forEach(k => {
+      const h = lag('div', 'kat' + (k.navn.length > 22 ? ' lang' : ''));
+      h.append(lag('span', null, k.navn));
+      b.append(h);
+    });
+    for (let r = 0; r < RADER; r++) {
+      KAT.forEach((k, ki) => {
+        const s = k.sporsmal[r];
+        if (!s) { b.append(lag('div', 'rute tom')); return; }
+        const key = ki + '-' + r;
+        const brukt = !!S.brukt[key];
+        const knapp = lag('button', 'rute' + (tall(s.poeng).length > 5 ? ' smal' : ''));
+        knapp.type = 'button';
+        knapp.dataset.key = key;
+        knapp.disabled = brukt;
+        knapp.setAttribute('aria-label', k.navn + ' for ' + tall(s.poeng) + ' poeng' + (brukt ? ', brukt' : ''));
+        if (!brukt) knapp.append(lag('span', null, tall(s.poeng)));
+        knapp.addEventListener('click', () => apneSporsmal(ki, r, knapp));
+        b.append(knapp);
+      });
+    }
+  }
+
+  function tegnPoeng() {
+    const ol = $('poengliste');
+    ol.textContent = '';
+    const topp = S.spillere.length ? Math.max(...S.spillere.map(s => s.poeng)) : 0;
+    S.spillere.forEach(s => {
+      const li = lag('li', 'poeng-brikke');
+      if (topp > 0 && s.poeng === topp) li.classList.add('leder');
+      if (s.poeng < 0) li.classList.add('minus');
+      if (sistEndret.has(s.id)) li.classList.add('endret');
+      li.append(lag('span', 'pb-poeng', poengTekst(s.poeng)), lag('span', 'pb-navn', s.navn));
+      ol.append(li);
+    });
+    sistEndret = new Set();
+    $('knapp-angre').disabled = !S.historikk.length;
+    $('fremdrift').textContent = antallBrukt() + ' av ' + ANTALL + ' spørsmål brukt';
+  }
+
+  $('knapp-angre').addEventListener('click', () => {
+    const h = S.historikk.pop();
+    if (!h) return;
+    h.endringer.forEach(e => {
+      const p = S.spillere.find(x => x.id === e.id);
+      if (p) { p.poeng -= e.d; sistEndret.add(p.id); }
+    });
+    delete S.brukt[h.key];
+    lagre();
+    tegnBrett();
+    tegnPoeng();
+    const [ki, r] = h.key.split('-').map(Number);
+    toast('Angret ' + KAT[ki].navn + ' for ' + tall(KAT[ki].sporsmal[r].poeng) + '. Spørsmålet er åpent igjen.');
+  });
+  $('knapp-spillere').addEventListener('click', () => visOppsett('rediger'));
+  $('knapp-resultat').addEventListener('click', () => visResultat());
+
+  // ---------- Spørsmålet ----------
+  let aktiv = null;
+
+  function apneSporsmal(ki, r, kilde) {
+    if (aktiv) return;
+    lydKontekst();
+    const k = KAT[ki];
+    const s = k.sporsmal[r];
+    aktiv = { ki: ki, r: r, key: ki + '-' + r, valg: {}, fasitVist: false };
+    const ov = $('sporsmal');
+    ov.classList.remove('med-fasit');
+    $('sp-kategori').textContent = k.navn;
+    $('sp-poeng').textContent = tall(s.poeng) + ' poeng';
+    const tekst = $('sp-tekst');
+    tekst.textContent = s.tekst;
+    tekst.classList.toggle('lang', s.tekst.length > 120 && s.tekst.length <= 240);
+    tekst.classList.toggle('svaert-lang', s.tekst.length > 240);
+    $('sp-fasit-tekst').textContent = s.fasit || 'Ingen fasit er lagt inn for dette spørsmålet.';
+    $('sp-fasit').hidden = true;
+    $('sp-poenggiving').hidden = true;
+    $('sp-vis-fasit').hidden = false;
+    $('sp-ferdig').hidden = true;
+    $('sp-oppsummering').textContent = '';
+    $('sp-timer').hidden = !TID;
+    ov.hidden = false;
+    ov.scrollTop = 0;
+    zoom(ov, kilde);
+    try { ov.focus({ preventScroll: true }); } catch (e) { /* ignorer */ }
+    if (TID) startTimer();
+  }
+
+  function zoom(ov, kilde) {
+    if (!kilde || !ov.animate || !bevegelse()) return;
+    const r = kilde.getBoundingClientRect();
+    const B = window.innerWidth;
+    const H = window.innerHeight;
+    if (!r.width || !r.height) return;
+    const dx = r.left + r.width / 2 - B / 2;
+    const dy = r.top + r.height / 2 - H / 2;
+    ov.animate([
+      { transform: 'translate(' + dx + 'px, ' + dy + 'px) scale(' + (r.width / B) + ', ' + (r.height / H) + ')', opacity: 0.7 },
+      { transform: 'none', opacity: 1 }
+    ], { duration: 420, easing: 'cubic-bezier(.2, .8, .2, 1)' });
+  }
+
+  function visFasit() {
+    if (!aktiv || aktiv.fasitVist) return;
+    aktiv.fasitVist = true;
+    stoppTimer();
+    $('sporsmal').classList.add('med-fasit');
+    $('sp-fasit').hidden = false;
+    $('sp-timer').hidden = true;
+    $('sp-vis-fasit').hidden = true;
+    $('sp-ferdig').hidden = false;
+    tegnPoenggiving();
+    $('sp-poenggiving').hidden = false;
+    lyd('fasit');
+  }
+
+  function tegnPoenggiving() {
+    const s = KAT[aktiv.ki].sporsmal[aktiv.r];
+    const g = $('sp-spillere');
+    g.textContent = '';
+    S.spillere.forEach(p => {
+      const kort = lag('div', 'pg-kort');
+      kort.dataset.id = p.id;
+      const info = lag('div', 'pg-info');
+      info.append(lag('span', 'pg-navn', p.navn), lag('span', 'pg-sum', poengTekst(p.poeng)));
+      const pluss = lag('button', 'pg-knapp pluss', '+' + tall(s.poeng));
+      pluss.type = 'button';
+      pluss.setAttribute('aria-label', 'Riktig svar: ' + p.navn + ' får ' + tall(s.poeng) + ' poeng');
+      pluss.addEventListener('click', () => velg(p.id, 1));
+      const minus = lag('button', 'pg-knapp minus', '−' + tall(s.poeng));
+      minus.type = 'button';
+      minus.setAttribute('aria-label', 'Feil svar: ' + p.navn + ' mister ' + tall(s.poeng) + ' poeng');
+      minus.addEventListener('click', () => velg(p.id, -1));
+      kort.append(info, pluss, minus);
+      g.append(kort);
+    });
+    oppdaterKort();
+  }
+
+  function velg(id, verdi) {
+    if (!aktiv) return;
+    aktiv.valg[id] = aktiv.valg[id] === verdi ? 0 : verdi;
+    oppdaterKort();
+    if (aktiv.valg[id] === 1) lyd('riktig');
+    else if (aktiv.valg[id] === -1) lyd('feil');
+  }
+
+  function oppdaterKort() {
+    const s = KAT[aktiv.ki].sporsmal[aktiv.r];
+    const pluss = [];
+    const minus = [];
+    document.querySelectorAll('.pg-kort').forEach(kort => {
+      const id = kort.dataset.id;
+      const v = aktiv.valg[id] || 0;
+      const p = S.spillere.find(x => x.id === id);
+      if (!p) return;
+      kort.classList.toggle('riktig', v === 1);
+      kort.classList.toggle('feil', v === -1);
+      kort.querySelector('.pluss').setAttribute('aria-pressed', String(v === 1));
+      kort.querySelector('.minus').setAttribute('aria-pressed', String(v === -1));
+      kort.querySelector('.pg-sum').textContent = v
+        ? poengTekst(p.poeng) + ' → ' + poengTekst(p.poeng + v * s.poeng)
+        : poengTekst(p.poeng);
+      if (v === 1) pluss.push(p.navn);
+      if (v === -1) minus.push(p.navn);
+    });
+    const deler = [];
+    if (pluss.length) deler.push(navneliste(pluss) + ' får ' + tall(s.poeng));
+    if (minus.length) deler.push(navneliste(minus) + ' mister ' + tall(s.poeng));
+    $('sp-oppsummering').textContent = deler.length ? deler.join('. ') + '.' : 'Ingen får poeng.';
+  }
+
+  function ferdig() {
+    if (!aktiv) return;
+    const s = KAT[aktiv.ki].sporsmal[aktiv.r];
+    const endringer = [];
+    Object.keys(aktiv.valg).forEach(id => {
+      const v = aktiv.valg[id];
+      const p = S.spillere.find(x => x.id === id);
+      if (!v || !p) return;
+      const d = v * s.poeng;
+      p.poeng += d;
+      endringer.push({ id: id, d: d });
+      sistEndret.add(id);
+    });
+    S.brukt[aktiv.key] = true;
+    S.historikk.push({ key: aktiv.key, endringer: endringer });
+    lagre();
+    lukkSporsmal();
+    if (antallBrukt() >= ANTALL) setTimeout(visResultat, 700);
+  }
+
+  function lukkSporsmal() {
+    stoppTimer();
+    $('sporsmal').hidden = true;
+    const key = aktiv && aktiv.key;
+    aktiv = null;
+    tegnBrett();
+    tegnPoeng();
+    const neste = document.querySelector('.rute[data-key="' + key + '"]:not(:disabled)') || document.querySelector('.rute:not(:disabled)');
+    if (neste) { try { neste.focus({ preventScroll: true }); } catch (e) { /* ignorer */ } }
+  }
+
+  $('sp-vis-fasit').addEventListener('click', visFasit);
+  $('sp-ferdig').addEventListener('click', ferdig);
+  $('sp-avbryt').addEventListener('click', lukkSporsmal);
+
+  // ---------- Nedtelling ----------
+  const timer = { igjen: 0, slutt: 0, kjorer: false, intervall: null, sisteSek: null };
+
+  function startTimer() {
+    stoppTimer();
+    timer.igjen = TID * 1000;
+    fortsettTimer();
+  }
+  function fortsettTimer() {
+    if (timer.igjen <= 0) return;
+    timer.slutt = performance.now() + timer.igjen;
+    timer.kjorer = true;
+    timer.sisteSek = Math.ceil(timer.igjen / 1000);
+    clearInterval(timer.intervall);
+    timer.intervall = setInterval(tikk, 100);
+    visTimer();
+  }
+  function pauseTimer() {
+    if (!timer.kjorer) return;
+    timer.igjen = Math.max(0, timer.slutt - performance.now());
+    stoppTimer();
+    visTimer();
+  }
+  function stoppTimer() {
+    clearInterval(timer.intervall);
+    timer.intervall = null;
+    timer.kjorer = false;
+  }
+  function tikk() {
+    timer.igjen = Math.max(0, timer.slutt - performance.now());
+    const sek = Math.ceil(timer.igjen / 1000);
+    if (sek !== timer.sisteSek) {
+      timer.sisteSek = sek;
+      if (sek > 0 && sek <= 5) lyd('tikk');
+    }
+    if (timer.igjen <= 0) {
+      stoppTimer();
+      lyd('slutt');
+    }
+    visTimer();
+  }
+  function visTimer() {
+    const ute = timer.igjen <= 0;
+    const sek = Math.ceil(timer.igjen / 1000);
+    $('timer-fyll').style.transform = 'scaleX(' + (TID ? timer.igjen / (TID * 1000) : 0) + ')';
+    $('timer-tall').textContent = String(sek);
+    $('timer-tall').hidden = ute;
+    $('timer-ute').hidden = !ute;
+    $('sp-timer').classList.toggle('lite', !ute && sek <= 5);
+    $('sp-timer').classList.toggle('ute', ute);
+    $('timer-pause').textContent = timer.kjorer ? 'Pause' : 'Fortsett';
+    $('timer-pause').disabled = ute;
+  }
+  $('timer-pause').addEventListener('click', () => {
+    if (timer.kjorer) pauseTimer(); else fortsettTimer();
+  });
+  $('timer-restart').addEventListener('click', startTimer);
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && DATA.forhandsvisning && window.parent !== window) {
+      try { window.parent.postMessage('jeopardy:lukk-forhandsvisning', '*'); } catch (err) { /* ignorer */ }
+      return;
+    }
+    if (!aktiv || aktiv.fasitVist || !TID) return;
+    if (e.key !== ' ' && e.code !== 'Space') return;
+    const mal = e.target;
+    if (mal && (mal.tagName === 'BUTTON' || mal.tagName === 'INPUT')) return;
+    e.preventDefault();
+    if (timer.kjorer) pauseTimer(); else fortsettTimer();
+  });
+
+  // ---------- Lyd ----------
+  let lydkontekst = null;
+  function lydKontekst() {
+    if (!S.lyd) return null;
+    try {
+      if (!lydkontekst) {
+        const AK = window.AudioContext || window.webkitAudioContext;
+        if (!AK) return null;
+        lydkontekst = new AK();
+      }
+      if (lydkontekst.state === 'suspended') lydkontekst.resume();
+    } catch (e) { lydkontekst = null; }
+    return lydkontekst;
+  }
+  function tone(frekvens, start, varighet, type, volum) {
+    const a = lydkontekst;
+    const t0 = a.currentTime + start;
+    const osc = a.createOscillator();
+    const forsterk = a.createGain();
+    osc.type = type;
+    osc.frequency.value = frekvens;
+    forsterk.gain.setValueAtTime(0.0001, t0);
+    forsterk.gain.exponentialRampToValueAtTime(volum, t0 + 0.012);
+    forsterk.gain.exponentialRampToValueAtTime(0.0001, t0 + varighet);
+    osc.connect(forsterk);
+    forsterk.connect(a.destination);
+    osc.start(t0);
+    osc.stop(t0 + varighet + 0.05);
+  }
+  function lyd(type) {
+    if (!S.lyd || !lydKontekst()) return;
+    try {
+      if (type === 'tikk') tone(880, 0, 0.09, 'sine', 0.18);
+      else if (type === 'slutt') { tone(196, 0, 0.75, 'sawtooth', 0.22); tone(147, 0, 0.75, 'square', 0.12); }
+      else if (type === 'fasit') { tone(659, 0, 0.16, 'triangle', 0.25); tone(988, 0.13, 0.3, 'triangle', 0.25); }
+      else if (type === 'riktig') { tone(784, 0, 0.12, 'triangle', 0.2); tone(1175, 0.09, 0.2, 'triangle', 0.2); }
+      else if (type === 'feil') tone(220, 0, 0.22, 'square', 0.1);
+      else if (type === 'seier') [523, 659, 784, 1047].forEach((f, i) => tone(f, i * 0.14, 0.4, 'triangle', 0.22));
+    } catch (e) { /* lyd er valgfritt */ }
+  }
+  function oppdaterLydknapp() {
+    const k = $('knapp-lyd');
+    k.textContent = S.lyd ? 'Lyd: på' : 'Lyd: av';
+    k.setAttribute('aria-pressed', String(!!S.lyd));
+  }
+  $('knapp-lyd').addEventListener('click', () => {
+    S.lyd = !S.lyd;
+    lagre();
+    oppdaterLydknapp();
+    if (S.lyd) lyd('tikk');
+  });
+
+  // ---------- Fullskjerm ----------
+  const fullskjerm = $('knapp-fullskjerm');
+  if (!document.fullscreenEnabled) fullskjerm.hidden = true;
+  fullskjerm.addEventListener('click', () => {
+    try {
+      const p = document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+      if (p && p.catch) p.catch(() => {});
+    } catch (e) { /* ikke støttet */ }
+  });
+  document.addEventListener('fullscreenchange', () => {
+    fullskjerm.textContent = document.fullscreenElement ? 'Avslutt fullskjerm' : 'Fullskjerm';
+  });
+
+  // ---------- Resultat ----------
+  function visResultat() {
+    const ferdigSpilt = antallBrukt() >= ANTALL;
+    const sortert = S.spillere.slice().sort((a, b) => b.poeng - a.poeng);
+    const ol = $('rangering');
+    ol.textContent = '';
+    let plass = 0;
+    let forrige = null;
+    sortert.forEach((s, i) => {
+      if (s.poeng !== forrige) { plass = i + 1; forrige = s.poeng; }
+      const li = lag('li', 'rang rang-' + Math.min(plass, 4));
+      li.append(lag('span', 'rang-plass', plass + '.'), lag('span', 'rang-navn', s.navn), lag('span', 'rang-poeng', poengTekst(s.poeng)));
+      ol.append(li);
+    });
+    let tittel = 'Ingen spillere';
+    if (sortert.length) {
+      const best = sortert[0].poeng;
+      const vinnere = sortert.filter(s => s.poeng === best).map(s => s.navn);
+      if (sortert.length > 1 && vinnere.length === sortert.length) tittel = ferdigSpilt ? 'Helt likt!' : 'Helt jevnt så langt';
+      else if (vinnere.length > 1) tittel = (ferdigSpilt ? 'Delt seier: ' : 'Delt ledelse: ') + navneliste(vinnere);
+      else tittel = (ferdigSpilt ? 'Vinneren er ' : 'I ledelsen: ') + vinnere[0];
+    }
+    $('resultat-over').textContent = ferdigSpilt ? 'Alle spørsmålene er brukt' : 'Stillingen etter ' + antallBrukt() + ' av ' + ANTALL + ' spørsmål';
+    $('resultat-tittel').textContent = tittel;
+    $('tilbake-til-brett').hidden = ferdigSpilt;
+    visSkjerm('resultat');
+    if (ferdigSpilt && sortert.length) {
+      konfetti();
+      lyd('seier');
+    }
+  }
+
+  function bekreftKlikk(knapp, trengerBekreftelse, handling) {
+    const original = knapp.textContent;
+    let venter = false;
+    let tidsavbrudd = null;
+    knapp.addEventListener('click', () => {
+      if (venter || !trengerBekreftelse()) {
+        clearTimeout(tidsavbrudd);
+        venter = false;
+        knapp.textContent = original;
+        handling();
+        return;
+      }
+      venter = true;
+      knapp.textContent = 'Trykk igjen for å nullstille poengene';
+      tidsavbrudd = setTimeout(() => { venter = false; knapp.textContent = original; }, 4000);
+    });
+  }
+  const spilletPagar = () => antallBrukt() > 0 && antallBrukt() < ANTALL;
+
+  $('tilbake-til-brett').addEventListener('click', visBrett);
+  bekreftKlikk($('spill-igjen'), spilletPagar, () => {
+    S.spillere.forEach(s => { s.poeng = 0; });
+    S.brukt = {};
+    S.historikk = [];
+    S.startet = true;
+    lagre();
+    visBrett();
+  });
+  bekreftKlikk($('nye-spillere'), spilletPagar, () => {
+    S = tomTilstand([], S.lyd);
+    slettLagret();
+    visOppsett('ny');
+  });
+
+  function konfetti() {
+    if (!bevegelse()) return;
+    const lerret = $('konfetti');
+    const ctx = lerret.getContext && lerret.getContext('2d');
+    if (!ctx) return;
+    const dpr = window.devicePixelRatio || 1;
+    const B = window.innerWidth;
+    const H = window.innerHeight;
+    lerret.width = B * dpr;
+    lerret.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const farger = ['#ffcc3a', '#ffffff', '#2fd27a', '#ff5a6a', '#8aa4ff'];
+    const biter = Array.from({ length: 170 }, () => ({
+      x: Math.random() * B,
+      y: -20 - Math.random() * H * 0.6,
+      vx: (Math.random() - 0.5) * 2.2,
+      vy: 2 + Math.random() * 3.2,
+      vinkel: Math.random() * Math.PI,
+      spinn: (Math.random() - 0.5) * 0.24,
+      b: 6 + Math.random() * 6,
+      h: 9 + Math.random() * 8,
+      farge: farger[Math.floor(Math.random() * farger.length)]
+    }));
+    const start = performance.now();
+    function ramme(t) {
+      ctx.clearRect(0, 0, B, H);
+      biter.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vinkel += p.spinn;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.vinkel);
+        ctx.fillStyle = p.farge;
+        ctx.fillRect(-p.b / 2, -p.h / 2, p.b, p.h);
+        ctx.restore();
+      });
+      if (t - start < 5500 && !$('resultat').hidden) requestAnimationFrame(ramme);
+      else ctx.clearRect(0, 0, B, H);
+    }
+    requestAnimationFrame(ramme);
+  }
+
+  let toastTid = null;
+  function toast(tekst) {
+    const el = $('toast');
+    el.textContent = tekst;
+    el.hidden = false;
+    clearTimeout(toastTid);
+    toastTid = setTimeout(() => { el.hidden = true; }, 3800);
+  }
+
+  // ---------- Start ----------
+  $('spilltittel').textContent = DATA.tittel;
+  $('topp-tittel').textContent = DATA.tittel;
+  $('spillinfo').textContent = KAT.length + ' kategorier · ' + ANTALL + ' spørsmål' +
+    (TID ? ' · ' + TID + ' sekunder per spørsmål' : '');
+  visOppsett('ny');
+})();
+</script>
+</template>
+
+<script>
+(() => {
+  'use strict';
+
+  const $ = id => document.getElementById(id);
+
+  // ---------- Eksempelspørsmål (brukes også i Excel-malen) ----------
+  const EKSEMPEL = [
+    ['Geografi', 100, 'Hva er hovedstaden i Sverige?', 'Stockholm'],
+    ['Geografi', 200, 'Hva heter Norges lengste elv?', 'Glomma'],
+    ['Geografi', 300, 'I hvilket land ligger byen Kyoto?', 'Japan'],
+    ['Geografi', 400, 'Hva heter verdens største hav?', 'Stillehavet'],
+    ['Geografi', 500, 'Hva heter Norges høyeste fjell?', 'Galdhøpiggen'],
+    ['Historie', 100, 'Hvilket år fikk Norge sin grunnlov?', '1814'],
+    ['Historie', 200, 'Hva het skipet som sank på sin første tur over Atlanterhavet i 1912?', 'Titanic'],
+    ['Historie', 300, 'Hvilket år falt Berlinmuren?', '1989'],
+    ['Historie', 400, 'Hvilken konge falt i slaget på Stiklestad i 1030?', 'Olav Haraldsson (Olav den hellige)'],
+    ['Historie', 500, 'Hvilken by ble begravd i aske da vulkanen Vesuv hadde utbrudd i år 79?', 'Pompeii'],
+    ['Naturfag', 100, 'Hvilken planet er nærmest sola?', 'Merkur'],
+    ['Naturfag', 200, 'Hva kalles prosessen der planter lager sukker ved hjelp av sollys?', 'Fotosyntese'],
+    ['Naturfag', 300, 'Hvilket grunnstoff har det kjemiske symbolet Au?', 'Gull'],
+    ['Naturfag', 400, 'Hvilken gass er det mest av i lufta vi puster inn?', 'Nitrogen (ca. 78 %)'],
+    ['Naturfag', 500, 'Hva heter den delen av cellen som inneholder arvestoffet?', 'Cellekjernen'],
+    ['Norsk', 100, 'Hva kalles ord som betyr det motsatte av hverandre, som «varm» og «kald»?', 'Antonymer'],
+    ['Norsk', 200, 'Hvilken ordklasse hører ord som «stor» og «rød» til?', 'Adjektiv'],
+    ['Norsk', 300, 'Fra hvilket språk kommer hilsenen «bonjour»?', 'Fransk'],
+    ['Norsk', 400, 'Hva kalles ord som betyr omtrent det samme, som «glad» og «blid»?', 'Synonymer'],
+    ['Norsk', 500, 'Hvem samlet «Norske folkeeventyr» sammen med Jørgen Moe?', 'Peter Christen Asbjørnsen'],
+    ['Sport', 100, 'Hvor mange spillere har et fotballag på banen samtidig?', '11'],
+    ['Sport', 200, 'I hvilken idrett bruker man puck?', 'Ishockey'],
+    ['Sport', 300, 'Hva heter tennisturneringen som spilles på gress i London?', 'Wimbledon'],
+    ['Sport', 400, 'Hvor mange ringer er det i det olympiske symbolet?', 'Fem'],
+    ['Sport', 500, 'Hvilken norsk by arrangerte vinter-OL i 1994?', 'Lillehammer'],
+    ['Matematikk', 100, 'Hva er 7 · 8?', '56'],
+    ['Matematikk', 200, 'Hvor mange grader er vinklene i en trekant til sammen?', '180 grader'],
+    ['Matematikk', 300, 'Hva er 25 % av 80?', '20'],
+    ['Matematikk', 400, 'Hva kalles en mangekant med seks sider?', 'Sekskant (heksagon)'],
+    ['Matematikk', 500, 'Hva er det minste primtallet?', '2']
+  ];
+
+  const VEILEDNING = [
+    ['Slik bruker du malen', ''],
+    ['Arket «Spørsmål»', 'Skriv ett spørsmål per rad. La overskriftene i første rad stå.'],
+    ['Kategori', 'Navnet på kategorien. Skriv det likt på alle spørsmål som hører sammen.'],
+    ['Poeng', 'Et tall, for eksempel 100, 200, 300. Kan stå tomt. Da får spørsmålene 100, 200, 300 … i den rekkefølgen de står.'],
+    ['Spørsmål', 'Teksten som vises på skjermen.'],
+    ['Fasit', 'Svaret som vises når du trykker «Vis fasit».'],
+    ['Tips', 'Du kan ha så mange kategorier og spørsmål du vil. Slett eksemplene og skriv dine egne.'],
+    ['Når du er ferdig', 'Lagre filen som Excel-arbeidsbok (.xlsx) og last den opp i Jeopardy-generatoren.']
+  ];
+
+  // ---------- Skrifttyper (lastes uten å blokkere siden) ----------
+  try {
+    const lenke = document.createElement('link');
+    lenke.rel = 'stylesheet';
+    lenke.href = 'https://fonts.googleapis.com/css2?family=Anton&family=Lexend:wght@400;700&display=swap';
+    document.head.appendChild(lenke);
+  } catch (e) { /* uten nett */ }
+
+  // ---------- Nedlasting: claude.ai-visning eller vanlig nettleser ----------
+  const nedlastinger = (async () => {
+    try {
+      if (window.claude && typeof window.claude.use === 'function') return await window.claude.use('downloads');
+    } catch (e) { /* ikke tilgjengelig */ }
+    return null;
+  })();
+
+  async function lagreFil(filnavn, blob) {
+    const dl = await nedlastinger;
+    if (dl) {
+      try {
+        await dl.save({ filename: filnavn, data: blob });
+        return { ok: true };
+      } catch (e) {
+        const kode = e && e.code;
+        if (kode === 'declined') return { ok: false, melding: 'Nedlastingen ble avbrutt.' };
+        if (kode === 'rate_limited') return { ok: false, melding: 'Vent litt, og prøv igjen.' };
+        if (!['unavailable', 'not_granted', 'capability_disabled', 'capability_removed'].includes(kode)) {
+          return { ok: false, melding: 'Nedlastingen virket ikke. ' + ((e && e.message) || '') };
+        }
+      }
+    }
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filnavn;
+    document.body.append(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+    return { ok: true };
+  }
+
+  // ---------- Hjelpere ----------
+  const escHtml = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const xmlEsc = escHtml;
+  function normaliser(s) {
+    return String(s == null ? '' : s).toLowerCase()
+      .replace(/æ/g, 'ae').replace(/ø/g, 'o').replace(/å/g, 'a')
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]/g, '');
+  }
+  function liste(ord) {
+    if (ord.length < 2) return ord.join('');
+    return ord.slice(0, -1).join(', ') + ' og ' + ord[ord.length - 1];
+  }
+  function radliste(rader) {
+    const vis = rader.slice(0, 8).map(String);
+    const tekst = rader.length > 8 ? vis.join(', ') + ' og ' + (rader.length - 8) + ' til' : liste(vis);
+    return (rader.length === 1 ? 'Rad ' : 'Radene ') + tekst;
+  }
+
+  // ---------- Lese ZIP (xlsx er en zip-fil) ----------
+  async function inflateRaw(data) {
+    if (typeof DecompressionStream === 'undefined') {
+      throw new Error('Nettleseren din er for gammel til å lese Excel-filer. Oppdater nettleseren, eller lagre arket som .csv og last opp det.');
+    }
+    const strom = new Blob([data]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+    return new Uint8Array(await new Response(strom).arrayBuffer());
+  }
+
+  function apneZip(buffer) {
+    const u8 = new Uint8Array(buffer);
+    const dv = new DataView(buffer);
+    let slutt = -1;
+    for (let i = u8.length - 22; i >= Math.max(0, u8.length - 22 - 65535); i--) {
+      if (dv.getUint32(i, true) === 0x06054b50) { slutt = i; break; }
+    }
+    if (slutt < 0) throw new Error('Filen ser ikke ut som en Excel-fil (.xlsx).');
+    const antall = dv.getUint16(slutt + 10, true);
+    let p = dv.getUint32(slutt + 16, true);
+    const filer = new Map();
+    const dekoder = new TextDecoder('utf-8');
+    for (let n = 0; n < antall && p + 46 <= u8.length; n++) {
+      if (dv.getUint32(p, true) !== 0x02014b50) break;
+      const metode = dv.getUint16(p + 10, true);
+      const storrelse = dv.getUint32(p + 20, true);
+      const navnLengde = dv.getUint16(p + 28, true);
+      const ekstra = dv.getUint16(p + 30, true);
+      const kommentar = dv.getUint16(p + 32, true);
+      const lokal = dv.getUint32(p + 42, true);
+      const navn = dekoder.decode(u8.subarray(p + 46, p + 46 + navnLengde)).replace(/\\/g, '/');
+      filer.set(navn.toLowerCase(), { metode: metode, storrelse: storrelse, lokal: lokal });
+      p += 46 + navnLengde + ekstra + kommentar;
+    }
+    return {
+      async tekst(navn) {
+        const f = filer.get(String(navn).toLowerCase());
+        if (!f) return null;
+        const start = f.lokal + 30 + dv.getUint16(f.lokal + 26, true) + dv.getUint16(f.lokal + 28, true);
+        const data = u8.subarray(start, start + f.storrelse);
+        let ut;
+        if (f.metode === 0) ut = data;
+        else if (f.metode === 8) ut = await inflateRaw(data);
+        else throw new Error('Excel-filen er lagret i et format generatoren ikke kan lese. Prøv «Lagre som» → Excel-arbeidsbok (.xlsx).');
+        return dekoder.decode(ut);
+      }
+    };
+  }
+
+  // ---------- Lese XLSX ----------
+  const REL_NS = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships';
+
+  function xml(tekst) {
+    const dok = new DOMParser().parseFromString(tekst, 'application/xml');
+    if (dok.getElementsByTagName('parsererror').length) throw new Error('Excel-filen ser ut til å være skadet.');
+    return dok;
+  }
+  const alle = (rot, navn) => Array.from(rot.getElementsByTagNameNS('*', navn));
+  function barn(el, navn) {
+    for (const c of el.children) if (c.localName === navn) return c;
+    return null;
+  }
+  function lostSti(base, mal) {
+    if (mal.startsWith('/')) return mal.slice(1);
+    const ut = [];
+    for (const d of (base + mal).split('/')) {
+      if (d === '..') ut.pop();
+      else if (d && d !== '.') ut.push(d);
+    }
+    return ut.join('/');
+  }
+  function relId(el) {
+    const v = el.getAttributeNS(REL_NS, 'id');
+    if (v) return v;
+    for (const a of el.attributes) if (a.localName === 'id' && a.prefix) return a.value;
+    return el.getAttribute('r:id');
+  }
+  async function lesRelasjoner(zip, sti, base) {
+    const res = { id: {}, type: {} };
+    const tekst = await zip.tekst(sti);
+    if (!tekst) return res;
+    for (const r of alle(xml(tekst), 'Relationship')) {
+      if (r.getAttribute('TargetMode') === 'External') continue;
+      const mal = lostSti(base, r.getAttribute('Target') || '');
+      res.id[r.getAttribute('Id')] = mal;
+      const type = (r.getAttribute('Type') || '').split('/').pop();
+      if (!res.type[type]) res.type[type] = mal;
+    }
+    return res;
+  }
+  function tekstFra(el) {
+    let s = '';
+    for (const t of alle(el, 't')) {
+      if (t.parentNode && t.parentNode.localName === 'rPh') continue;
+      s += t.textContent;
+    }
+    return s;
+  }
+  function lesDelteStrenger(tekst) {
+    if (!tekst) return [];
+    return alle(xml(tekst), 'si').map(tekstFra);
+  }
+  function formatType(id, kode) {
+    if ((id >= 14 && id <= 17) || id === 22 || (id >= 27 && id <= 36) || (id >= 50 && id <= 58)) return 'dato';
+    if ((id >= 18 && id <= 21) || (id >= 45 && id <= 47)) return 'tid';
+    if (id === 9 || id === 10) return 'prosent';
+    if (kode) {
+      const ren = kode.replace(/"[^"]*"/g, '').replace(/\[[^\]]*\]/g, '').replace(/\\./g, '');
+      if (/%/.test(ren)) return 'prosent';
+      if (/[dy]/i.test(ren)) return 'dato';
+      if (/[hs]/i.test(ren)) return 'tid';
+    }
+    return null;
+  }
+  function lesStiler(tekst) {
+    if (!tekst) return [];
+    const dok = xml(tekst);
+    const egne = {};
+    for (const nf of alle(dok, 'numFmt')) egne[nf.getAttribute('numFmtId')] = nf.getAttribute('formatCode') || '';
+    const xfs = alle(dok, 'cellXfs')[0];
+    if (!xfs) return [];
+    return Array.from(xfs.children).filter(x => x.localName === 'xf').map(xf => {
+      const id = Number(xf.getAttribute('numFmtId') || 0);
+      return formatType(id, egne[id]);
+    });
+  }
+  const to = n => String(n).padStart(2, '0');
+  function formaterTall(n) {
+    if (Number.isInteger(n)) return String(n);
+    return String(parseFloat(n.toPrecision(12))).replace('.', ',');
+  }
+  function formaterDato(n, d1904) {
+    const dager = Math.floor(n) + (d1904 ? 1462 : 0);
+    const d = new Date(Date.UTC(1899, 11, 30) + dager * 86400000);
+    return to(d.getUTCDate()) + '.' + to(d.getUTCMonth() + 1) + '.' + d.getUTCFullYear();
+  }
+  function formaterTid(n) {
+    const min = Math.round((n - Math.floor(n)) * 1440);
+    return to(Math.floor(min / 60) % 24) + ':' + to(min % 60);
+  }
+  function kolonneIndeks(ref) {
+    let n = 0;
+    for (const tegn of ref.toUpperCase()) {
+      const k = tegn.charCodeAt(0);
+      if (k < 65 || k > 90) break;
+      n = n * 26 + (k - 64);
+    }
+    return n - 1;
+  }
+  function celleVerdi(c, delte, stiler, d1904) {
+    const t = c.getAttribute('t') || 'n';
+    if (t === 'inlineStr') {
+      const is = barn(c, 'is');
+      return is ? tekstFra(is) : '';
+    }
+    const v = barn(c, 'v');
+    const vt = v ? v.textContent : '';
+    if (t === 's') return delte[Number(vt)] || '';
+    if (t === 'str') return vt;
+    if (t === 'e') return '';
+    if (t === 'b') return vt === '1' ? 'Sann' : 'Usann';
+    if (vt === '') return '';
+    const n = Number(vt);
+    if (!isFinite(n)) return vt;
+    const type = stiler[Number(c.getAttribute('s') || 0)];
+    if (type === 'dato') return formaterDato(n, d1904);
+    if (type === 'tid') return formaterTid(n);
+    if (type === 'prosent') return formaterTall(n * 100) + ' %';
+    return formaterTall(n);
+  }
+  function lesArk(tekst, delte, stiler, d1904) {
+    const rader = [];
+    let ri = -1;
+    for (const row of alle(xml(tekst), 'row')) {
+      const r = Number(row.getAttribute('r'));
+      ri = r > 0 ? r - 1 : ri + 1;
+      if (ri > 5000) break;
+      const rad = [];
+      let ki = -1;
+      for (const c of row.children) {
+        if (c.localName !== 'c') continue;
+        const ref = c.getAttribute('r');
+        ki = ref ? kolonneIndeks(ref) : ki + 1;
+        if (ki < 0 || ki > 60) continue;
+        rad[ki] = celleVerdi(c, delte, stiler, d1904);
+      }
+      rader[ri] = rad;
+    }
+    return rader;
+  }
+  async function lesXlsx(buffer) {
+    const zip = apneZip(buffer);
+    const wbTekst = await zip.tekst('xl/workbook.xml');
+    if (!wbTekst) throw new Error('Fant ikke regnearket i filen. Lagre filen som Excel-arbeidsbok (.xlsx) og prøv igjen.');
+    const wb = xml(wbTekst);
+    const d1904 = alle(wb, 'workbookPr').some(e => ['1', 'true'].includes(e.getAttribute('date1904')));
+    const rel = await lesRelasjoner(zip, 'xl/_rels/workbook.xml.rels', 'xl/');
+    const delte = lesDelteStrenger(await zip.tekst(rel.type.sharedStrings || 'xl/sharedStrings.xml'));
+    const stiler = lesStiler(await zip.tekst(rel.type.styles || 'xl/styles.xml'));
+    const ark = [];
+    for (const s of alle(wb, 'sheet')) {
+      const sti = rel.id[relId(s)];
+      if (!sti) continue;
+      const tekst = await zip.tekst(sti);
+      if (!tekst) continue;
+      ark.push({
+        navn: s.getAttribute('name') || 'Ark',
+        skjult: ['hidden', 'veryHidden'].includes(s.getAttribute('state')),
+        rader: lesArk(tekst, delte, stiler, d1904)
+      });
+    }
+    if (!ark.length) throw new Error('Fant ingen ark i Excel-filen.');
+    return ark;
+  }
+
+  // ---------- Lese CSV ----------
+  function lesCsv(buffer) {
+    let tekst;
+    try { tekst = new TextDecoder('utf-8', { fatal: true }).decode(buffer); }
+    catch (e) { tekst = new TextDecoder('windows-1252').decode(buffer); }
+    tekst = tekst.replace(/^\uFEFF/, '');
+    const forste = tekst.split(/\r?\n/, 1)[0] || '';
+    const skille = ['\t', ';', ','].map(s => [s, forste.split(s).length]).sort((a, b) => b[1] - a[1])[0][0];
+    const rader = [];
+    let rad = [];
+    let felt = '';
+    let iSitat = false;
+    for (let i = 0; i < tekst.length; i++) {
+      const t = tekst[i];
+      if (iSitat) {
+        if (t === '"') {
+          if (tekst[i + 1] === '"') { felt += '"'; i++; } else iSitat = false;
+        } else felt += t;
+      } else if (t === '"' && felt === '') iSitat = true;
+      else if (t === skille) { rad.push(felt); felt = ''; }
+      else if (t === '\n' || t === '\r') {
+        if (t === '\r' && tekst[i + 1] === '\n') i++;
+        rad.push(felt);
+        rader.push(rad);
+        rad = [];
+        felt = '';
+      } else felt += t;
+    }
+    if (felt !== '' || rad.length) { rad.push(felt); rader.push(rad); }
+    return [{ navn: 'CSV', skjult: false, rader: rader }];
+  }
+
+  // ---------- Tolke arket ----------
+  const OVERSKRIFTER = {
+    kategori: ['kategori', 'category', 'categories', 'tema', 'emne'],
+    poeng: ['poeng', 'verdi', 'point', 'value', 'score', 'belop'],
+    sporsmal: ['sporsmal', 'sporsmaal', 'spm', 'question', 'oppgave', 'clue', 'ledetrad'],
+    fasit: ['fasit', 'svar', 'answer', 'losning', 'riktigsvar']
+  };
+  // En overskrift er kort og uten tall, f.eks. «Spørsmål» eller «Kategorier».
+  // Datarader som «Spørsmål 1 i kategori 2» skal ikke tolkes som overskrift.
+  function kolonneType(verdi) {
+    if (/\d/.test(String(verdi == null ? '' : verdi))) return null;
+    const n = normaliser(verdi);
+    if (!n) return null;
+    for (const type of Object.keys(OVERSKRIFTER)) {
+      if (OVERSKRIFTER[type].some(o => n.startsWith(o) && n.length <= o.length + 6)) return type;
+    }
+    return null;
+  }
+  function finnOverskrift(rader) {
+    for (let r = 0; r < Math.min(rader.length, 10); r++) {
+      const rad = rader[r] || [];
+      const kart = {};
+      rad.forEach((v, c) => {
+        const t = kolonneType(v);
+        if (t && kart[t] === undefined) kart[t] = c;
+      });
+      if (kart.sporsmal !== undefined && (kart.kategori !== undefined || kart.fasit !== undefined)) return { rad: r, kart: kart };
+    }
+    return null;
+  }
+  const harInnhold = rad => !!rad && rad.some(v => String(v == null ? '' : v).trim() !== '');
+  function tolkPoeng(tekst) {
+    const m = String(tekst).replace(/[\s\u00a0]/g, '').replace(',', '.').match(/-?\d+(\.\d+)?/);
+    if (!m) return null;
+    const n = Math.round(Number(m[0]));
+    return isFinite(n) && n > 0 ? n : null;
+  }
+  function velgArk(ark) {
+    const synlige = ark.filter(a => !a.skjult);
+    const kandidater = synlige.length ? synlige : ark;
+    for (const a of kandidater) {
+      const h = finnOverskrift(a.rader);
+      if (h) return { ark: a, kart: h.kart, start: h.rad + 1, overskrift: true };
+    }
+    const a = kandidater.find(x => x.rader.some(harInnhold));
+    if (!a) return null;
+    const forste = a.rader.findIndex(harInnhold);
+    const r0 = a.rader[forste];
+    const b = String(r0[1] == null ? '' : r0[1]).trim();
+    const serUtSomOverskrift = b !== '' && tolkPoeng(b) === null;
+    return { ark: a, kart: { kategori: 0, poeng: 1, sporsmal: 2, fasit: 3 }, start: forste + (serUtSomOverskrift ? 1 : 0), overskrift: false };
+  }
+
+  function byggSpill(rader, kart, start) {
+    const merknader = [];
+    const kategorier = [];
+    const indeks = new Map();
+    const mangler = { sporsmal: [], fasit: [], arvet: [], diverse: [], ugyldigPoeng: [] };
+    let tomPoeng = 0;
+    let forrigeKat = '';
+    for (let r = start; r < rader.length; r++) {
+      const rad = rader[r] || [];
+      const hent = k => (kart[k] === undefined ? '' : String(rad[kart[k]] == null ? '' : rad[kart[k]]).trim());
+      let kat = hent('kategori');
+      const poengTekst = hent('poeng');
+      const tekst = hent('sporsmal');
+      const fasit = hent('fasit');
+      if (!kat && !poengTekst && !tekst && !fasit) continue;
+      const radnr = r + 1;
+      if (!tekst) { mangler.sporsmal.push(radnr); continue; }
+      if (!kat) {
+        if (forrigeKat) { kat = forrigeKat; mangler.arvet.push(radnr); }
+        else { kat = 'Diverse'; mangler.diverse.push(radnr); }
+      }
+      forrigeKat = kat;
+      let poeng = poengTekst ? tolkPoeng(poengTekst) : null;
+      if (poengTekst && poeng === null) mangler.ugyldigPoeng.push(radnr);
+      else if (!poengTekst) tomPoeng++;
+      if (!fasit) mangler.fasit.push(radnr);
+      const nokkel = kat.toLocaleLowerCase('nb');
+      let k = indeks.get(nokkel);
+      if (!k) { k = { navn: kat, sporsmal: [] }; indeks.set(nokkel, k); kategorier.push(k); }
+      k.sporsmal.push({ poeng: poeng, tekst: tekst, fasit: fasit });
+    }
+    for (const k of kategorier) {
+      k.sporsmal.forEach((s, i) => { if (s.poeng === null) s.poeng = (i + 1) * 100; });
+      k.sporsmal.sort((a, b) => a.poeng - b.poeng);
+    }
+    const antall = kategorier.reduce((s, k) => s + k.sporsmal.length, 0);
+
+    if (!antall) {
+      merknader.push({ niva: 'feil', tekst: 'Fant ingen spørsmål. Sjekk at arket har kolonnene Kategori, Poeng, Spørsmål og Fasit, med ett spørsmål per rad.' });
+    }
+    if (mangler.sporsmal.length) merknader.push({ niva: 'varsel', tekst: radliste(mangler.sporsmal) + ' mangler spørsmål og er hoppet over.' });
+    if (mangler.fasit.length) merknader.push({ niva: 'varsel', tekst: radliste(mangler.fasit) + ' mangler fasit. Spørsmålene er med, men det blir ingen fasit å vise.' });
+    if (mangler.ugyldigPoeng.length) merknader.push({ niva: 'varsel', tekst: radliste(mangler.ugyldigPoeng) + ' har poeng som ikke er et positivt tall. De fikk poeng etter plassen sin i kategorien.' });
+    if (tomPoeng) merknader.push({ niva: 'info', tekst: tomPoeng + (tomPoeng === 1 ? ' spørsmål' : ' spørsmål') + ' manglet poeng og fikk 100, 200, 300 … etter rekkefølgen i kategorien.' });
+    if (mangler.arvet.length) merknader.push({ niva: 'info', tekst: radliste(mangler.arvet) + ' hadde tom kategori og fikk samme kategori som raden over.' });
+    if (mangler.diverse.length) merknader.push({ niva: 'info', tekst: radliste(mangler.diverse) + ' mangler kategori og ble lagt i «Diverse».' });
+    if (kategorier.length > 8) merknader.push({ niva: 'varsel', tekst: 'Spillet har ' + kategorier.length + ' kategorier. På en projektor blir kolonnene smale. 5–7 kategorier passer best.' });
+    const mange = kategorier.filter(k => k.sporsmal.length > 7).map(k => '«' + k.navn + '»');
+    if (mange.length) merknader.push({ niva: 'varsel', tekst: liste(mange) + ' har mer enn 7 spørsmål. Rutene på brettet blir lave.' });
+    const like = kategorier.filter(k => k.sporsmal.some((s, i) => i > 0 && s.poeng === k.sporsmal[i - 1].poeng)).map(k => '«' + k.navn + '»');
+    if (like.length) merknader.push({ niva: 'info', tekst: liste(like) + ' har flere spørsmål med samme poengsum. Alle kommer med på brettet.' });
+    const lengder = new Set(kategorier.map(k => k.sporsmal.length));
+    if (lengder.size > 1) merknader.push({ niva: 'info', tekst: 'Kategoriene har ulikt antall spørsmål. Plasser uten spørsmål blir stående tomme på brettet.' });
+    const lange = kategorier.reduce((s, k) => s + k.sporsmal.filter(x => x.tekst.length > 240).length, 0);
+    if (lange) merknader.push({ niva: 'info', tekst: lange + ' spørsmål er lengre enn 240 tegn. De vises med mindre skrift.' });
+
+    return { spill: { kategorier: kategorier }, antall: antall, merknader: merknader };
+  }
+
+  // ---------- Lage Excel-mal (ZIP uten komprimering) ----------
+  const CRC = (() => {
+    const t = new Uint32Array(256);
+    for (let n = 0; n < 256; n++) {
+      let c = n;
+      for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1;
+      t[n] = c >>> 0;
+    }
+    return t;
+  })();
+  function crc32(u8) {
+    let c = 0xFFFFFFFF;
+    for (let i = 0; i < u8.length; i++) c = CRC[(c ^ u8[i]) & 0xFF] ^ (c >>> 8);
+    return (c ^ 0xFFFFFFFF) >>> 0;
+  }
+  function lagZip(filer, mime) {
+    const enc = new TextEncoder();
+    const deler = [];
+    const sentral = [];
+    let offset = 0;
+    const dato = ((2026 - 1980) << 9) | (1 << 5) | 1;
+    for (const f of filer) {
+      const navn = enc.encode(f.navn);
+      const data = enc.encode(f.data);
+      const crc = crc32(data);
+      const lokal = new Uint8Array(30 + navn.length);
+      const lv = new DataView(lokal.buffer);
+      lv.setUint32(0, 0x04034b50, true);
+      lv.setUint16(4, 20, true);
+      lv.setUint16(6, 0x0800, true);
+      lv.setUint16(8, 0, true);
+      lv.setUint16(10, 0, true);
+      lv.setUint16(12, dato, true);
+      lv.setUint32(14, crc, true);
+      lv.setUint32(18, data.length, true);
+      lv.setUint32(22, data.length, true);
+      lv.setUint16(26, navn.length, true);
+      lv.setUint16(28, 0, true);
+      lokal.set(navn, 30);
+      const sen = new Uint8Array(46 + navn.length);
+      const sv = new DataView(sen.buffer);
+      sv.setUint32(0, 0x02014b50, true);
+      sv.setUint16(4, 20, true);
+      sv.setUint16(6, 20, true);
+      sv.setUint16(8, 0x0800, true);
+      sv.setUint16(10, 0, true);
+      sv.setUint16(12, 0, true);
+      sv.setUint16(14, dato, true);
+      sv.setUint32(16, crc, true);
+      sv.setUint32(20, data.length, true);
+      sv.setUint32(24, data.length, true);
+      sv.setUint16(28, navn.length, true);
+      sv.setUint32(42, offset, true);
+      sen.set(navn, 46);
+      deler.push(lokal, data);
+      sentral.push(sen);
+      offset += lokal.length + data.length;
+    }
+    const storrelse = sentral.reduce((s, c) => s + c.length, 0);
+    const slutt = new Uint8Array(22);
+    const ev = new DataView(slutt.buffer);
+    ev.setUint32(0, 0x06054b50, true);
+    ev.setUint16(8, filer.length, true);
+    ev.setUint16(10, filer.length, true);
+    ev.setUint32(12, storrelse, true);
+    ev.setUint32(16, offset, true);
+    return new Blob([...deler, ...sentral, slutt], { type: mime });
+  }
+
+  const XML_HODE = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n';
+  const NS_MAIN = 'http://schemas.openxmlformats.org/spreadsheetml/2006/main';
+
+  function arkXml(rader, valg) {
+    const kolonner = '<cols>' + valg.bredder.map((b, i) => '<col min="' + (i + 1) + '" max="' + (i + 1) + '" width="' + b + '" customWidth="1"/>').join('') + '</cols>';
+    const visning = '<sheetViews><sheetView workbookViewId="0"' + (valg.valgt ? ' tabSelected="1"' : '') + '>' +
+      (valg.frys ? '<pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/><selection pane="bottomLeft" activeCell="A2" sqref="A2"/>' : '') +
+      '</sheetView></sheetViews>';
+    const data = rader.map((rad, ri) => {
+      const celler = rad.map((v, ci) => {
+        const ref = String.fromCharCode(65 + ci) + (ri + 1);
+        const stil = ri === 0 ? 1 : (ci === 0 && valg.fetForsteKolonne ? 3 : 2);
+        if (typeof v === 'number') return '<c r="' + ref + '" s="' + stil + '"><v>' + v + '</v></c>';
+        if (v === '') return '<c r="' + ref + '" s="' + stil + '"/>';
+        return '<c r="' + ref + '" s="' + stil + '" t="inlineStr"><is><t xml:space="preserve">' + xmlEsc(v) + '</t></is></c>';
+      }).join('');
+      return '<row r="' + (ri + 1) + '"' + (ri === 0 ? ' ht="24" customHeight="1"' : '') + '>' + celler + '</row>';
+    }).join('');
+    return XML_HODE + '<worksheet xmlns="' + NS_MAIN + '" xmlns:r="' + REL_NS + '">' + visning +
+      '<sheetFormatPr defaultRowHeight="15"/>' + kolonner + '<sheetData>' + data + '</sheetData></worksheet>';
+  }
+
+  function lagExcelMal() {
+    const stiler = XML_HODE + '<styleSheet xmlns="' + NS_MAIN + '">' +
+      '<fonts count="3"><font><sz val="11"/><name val="Calibri"/><family val="2"/></font>' +
+      '<font><b/><sz val="12"/><color rgb="FFFFFFFF"/><name val="Calibri"/><family val="2"/></font>' +
+      '<font><b/><sz val="11"/><name val="Calibri"/><family val="2"/></font></fonts>' +
+      '<fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill>' +
+      '<fill><patternFill patternType="solid"><fgColor rgb="FF1534C9"/><bgColor indexed="64"/></patternFill></fill></fills>' +
+      '<borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders>' +
+      '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
+      '<cellXfs count="4">' +
+      '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>' +
+      '<xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1" applyAlignment="1"><alignment vertical="center"/></xf>' +
+      '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>' +
+      '<xf numFmtId="0" fontId="2" fillId="0" borderId="0" xfId="0" applyFont="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>' +
+      '</cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>';
+    const filer = [
+      { navn: '[Content_Types].xml', data: XML_HODE +
+        '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' +
+        '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
+        '<Default Extension="xml" ContentType="application/xml"/>' +
+        '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>' +
+        '<Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>' +
+        '<Override PartName="/xl/worksheets/sheet2.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>' +
+        '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>' +
+        '</Types>' },
+      { navn: '_rels/.rels', data: XML_HODE +
+        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+        '<Relationship Id="rId1" Type="' + REL_NS + '/officeDocument" Target="xl/workbook.xml"/>' +
+        '</Relationships>' },
+      { navn: 'xl/workbook.xml', data: XML_HODE +
+        '<workbook xmlns="' + NS_MAIN + '" xmlns:r="' + REL_NS + '">' +
+        '<bookViews><workbookView activeTab="0"/></bookViews>' +
+        '<sheets><sheet name="Spørsmål" sheetId="1" r:id="rId1"/><sheet name="Slik gjør du" sheetId="2" r:id="rId2"/></sheets>' +
+        '</workbook>' },
+      { navn: 'xl/_rels/workbook.xml.rels', data: XML_HODE +
+        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+        '<Relationship Id="rId1" Type="' + REL_NS + '/worksheet" Target="worksheets/sheet1.xml"/>' +
+        '<Relationship Id="rId2" Type="' + REL_NS + '/worksheet" Target="worksheets/sheet2.xml"/>' +
+        '<Relationship Id="rId3" Type="' + REL_NS + '/styles" Target="styles.xml"/>' +
+        '</Relationships>' },
+      { navn: 'xl/styles.xml', data: stiler },
+      { navn: 'xl/worksheets/sheet1.xml', data: arkXml([['Kategori', 'Poeng', 'Spørsmål', 'Fasit']].concat(EKSEMPEL), { bredder: [22, 10, 70, 36], frys: true, valgt: true }) },
+      { navn: 'xl/worksheets/sheet2.xml', data: arkXml(VEILEDNING, { bredder: [24, 96], fetForsteKolonne: true }) }
+    ];
+    return lagZip(filer, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+  }
+
+  // ---------- Lage spillfilen ----------
+  function lagId() {
+    const tilfeldig = (window.crypto && crypto.getRandomValues) ? Array.from(crypto.getRandomValues(new Uint32Array(2)), n => n.toString(36)).join('') : Math.random().toString(36).slice(2);
+    return 'j' + Date.now().toString(36) + tilfeldig;
+  }
+  function spillData(forhandsvisning) {
+    return {
+      versjon: 1,
+      id: lagId(),
+      tittel: hentTittel(),
+      tid: Number($('tid').value) || 0,
+      forhandsvisning: !!forhandsvisning,
+      kategorier: tilstand.spill.kategorier.map(k => ({
+        navn: k.navn,
+        sporsmal: k.sporsmal.map(s => ({ poeng: s.poeng, tekst: s.tekst, fasit: s.fasit }))
+      }))
+    };
+  }
+  function byggSpillHtml(data) {
+    const stil = $('spillmal-stil').innerHTML.trim();
+    const kropp = $('spillmal-kropp').innerHTML.trim();
+    const json = JSON.stringify(data)
+      .replace(/</g, '\\u003c').replace(/>/g, '\\u003e').replace(/&/g, '\\u0026')
+      .replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029');
+    return [
+      '<!DOCTYPE html>',
+      '<html lang="nb">',
+      '<head>',
+      '<meta charset="utf-8">',
+      '<meta name="viewport" content="width=device-width, initial-scale=1">',
+      '<meta name="generator" content="Jeopardy-generator">',
+      '<title>' + escHtml(data.tittel) + '</title>',
+      stil,
+      '</head>',
+      '<body>',
+      '<script type="application/json" id="spilldata">' + json + '<\/script>',
+      kropp,
+      '</body>',
+      '</html>',
+      ''
+    ].join('\n');
+  }
+  function hentTittel() {
+    return $('tittel').value.trim().replace(/\s+/g, ' ') || 'Jeopardy';
+  }
+  function lagFilnavn(tittel) {
+    let s = tittel.toLowerCase().replace(/æ/g, 'ae').replace(/ø/g, 'o').replace(/å/g, 'a')
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);
+    if (!s) s = 'spill';
+    if (!/jeopardy/.test(s)) s = 'jeopardy-' + s;
+    return s + '.html';
+  }
+  function tittelFraFilnavn(navn) {
+    const t = navn.replace(/\.[^.]+$/, '').replace(/[_]+/g, ' ').replace(/\s+/g, ' ').trim();
+    return t ? t.charAt(0).toLocaleUpperCase('nb') + t.slice(1) : 'Jeopardy';
+  }
+
+  // ---------- Visning ----------
+  const tilstand = { spill: null, antall: 0, merknader: [], kilde: 'eksempel', filnavn: '', tittelEndret: false };
+
+  function settStatus(id, tekst, niva) {
+    const el = $(id);
+    el.textContent = tekst;
+    if (niva) el.dataset.niva = niva; else delete el.dataset.niva;
+  }
+
+  function tegnAlt() {
+    const sp = tilstand.spill;
+    const kat = sp ? sp.kategorier : [];
+    const brett = $('mini-brett');
+    brett.textContent = '';
+    $('brett-navn').textContent = hentTittel();
+    $('brett-meta').textContent = kat.length + (kat.length === 1 ? ' kategori' : ' kategorier') + ' · ' + tilstand.antall + ' spørsmål';
+    const kilde = $('kilde');
+    kilde.textContent = tilstand.kilde === 'fil' ? tilstand.filnavn : 'Eksempel';
+    kilde.dataset.type = tilstand.kilde;
+    kilde.title = tilstand.kilde === 'fil' ? tilstand.filnavn : 'Eksempelspørsmål';
+
+    if (!kat.length) {
+      const p = document.createElement('p');
+      p.className = 'tomt-brett';
+      p.textContent = 'Ingen spørsmål å vise.';
+      brett.style.gridTemplateColumns = '';
+      brett.append(p);
+    } else {
+      const m = Math.max(...kat.map(k => k.sporsmal.length));
+      brett.style.gridTemplateColumns = 'repeat(' + kat.length + ', minmax(84px, 1fr))';
+      for (const k of kat) {
+        const h = document.createElement('div');
+        h.className = 'mb-kat';
+        h.textContent = k.navn;
+        brett.append(h);
+      }
+      for (let r = 0; r < m; r++) {
+        for (const k of kat) {
+          const s = k.sporsmal[r];
+          const c = document.createElement('div');
+          c.className = s ? 'mb-rute' : 'mb-rute tom';
+          if (s) { c.textContent = s.poeng.toLocaleString('nb-NO'); c.title = s.tekst; }
+          brett.append(c);
+        }
+      }
+    }
+
+    const mk = $('merknader');
+    mk.textContent = '';
+    const etiketter = { feil: 'Feil', varsel: 'Sjekk', info: 'Info' };
+    for (const m of tilstand.merknader) {
+      const d = document.createElement('div');
+      d.className = 'merknad';
+      d.dataset.niva = m.niva;
+      const merke = document.createElement('span');
+      merke.className = 'merke';
+      merke.textContent = etiketter[m.niva];
+      const t = document.createElement('span');
+      t.textContent = m.tekst;
+      d.append(merke, t);
+      mk.append(d);
+    }
+
+    const tb = $('sporsmal-tabell');
+    tb.textContent = '';
+    for (const k of kat) {
+      for (const s of k.sporsmal) {
+        const tr = document.createElement('tr');
+        const celler = [[k.navn, 'k'], [s.poeng.toLocaleString('nb-NO'), 'p'], [s.tekst, ''], [s.fasit, '']];
+        celler.forEach(([v, kl], i) => {
+          const td = document.createElement('td');
+          if (kl) td.className = kl;
+          if (i === 3 && !v) {
+            const em = document.createElement('span');
+            em.className = 'mangler';
+            em.textContent = 'mangler fasit';
+            td.append(em);
+          } else td.textContent = v;
+          tr.append(td);
+        });
+        tb.append(tr);
+      }
+    }
+    $('alle-sporsmal-tittel').textContent = 'Se alle spørsmålene (' + tilstand.antall + ')';
+
+    const kanLages = tilstand.antall > 0;
+    $('last-ned-spill').disabled = !kanLages;
+    $('prov-spill').disabled = !kanLages;
+  }
+
+  function brukResultat(res) {
+    tilstand.spill = res.spill;
+    tilstand.antall = res.antall;
+    tilstand.merknader = res.merknader;
+  }
+
+  async function behandleFil(fil) {
+    if (!fil) return;
+    settStatus('fil-status', 'Leser «' + fil.name + '» …', 'info');
+    try {
+      const buffer = await fil.arrayBuffer();
+      const u8 = new Uint8Array(buffer);
+      let ark;
+      if (u8[0] === 0x50 && u8[1] === 0x4b) ark = await lesXlsx(buffer);
+      else if (u8[0] === 0xD0 && u8[1] === 0xCF) {
+        throw new Error('Dette er en eldre Excel-fil (.xls). Åpne den i Excel, velg Fil → Lagre som → Excel-arbeidsbok (.xlsx), og last opp den nye filen.');
+      } else ark = lesCsv(buffer);
+      const valg = velgArk(ark);
+      if (!valg) throw new Error('Filen er tom. Fant ingen rader med innhold.');
+      const res = byggSpill(valg.ark.rader, valg.kart, valg.start);
+      if (!valg.overskrift && res.antall) {
+        res.merknader.unshift({ niva: 'info', tekst: 'Fant ingen overskriftsrad. Kolonnene ble lest som A = Kategori, B = Poeng, C = Spørsmål og D = Fasit.' });
+      }
+      if (!res.antall) {
+        tilstand.merknader = res.merknader;
+        tegnAlt();
+        throw new Error('Fant ingen spørsmål i «' + fil.name + '». Brettet viser fortsatt forrige innhold.');
+      }
+      brukResultat(res);
+      tilstand.kilde = 'fil';
+      tilstand.filnavn = fil.name;
+      if (!tilstand.tittelEndret) $('tittel').value = tittelFraFilnavn(fil.name);
+      tegnAlt();
+      const arkTekst = ark.length > 1 ? ' (arket «' + valg.ark.navn + '»)' : '';
+      settStatus('fil-status', 'Lest inn «' + fil.name + '»' + arkTekst + ': ' + res.spill.kategorier.length +
+        (res.spill.kategorier.length === 1 ? ' kategori' : ' kategorier') + ' og ' + res.antall + ' spørsmål.', 'ok');
+      settStatus('nedlasting-status', '', null);
+    } catch (e) {
+      settStatus('fil-status', (e && e.message) || 'Kunne ikke lese filen.', 'feil');
+    } finally {
+      $('fil').value = '';
+    }
+  }
+
+  // ---------- Hendelser ----------
+  $('fil').addEventListener('change', e => behandleFil(e.target.files && e.target.files[0]));
+
+  const sone = $('slippsone');
+  let draTeller = 0;
+  window.addEventListener('dragenter', e => {
+    if (!e.dataTransfer || !Array.from(e.dataTransfer.types || []).includes('Files')) return;
+    draTeller++;
+    sone.classList.add('over');
+  });
+  window.addEventListener('dragleave', () => {
+    draTeller = Math.max(0, draTeller - 1);
+    if (!draTeller) sone.classList.remove('over');
+  });
+  window.addEventListener('dragover', e => { e.preventDefault(); });
+  window.addEventListener('drop', e => {
+    e.preventDefault();
+    draTeller = 0;
+    sone.classList.remove('over');
+    const fil = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    if (fil) behandleFil(fil);
+  });
+
+  $('tittel').addEventListener('input', () => {
+    tilstand.tittelEndret = true;
+    $('brett-navn').textContent = hentTittel();
+  });
+
+  $('last-ned-mal').addEventListener('click', async () => {
+    settStatus('mal-status', 'Lager malen …', 'info');
+    const res = await lagreFil('jeopardy-mal.xlsx', lagExcelMal());
+    settStatus('mal-status', res.ok ? 'Malen er lastet ned som «jeopardy-mal.xlsx».' : res.melding, res.ok ? 'ok' : 'feil');
+  });
+
+  $('last-ned-spill').addEventListener('click', async () => {
+    if (!tilstand.antall) return;
+    const data = spillData(false);
+    const filnavn = lagFilnavn(data.tittel);
+    settStatus('nedlasting-status', 'Lager spillet …', 'info');
+    const blob = new Blob([byggSpillHtml(data)], { type: 'text/html;charset=utf-8' });
+    const res = await lagreFil(filnavn, blob);
+    settStatus('nedlasting-status', res.ok ? 'Spillet er lastet ned som «' + filnavn + '».' : res.melding, res.ok ? 'ok' : 'feil');
+  });
+
+  const fv = $('forhandsvisning');
+  const ramme = $('fv-ramme');
+  function lukkForhandsvisning() {
+    fv.hidden = true;
+    ramme.srcdoc = '';
+    document.body.classList.remove('laast');
+    $('prov-spill').focus();
+  }
+  $('prov-spill').addEventListener('click', () => {
+    if (!tilstand.antall) return;
+    ramme.srcdoc = byggSpillHtml(spillData(true));
+    fv.hidden = false;
+    document.body.classList.add('laast');
+    $('lukk-forhandsvisning').focus();
+  });
+  $('lukk-forhandsvisning').addEventListener('click', lukkForhandsvisning);
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !fv.hidden) lukkForhandsvisning();
+  });
+  window.addEventListener('message', e => {
+    if (e.data === 'jeopardy:lukk-forhandsvisning' && e.source === ramme.contentWindow && !fv.hidden) lukkForhandsvisning();
+  });
+
+  // ---------- Start med eksempelspørsmålene ----------
+  brukResultat(byggSpill([['Kategori', 'Poeng', 'Spørsmål', 'Fasit']].concat(EKSEMPEL.map(r => r.map(String))), { kategori: 0, poeng: 1, sporsmal: 2, fasit: 3 }, 1));
+  tegnAlt();
+})();
+</script>
+</body>
+</html>
