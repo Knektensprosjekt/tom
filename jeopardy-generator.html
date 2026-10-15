@@ -593,7 +593,7 @@ h1 {
           <ul class="tips">
             <li>Lag så mange kategorier og spørsmål du vil. Brettet tilpasser seg.</li>
             <li>Står poeng tomt, får spørsmålene 100, 200, 300 … i den rekkefølgen de står.</li>
-            <li>Vil du bruke jokere? Fyll også ut kolonnene <em>Feil svar 1</em>, <em>Feil svar 2</em> og <em>Hint</em> (E, F og G). Tomme celler er greit.</li>
+            <li>Skal elevene svare med tastene 1–4, eller vil du bruke jokere? Fyll også ut <em>Feil svar 1–3</em> og <em>Hint</em> (kolonne E–H). Tomme celler er greit.</li>
             <li>Virker med .xlsx fra Excel, Google Regneark og Numbers, og med .csv.</li>
           </ul>
           <button type="button" class="knapp sekundar" id="last-ned-mal">
@@ -671,6 +671,13 @@ h1 {
         <span class="trinn-nr" aria-hidden="true">4</span>
         <div class="trinn-innhold">
           <h2>Velg regler</h2>
+          <fieldset class="gruppe">
+            <legend>Hvordan svarer de?</legend>
+            <div class="avkryss" id="svarmate-valg">
+              <label><input type="radio" name="svarmate" value="muntlig" checked><span><strong>Muntlig</strong> <em>Spillerne svarer høyt, og du gir poeng for riktig og feil svar.</em></span></label>
+              <label><input type="radio" name="svarmate" value="taster"><span><strong>Med tastene 1–4</strong> <em id="dekning-taster">Spillet viser fire svaralternativer. Spilleren trykker 1, 2, 3 eller 4 før tiden går ut, og spillet gir poengene.</em></span></label>
+            </div>
+          </fieldset>
           <fieldset class="gruppe">
             <legend>Hvem svarer?</legend>
             <div class="avkryss" id="svar-valg">
@@ -1217,6 +1224,68 @@ button { font: inherit; color: inherit; cursor: pointer; }
   box-shadow: 0 0 22px var(--gull-glod);
 }
 .pg-kort.har-tur { border-color: var(--gull); }
+.svar-instruks { margin: 0; font-weight: 700; font-size: clamp(17px, 1.7vw, 26px); color: var(--gull); }
+.svarvalg {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(8px, 1.2vw, 16px);
+  width: min(1100px, 100%);
+}
+.svar-alt {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 2.4em;
+  padding: 10px 18px;
+  border-radius: 14px;
+  border: 3px solid var(--gull);
+  background: var(--slor);
+  color: var(--hvit);
+  text-align: left;
+  font-family: var(--font-ledetekst);
+  font-weight: 700;
+  font-size: clamp(18px, 2.2vw, 36px);
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.svar-alt:hover:not(:disabled) { background: var(--joker-bg); }
+.svar-alt:disabled { cursor: default; }
+.svar-nr {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 8px;
+  background: var(--gull);
+  color: var(--gull-tekst);
+  font-family: var(--font-tall);
+  font-weight: 400;
+}
+.svar-tekst { min-width: 0; }
+.svar-alt.fjernet { opacity: .3; text-decoration: line-through; }
+.svar-alt.bleik { opacity: .45; }
+.svar-alt.valgt { outline: 4px solid var(--hvit); outline-offset: 3px; }
+.svar-alt.riktig { opacity: 1; border-color: var(--riktig); background: var(--riktig); color: var(--riktig-tekst); }
+.svar-alt.feil { opacity: 1; border-color: var(--feil); background: var(--feil); color: var(--feil-tekst); }
+.svar-alt.riktig .svar-nr, .svar-alt.feil .svar-nr { background: var(--slor); color: inherit; }
+.svar-resultat {
+  margin: 0;
+  padding: 8px 24px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: clamp(20px, 2.4vw, 36px);
+  animation: inn .3s both;
+}
+.svar-resultat.riktig { background: var(--riktig); color: var(--riktig-tekst); }
+.svar-resultat.feil { background: var(--feil); color: var(--feil-tekst); }
+.med-valg .sp-tekst { font-size: clamp(22px, 3.3vw, 56px); }
+.med-valg .sp-tekst.lang { font-size: clamp(20px, 2.6vw, 44px); }
+.med-valg .sp-tekst.svaert-lang { font-size: clamp(17px, 2vw, 34px); }
+.med-valg .sp-midt { gap: clamp(10px, 2vh, 24px); }
+.pg-endre-rad { margin: 0; text-align: center; }
+.pg-endre-rad:has(#pg-endre[hidden]) { display: none; }
+@media (max-width: 640px) { .svarvalg { grid-template-columns: minmax(0, 1fr); } }
 .pg-apne { margin: 8px 0 0; text-align: center; }
 .verktoy-knapp.avslutt { border-color: var(--feil); }
 .verktoy-knapp.avslutt:hover { background: var(--feil); color: var(--feil-tekst); }
@@ -1698,6 +1767,9 @@ button { font: inherit; color: inherit; cursor: pointer; }
     </header>
     <div class="sp-midt">
       <p class="sp-tekst" id="sp-tekst"></p>
+      <p class="svar-instruks" id="svar-instruks" hidden></p>
+      <div class="svarvalg" id="svarvalg" hidden></div>
+      <p class="svar-resultat" id="svar-resultat" role="status" aria-live="assertive" hidden></p>
       <div class="joker-banner" id="joker-banner" hidden>
         <span id="joker-banner-tekst"></span>
         <button type="button" class="lenkeknapp" id="joker-angre">Angre joker</button>
@@ -1721,6 +1793,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
       <div class="joker-velger-spillere" id="joker-velger-spillere"></div>
       <div><button type="button" class="lenkeknapp" id="joker-velger-avbryt">Avbryt</button></div>
     </div>
+    <p class="pg-endre-rad"><button type="button" class="lenkeknapp" id="pg-endre" hidden>Endre poeng</button></p>
     <div class="poenggiving" id="sp-poenggiving" hidden>
       <h2 id="sp-poenggiving-tittel">Hvem svarte riktig, og hvem svarte feil?</h2>
       <div class="pg-rutenett" id="sp-spillere"></div>
@@ -1845,7 +1918,9 @@ button { font: inherit; color: inherit; cursor: pointer; }
   const JOKER_ANTALL = EN_TOTALT ? 1 : Math.max(1, Math.min(9, Number(JK.antall) || 1));
   const KOSTNAD = ['halv', 'halvgevinst', 'fast', 'gratis'].includes(JK.kostnad) ? JK.kostnad : 'halv';
   const TREKK = Math.max(0, Math.round(Number(JK.trekk) || 0));
-  const TUR = DATA.svar === 'tur';
+  // Med tastene 1–4 sjekker spillet svaret selv. Da må spillerne svare etter tur.
+  const FLERVALG = DATA.svarmate === 'taster';
+  const TUR = DATA.svar === 'tur' || FLERVALG;
   if (TUR) document.body.classList.add('tur-modus');
   const brukte = (p, id) => (p.jokere && p.jokere[id]) || 0;
   const bruktTotalt = p => Object.keys(p.jokere || {}).reduce((sum, k) => sum + (p.jokere[k] || 0), 0);
@@ -1865,7 +1940,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 
   // ---------- Tilstand og lagring ----------
   function tomTilstand(spillere, lyd, musikk) {
-    return { spillere: spillere || [], brukt: {}, historikk: [], femti: {}, turId: null, lyd: lyd !== false, musikk: musikk !== false, startet: false };
+    return { spillere: spillere || [], brukt: {}, historikk: [], femti: {}, alt: {}, turId: null, lyd: lyd !== false, musikk: musikk !== false, startet: false };
   }
   // Etter tur: den som har tur, eller den første i lista hvis turen mangler
   function turSpiller() {
@@ -1905,6 +1980,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
         t.spillere.forEach(p => { p.jokere = p.jokere || {}; });
         t.musikk = t.musikk !== false;
         t.femti = t.femti || {};
+        t.alt = t.alt || {};
         return t;
       }
     } catch (e) { /* ignorer */ }
@@ -2035,6 +2111,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
       S.brukt = {};
       S.historikk = [];
       S.femti = {};
+      S.alt = {};
       S.spillere.forEach(s => { s.poeng = 0; s.jokere = {}; });
       S.turId = S.spillere[0].id;
     }
@@ -2102,6 +2179,23 @@ button { font: inherit; color: inherit; cursor: pointer; }
       });
     }
   }
+
+  // Piltastene flytter mellom rutene, Enter åpner
+  $('brett').addEventListener('keydown', e => {
+    const mal = e.target;
+    if (!mal || !mal.classList || !mal.classList.contains('rute') || !mal.dataset.key) return;
+    const steg = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
+    if (!steg) return;
+    e.preventDefault();
+    let [ki, r] = mal.dataset.key.split('-').map(Number);
+    for (let i = 0; i < KAT.length + RADER; i++) {
+      ki += steg[0];
+      r += steg[1];
+      if (ki < 0 || ki >= KAT.length || r < 0 || r >= RADER) return;
+      const neste = document.querySelector('.rute[data-key="' + ki + '-' + r + '"]:not(:disabled)');
+      if (neste) { neste.focus(); return; }
+    }
+  });
 
   function tegnPoeng() {
     const ol = $('poengliste');
@@ -2242,6 +2336,11 @@ button { font: inherit; color: inherit; cursor: pointer; }
     $('sp-ferdig').hidden = true;
     $('sp-oppsummering').textContent = '';
     $('sp-timer').hidden = !TID;
+    $('pg-endre').hidden = true;
+    $('sp-ferdig').textContent = FLERVALG ? 'Tilbake til brettet (Enter)' : 'Tilbake til brettet';
+    aktiv.alternativer = lagAlternativer(aktiv.key, s);
+    aktiv.besvart = false;
+    tegnSvarvalg();
     tegnJokerrad();
     ov.hidden = false;
     ov.scrollTop = 0;
@@ -2267,6 +2366,117 @@ button { font: inherit; color: inherit; cursor: pointer; }
     ], { duration: 420, easing: 'cubic-bezier(.2, .8, .2, 1)' });
   }
 
+  // ---------- Svar med tastene 1–4 ----------
+  function blandet(liste) {
+    const a = liste.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  // Rekkefølgen huskes per rute, så den er den samme hvis ruta åpnes igjen
+  function lagAlternativer(key, s) {
+    if (!FLERVALG || !s.fasit || !s.feil.length) return null;
+    const feil = s.feil.slice(0, 3);
+    let liste = S.alt[key];
+    const gyldig = Array.isArray(liste) && liste.length === feil.length + 1 &&
+      liste.includes(s.fasit) && feil.every(f => liste.includes(f));
+    if (!gyldig) {
+      liste = blandet([s.fasit].concat(feil));
+      S.alt[key] = liste;
+      lagreTrygt();
+    }
+    return liste;
+  }
+  function tastTekst(tall) {
+    return tall.length < 2 ? tall.join('') : tall.slice(0, -1).join(', ') + ' eller ' + tall[tall.length - 1];
+  }
+  function oppdaterInstruks() {
+    const tp = turSpiller();
+    const ledige = Array.from($('svarvalg').children).map((b, i) => (b.disabled ? null : String(i + 1))).filter(Boolean);
+    $('svar-instruks').textContent = (tp ? tp.navn + ', trykk ' : 'Trykk ') + tastTekst(ledige) + (TID ? ' før tiden går ut.' : '.');
+  }
+  function tegnSvarvalg() {
+    const boks = $('svarvalg');
+    boks.textContent = '';
+    const alt = aktiv.alternativer;
+    const s = aktivtSporsmal();
+    $('svar-resultat').hidden = true;
+    $('sporsmal').classList.toggle('med-valg', !!alt);
+    boks.hidden = !alt;
+    const instruks = $('svar-instruks');
+    instruks.hidden = !FLERVALG;
+    if (!FLERVALG) return;
+    if (!alt) {
+      instruks.textContent = 'Dette spørsmålet har ingen svaralternativer. Svar høyt, så gir læreren poeng.';
+      return;
+    }
+    alt.forEach((tekst, i) => {
+      const b = lag('button', 'svar-alt');
+      b.type = 'button';
+      b.dataset.riktig = String(tekst === s.fasit);
+      b.append(lag('span', 'svar-nr', String(i + 1)), lag('span', 'svar-tekst', tekst));
+      b.addEventListener('click', () => svar(i));
+      boks.append(b);
+    });
+    if (aktiv.joker && aktiv.joker.type === '5050') fjernToFeil();
+    oppdaterInstruks();
+  }
+  function fjernToFeil() {
+    const s = aktivtSporsmal();
+    const feil = aktiv.alternativer.filter(x => x !== s.fasit);
+    if (!S.femti[aktiv.key] || !feil.includes(S.femti[aktiv.key])) {
+      S.femti[aktiv.key] = feil[Math.floor(Math.random() * feil.length)];
+      lagreTrygt();
+    }
+    const behold = S.femti[aktiv.key];
+    Array.from($('svarvalg').children).forEach((b, i) => {
+      const t = aktiv.alternativer[i];
+      if (t !== s.fasit && t !== behold) {
+        b.classList.add('fjernet');
+        b.disabled = true;
+      }
+    });
+    oppdaterInstruks();
+  }
+  function visSvarResultat(type, tekst) {
+    const el = $('svar-resultat');
+    el.className = 'svar-resultat ' + type;
+    el.textContent = tekst;
+    el.hidden = false;
+  }
+  function svar(i) {
+    if (!aktiv || !aktiv.alternativer || aktiv.besvart || aktiv.fasitVist) return;
+    if (!$('joker-velger').hidden) return;
+    const knapp = $('svarvalg').children[i];
+    if (!knapp || knapp.disabled) return;
+    aktiv.besvart = true;
+    const s = aktivtSporsmal();
+    const riktig = aktiv.alternativer[i] === s.fasit;
+    const tp = turSpiller();
+    if (tp) aktiv.valg[tp.id] = riktig ? 1 : -1;
+    knapp.classList.add('valgt');
+    visFasit(true);
+    const navn = tp ? tp.navn : '';
+    if (riktig) visSvarResultat('riktig', navn ? navn + ' svarte riktig!' : 'Riktig svar!');
+    else visSvarResultat('feil', (navn ? navn + ' svarte feil.' : 'Feil svar.') + ' Riktig svar er ' + s.fasit + '.');
+    lyd(riktig ? 'riktig' : 'feil');
+  }
+  function tidenUte() {
+    if (!FLERVALG || !aktiv || !aktiv.alternativer || aktiv.besvart || aktiv.fasitVist) return;
+    aktiv.besvart = true;
+    const tp = turSpiller();
+    if (tp) aktiv.valg[tp.id] = 0;
+    visFasit(true);
+    visSvarResultat('feil', 'Tiden er ute. Riktig svar er ' + aktivtSporsmal().fasit + '. Ingen poeng.');
+  }
+  $('pg-endre').addEventListener('click', () => {
+    $('sp-poenggiving').hidden = false;
+    $('pg-endre').hidden = true;
+    visBunn();
+  });
+
   // ---------- Jokere i spørsmålet ----------
   function jokerTilgjengelig(id) {
     const s = aktivtSporsmal();
@@ -2275,6 +2485,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
     if (TID && timer.igjen <= 0) return { ok: false, grunn: 'Tiden er ute.' };
     if (id === '5050' && !s.fasit) return { ok: false, grunn: 'Spørsmålet har ingen fasit.' };
     if (id === '5050' && !s.feil.length) return { ok: false, grunn: 'Ingen feil svar er lagt inn for dette spørsmålet.' };
+    if (id === '5050' && aktiv.alternativer && aktiv.alternativer.length < 3) return { ok: false, grunn: 'Det er bare to svaralternativer.' };
     if (id === 'hint' && !s.hint) return { ok: false, grunn: 'Ingen hint er lagt inn for dette spørsmålet.' };
     const tp = turSpiller();
     if (tp && igjen(tp, id) <= 0) return { ok: false, grunn: tp.navn + (EN_TOTALT ? ' har brukt jokeren sin.' : ' har brukt opp denne jokeren.') };
@@ -2379,7 +2590,10 @@ button { font: inherit; color: inherit; cursor: pointer; }
     const banner = $('joker-banner');
     $('joker-banner-tekst').textContent = 'Joker · ' + navn + ' bruker ' + JOKER_INFO[j.type].navn + ' · ' + (TUR ? '' : navn + ' svarer alene · ') + verdiTekst();
     banner.hidden = false;
-    if (j.type === '5050') {
+    if (j.type === '5050' && aktiv.alternativer) {
+      fjernToFeil();
+      vis.append(lag('span', 'joker-etikett', '50/50 for ' + navn + ': to gale svar er fjernet'));
+    } else if (j.type === '5050') {
       if (!S.femti[aktiv.key] || !s.feil.includes(S.femti[aktiv.key])) {
         S.femti[aktiv.key] = s.feil[Math.floor(Math.random() * s.feil.length)];
         lagreTrygt();
@@ -2427,6 +2641,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
     $('joker-visning').textContent = '';
     $('joker-banner').hidden = true;
     $('sporsmal').classList.remove('med-joker');
+    if (aktiv.alternativer && !aktiv.besvart) tegnSvarvalg();
     tegnJokerrad();
     if (p) toast(p.navn + ' fikk ' + JOKER_INFO[j.type].navn + ' tilbake.');
   }
@@ -2448,13 +2663,25 @@ button { font: inherit; color: inherit; cursor: pointer; }
   }
   const jokerTrekk = id => (KOSTNAD === 'fast' && jokerSpiller(id) ? -TREKK : 0);
 
-  function visFasit() {
+  function visFasit(automatisk) {
     if (!aktiv || aktiv.fasitVist) return;
     lukkJokerVelger();
     aktiv.fasitVist = true;
+    aktiv.besvart = true;
+    const medValg = !!aktiv.alternativer;
+    if (medValg) {
+      const fasit = aktivtSporsmal().fasit;
+      Array.from($('svarvalg').children).forEach((b, i) => {
+        b.disabled = true;
+        if (aktiv.alternativer[i] === fasit) b.classList.add('riktig');
+        else if (b.classList.contains('valgt')) b.classList.add('feil');
+        else b.classList.add('bleik');
+      });
+      $('svar-instruks').hidden = true;
+    }
     stoppTimer();
     $('sporsmal').classList.add('med-fasit');
-    $('sp-fasit').hidden = false;
+    $('sp-fasit').hidden = medValg;
     $('sp-timer').hidden = true;
     $('jokerrad').hidden = true;
     $('joker-angre').hidden = true;
@@ -2462,10 +2689,13 @@ button { font: inherit; color: inherit; cursor: pointer; }
     $('sp-vis-fasit').hidden = true;
     $('sp-ferdig').hidden = false;
     tegnPoenggiving();
-    $('sp-poenggiving').hidden = false;
-    lyd('fasit');
+    const auto = automatisk === true && medValg;
+    $('sp-poenggiving').hidden = auto;
+    $('pg-endre').hidden = !auto;
+    if (!auto) lyd('fasit');
     musikkStyring();
     visBunn();
+    try { $('sporsmal').focus({ preventScroll: true }); } catch (e) { /* ignorer */ }
   }
   function visBunn() {
     requestAnimationFrame(() => {
@@ -2613,7 +2843,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
     if (neste) { try { neste.focus({ preventScroll: true }); } catch (e) { /* ignorer */ } }
   }
 
-  $('sp-vis-fasit').addEventListener('click', visFasit);
+  $('sp-vis-fasit').addEventListener('click', () => visFasit(false));
   $('sp-ferdig').addEventListener('click', ferdig);
   $('sp-avbryt').addEventListener('click', avbryt);
 
@@ -2668,6 +2898,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
       lyd('slutt');
       musikkStyring();
       if (aktiv) tegnJokerrad();
+      tidenUte();
     }
     visTimer();
   }
@@ -2708,6 +2939,21 @@ button { font: inherit; color: inherit; cursor: pointer; }
     if (e.key === 'Escape' && DATA.forhandsvisning && window.parent !== window) {
       try { window.parent.postMessage('jeopardy:lukk-forhandsvisning', '*'); } catch (err) { /* ignorer */ }
       return;
+    }
+    const skriver = e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA');
+    if (FLERVALG && aktiv && !skriver && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      if (/^[1-9]$/.test(e.key) && !e.repeat && aktiv.alternativer && !aktiv.besvart && $('joker-velger').hidden) {
+        e.preventDefault();
+        svar(Number(e.key) - 1);
+        return;
+      }
+      if (e.key === 'Enter' && aktiv.fasitVist && !e.repeat && !(e.target && e.target.tagName === 'BUTTON')) {
+        e.preventDefault();
+        ferdig();
+        return;
+      }
+      // Tastaturet er hos elevene: mellomrom skal ikke stoppe tiden
+      if (e.key === ' ' || e.code === 'Space') { e.preventDefault(); return; }
     }
     if (!aktiv || aktiv.fasitVist || !TID || !$('joker-velger').hidden) return;
     if (e.key !== ' ' && e.code !== 'Space') return;
@@ -2848,7 +3094,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
     if ((e.key === 'm' || e.key === 'M') && HAR_LYDFIL && !musikkFeil && !e.ctrlKey && !e.metaKey && !e.altKey) {
       const t = e.target;
       if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
-      if (!S.startet || !$('oppsett').hidden) return;
+      if (!S.startet || !$('oppsett').hidden || (FLERVALG && aktiv)) return;
       S.musikk = !S.musikk;
       lagreTrygt();
       oppdaterMusikkknapp();
@@ -2954,6 +3200,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
     S.brukt = {};
     S.historikk = [];
     S.femti = {};
+    S.alt = {};
     S.turId = S.spillere.length ? S.spillere[0].id : null;
     S.startet = true;
     avsluttet = false;
@@ -3032,11 +3279,15 @@ button { font: inherit; color: inherit; cursor: pointer; }
   $('topp-tittel').textContent = DATA.tittel;
   $('spillinfo').textContent = KAT.length + ' kategorier · ' + ANTALL + ' spørsmål' +
     (TID ? ' · ' + TID + ' sekunder per spørsmål' : '');
-  if (JOKERE.length || TUR) {
+  if (JOKERE.length || TUR || FLERVALG) {
     const r = $('regler');
     r.textContent = '';
     if (TUR) {
       r.append(lag('strong', null, 'Etter tur: '), document.createTextNode('Den som har tur, velger et spørsmål og svarer. Navnet lyser på poengtavla.'));
+      if (FLERVALG || JOKERE.length) r.append(document.createElement('br'));
+    }
+    if (FLERVALG) {
+      r.append(lag('strong', null, 'Svar med tastene: '), document.createTextNode('Trykk 1, 2, 3 eller 4' + (TID ? ' før tiden går ut' : '') + '. Riktig svar gir poeng, feil svar gir minuspoeng' + (TID ? ', og svarer du ikke i tide, får du ingen poeng' : '') + '. Velg rute med piltastene og Enter.'));
       if (JOKERE.length) r.append(document.createElement('br'));
     }
     if (JOKERE.length) {
@@ -3063,39 +3314,39 @@ button { font: inherit; color: inherit; cursor: pointer; }
 
   // ---------- Eksempelspørsmål (brukes også i Excel-malen) ----------
   const EKSEMPEL = [
-    ['Geografi', 100, 'Hva er hovedstaden i Sverige?', 'Stockholm', 'Göteborg', 'Malmö', 'Byen ligger der innsjøen Mälaren møter Østersjøen.'],
-    ['Geografi', 200, 'Hva heter Norges lengste elv?', 'Glomma', 'Gudbrandsdalslågen', 'Numedalslågen', 'Den renner ut i havet ved Fredrikstad.'],
-    ['Geografi', 300, 'I hvilket land ligger byen Kyoto?', 'Japan', 'Kina', 'Sør-Korea', 'Landet består av mange øyer i Øst-Asia.'],
-    ['Geografi', 400, 'Hva heter verdens største hav?', 'Stillehavet', 'Atlanterhavet', 'Det indiske hav', 'Det ligger mellom Asia og Amerika.'],
-    ['Geografi', 500, 'Hva heter Norges høyeste fjell?', 'Galdhøpiggen', 'Glittertind', 'Snøhetta', 'Det ligger i Jotunheimen og er 2469 meter høyt.'],
-    ['Historie', 100, 'Hvilket år fikk Norge sin grunnlov?', '1814', '1905', '1945', 'Den ble skrevet under på Eidsvoll.'],
-    ['Historie', 200, 'Hva het skipet som sank på sin første tur over Atlanterhavet i 1912?', 'Titanic', 'Lusitania', 'Britannic', 'Skipet traff et isfjell.'],
-    ['Historie', 300, 'Hvilket år falt Berlinmuren?', '1989', '1991', '1961', 'Det var to år før Sovjetunionen ble oppløst.'],
-    ['Historie', 400, 'Hvilken konge falt i slaget på Stiklestad i 1030?', 'Olav Haraldsson (Olav den hellige)', 'Harald Hårfagre', 'Olav Tryggvason', 'Han ble senere kåret til helgen.'],
-    ['Historie', 500, 'Hvilken by ble begravd i aske da vulkanen Vesuv hadde utbrudd i år 79?', 'Pompeii', 'Roma', 'Napoli', 'Byen ligger i Italia, rett ved foten av vulkanen.'],
-    ['Naturfag', 100, 'Hvilken planet er nærmest sola?', 'Merkur', 'Venus', 'Mars', 'Den er også den minste planeten i solsystemet.'],
-    ['Naturfag', 200, 'Hva kalles prosessen der planter lager sukker ved hjelp av sollys?', 'Fotosyntese', 'Respirasjon', 'Fordøyelse', 'Ordet betyr omtrent «å sette sammen med lys».'],
-    ['Naturfag', 300, 'Hvilket grunnstoff har det kjemiske symbolet Au?', 'Gull', 'Sølv', 'Aluminium', 'Symbolet kommer fra det latinske ordet aurum.'],
-    ['Naturfag', 400, 'Hvilken gass er det mest av i lufta vi puster inn?', 'Nitrogen (ca. 78 %)', 'Oksygen', 'Karbondioksid', 'Det er ikke oksygen.'],
-    ['Naturfag', 500, 'Hva heter den delen av cellen som inneholder arvestoffet?', 'Cellekjernen', 'Cellemembranen', 'Mitokondriene', 'Den styrer cellen og ligger ofte midt i den.'],
-    ['Norsk', 100, 'Hva kalles ord som betyr det motsatte av hverandre, som «varm» og «kald»?', 'Antonymer', 'Synonymer', 'Homonymer', 'Det er det motsatte av synonymer.'],
-    ['Norsk', 200, 'Hvilken ordklasse hører ord som «stor» og «rød» til?', 'Adjektiv', 'Verb', 'Substantiv', 'Ordklassen forteller hvordan noe er.'],
-    ['Norsk', 300, 'Fra hvilket språk kommer hilsenen «bonjour»?', 'Fransk', 'Spansk', 'Italiensk', 'Språket snakkes i Paris.'],
-    ['Norsk', 400, 'Hva kalles ord som betyr omtrent det samme, som «glad» og «blid»?', 'Synonymer', 'Antonymer', 'Homonymer', 'Ordet begynner på S.'],
-    ['Norsk', 500, 'Hvem samlet «Norske folkeeventyr» sammen med Jørgen Moe?', 'Peter Christen Asbjørnsen', 'Henrik Wergeland', 'Ivar Aasen', 'Fornavnet hans er Peter.'],
-    ['Sport', 100, 'Hvor mange spillere har et fotballag på banen samtidig?', '11', '9', '10', 'Det er like mange som i bandy.'],
-    ['Sport', 200, 'I hvilken idrett bruker man puck?', 'Ishockey', 'Bandy', 'Curling', 'Spillerne har skøyter, hjelm og kølle.'],
-    ['Sport', 300, 'Hva heter tennisturneringen som spilles på gress i London?', 'Wimbledon', 'Roland-Garros', 'US Open', 'Spillerne må ha på seg hvite klær der.'],
-    ['Sport', 400, 'Hvor mange ringer er det i det olympiske symbolet?', 'Fem', 'Fire', 'Seks', 'Det er én ring for hver verdensdel som er med.'],
-    ['Sport', 500, 'Hvilken norsk by arrangerte vinter-OL i 1994?', 'Lillehammer', 'Oslo', 'Trondheim', 'Byen ligger ved nordenden av Mjøsa.'],
-    ['Matematikk', 100, 'Hva er 7 · 8?', '56', '54', '48', '7 · 7 = 49. Legg til én sjuer til.'],
-    ['Matematikk', 200, 'Hvor mange grader er vinklene i en trekant til sammen?', '180 grader', '90 grader', '360 grader', 'Det er halvparten av en hel sirkel.'],
-    ['Matematikk', 300, 'Hva er 25 % av 80?', '20', '25', '16', '25 % er det samme som en firedel.'],
-    ['Matematikk', 400, 'Hva kalles en mangekant med seks sider?', 'Sekskant (heksagon)', 'Femkant', 'Åttekant', 'Cellene i en bikube har denne formen.'],
-    ['Matematikk', 500, 'Hva er det minste primtallet?', '2', '1', '3', 'Det er det eneste partallet som er et primtall.']
+    ['Geografi', 100, 'Hva er hovedstaden i Sverige?', 'Stockholm', 'Göteborg', 'Malmö', 'Uppsala', 'Byen ligger der innsjøen Mälaren møter Østersjøen.'],
+    ['Geografi', 200, 'Hva heter Norges lengste elv?', 'Glomma', 'Gudbrandsdalslågen', 'Numedalslågen', 'Tana', 'Den renner ut i havet ved Fredrikstad.'],
+    ['Geografi', 300, 'I hvilket land ligger byen Kyoto?', 'Japan', 'Kina', 'Sør-Korea', 'Thailand', 'Landet består av mange øyer i Øst-Asia.'],
+    ['Geografi', 400, 'Hva heter verdens største hav?', 'Stillehavet', 'Atlanterhavet', 'Det indiske hav', 'Nordishavet', 'Det ligger mellom Asia og Amerika.'],
+    ['Geografi', 500, 'Hva heter Norges høyeste fjell?', 'Galdhøpiggen', 'Glittertind', 'Snøhetta', 'Store Skagastølstind', 'Det ligger i Jotunheimen og er 2469 meter høyt.'],
+    ['Historie', 100, 'Hvilket år fikk Norge sin grunnlov?', '1814', '1905', '1945', '1884', 'Den ble skrevet under på Eidsvoll.'],
+    ['Historie', 200, 'Hva het skipet som sank på sin første tur over Atlanterhavet i 1912?', 'Titanic', 'Lusitania', 'Britannic', 'Olympic', 'Skipet traff et isfjell.'],
+    ['Historie', 300, 'Hvilket år falt Berlinmuren?', '1989', '1991', '1961', '1985', 'Det var to år før Sovjetunionen ble oppløst.'],
+    ['Historie', 400, 'Hvilken konge falt i slaget på Stiklestad i 1030?', 'Olav Haraldsson (Olav den hellige)', 'Harald Hårfagre', 'Olav Tryggvason', 'Håkon den gode', 'Han ble senere kåret til helgen.'],
+    ['Historie', 500, 'Hvilken by ble begravd i aske da vulkanen Vesuv hadde utbrudd i år 79?', 'Pompeii', 'Roma', 'Napoli', 'Athen', 'Byen ligger i Italia, rett ved foten av vulkanen.'],
+    ['Naturfag', 100, 'Hvilken planet er nærmest sola?', 'Merkur', 'Venus', 'Mars', 'Jorda', 'Den er også den minste planeten i solsystemet.'],
+    ['Naturfag', 200, 'Hva kalles prosessen der planter lager sukker ved hjelp av sollys?', 'Fotosyntese', 'Respirasjon', 'Fordøyelse', 'Fordamping', 'Ordet betyr omtrent «å sette sammen med lys».'],
+    ['Naturfag', 300, 'Hvilket grunnstoff har det kjemiske symbolet Au?', 'Gull', 'Sølv', 'Aluminium', 'Kobber', 'Symbolet kommer fra det latinske ordet aurum.'],
+    ['Naturfag', 400, 'Hvilken gass er det mest av i lufta vi puster inn?', 'Nitrogen (ca. 78 %)', 'Oksygen', 'Karbondioksid', 'Hydrogen', 'Det er ikke oksygen.'],
+    ['Naturfag', 500, 'Hva heter den delen av cellen som inneholder arvestoffet?', 'Cellekjernen', 'Cellemembranen', 'Mitokondriene', 'Cellevæsken', 'Den styrer cellen og ligger ofte midt i den.'],
+    ['Norsk', 100, 'Hva kalles ord som betyr det motsatte av hverandre, som «varm» og «kald»?', 'Antonymer', 'Synonymer', 'Homonymer', 'Adjektiver', 'Det er det motsatte av synonymer.'],
+    ['Norsk', 200, 'Hvilken ordklasse hører ord som «stor» og «rød» til?', 'Adjektiv', 'Verb', 'Substantiv', 'Adverb', 'Ordklassen forteller hvordan noe er.'],
+    ['Norsk', 300, 'Fra hvilket språk kommer hilsenen «bonjour»?', 'Fransk', 'Spansk', 'Italiensk', 'Tysk', 'Språket snakkes i Paris.'],
+    ['Norsk', 400, 'Hva kalles ord som betyr omtrent det samme, som «glad» og «blid»?', 'Synonymer', 'Antonymer', 'Homonymer', 'Pronomener', 'Ordet begynner på S.'],
+    ['Norsk', 500, 'Hvem samlet «Norske folkeeventyr» sammen med Jørgen Moe?', 'Peter Christen Asbjørnsen', 'Henrik Wergeland', 'Ivar Aasen', 'Theodor Kittelsen', 'Fornavnet hans er Peter.'],
+    ['Sport', 100, 'Hvor mange spillere har et fotballag på banen samtidig?', '11', '9', '10', '12', 'Det er like mange som i bandy.'],
+    ['Sport', 200, 'I hvilken idrett bruker man puck?', 'Ishockey', 'Bandy', 'Curling', 'Innebandy', 'Spillerne har skøyter, hjelm og kølle.'],
+    ['Sport', 300, 'Hva heter tennisturneringen som spilles på gress i London?', 'Wimbledon', 'Roland-Garros', 'US Open', 'Australian Open', 'Spillerne må ha på seg hvite klær der.'],
+    ['Sport', 400, 'Hvor mange ringer er det i det olympiske symbolet?', 'Fem', 'Fire', 'Seks', 'Sju', 'Det er én ring for hver verdensdel som er med.'],
+    ['Sport', 500, 'Hvilken norsk by arrangerte vinter-OL i 1994?', 'Lillehammer', 'Oslo', 'Trondheim', 'Hamar', 'Byen ligger ved nordenden av Mjøsa.'],
+    ['Matematikk', 100, 'Hva er 7 · 8?', '56', '54', '48', '63', '7 · 7 = 49. Legg til én sjuer til.'],
+    ['Matematikk', 200, 'Hvor mange grader er vinklene i en trekant til sammen?', '180 grader', '90 grader', '360 grader', '270 grader', 'Det er halvparten av en hel sirkel.'],
+    ['Matematikk', 300, 'Hva er 25 % av 80?', '20', '25', '16', '40', '25 % er det samme som en firedel.'],
+    ['Matematikk', 400, 'Hva kalles en mangekant med seks sider?', 'Sekskant (heksagon)', 'Femkant', 'Åttekant', 'Sjukant', 'Cellene i en bikube har denne formen.'],
+    ['Matematikk', 500, 'Hva er det minste primtallet?', '2', '1', '3', '0', 'Det er det eneste partallet som er et primtall.']
   ];
-  const OVERSKRIFT_RAD = ['Kategori', 'Poeng', 'Spørsmål', 'Fasit', 'Feil svar 1', 'Feil svar 2', 'Hint'];
-  const STANDARD_KART = { kategori: 0, poeng: 1, sporsmal: 2, fasit: 3, feil: [4, 5], hint: 6 };
+  const OVERSKRIFT_RAD = ['Kategori', 'Poeng', 'Spørsmål', 'Fasit', 'Feil svar 1', 'Feil svar 2', 'Feil svar 3', 'Hint'];
+  const STANDARD_KART = { kategori: 0, poeng: 1, sporsmal: 2, fasit: 3, feil: [4, 5, 6], hint: 7 };
 
   const VEILEDNING = [
     ['Slik bruker du malen', ''],
@@ -3104,7 +3355,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
     ['Poeng', 'Et tall, for eksempel 100, 200, 300. Kan stå tomt. Da får spørsmålene 100, 200, 300 … i den rekkefølgen de står.'],
     ['Spørsmål', 'Teksten som vises på skjermen.'],
     ['Fasit', 'Svaret som vises når du trykker «Vis fasit».'],
-    ['Feil svar 1 og 2', 'Valgfritt. Et galt, men troverdig svar i samme stil som fasiten. Brukes av jokeren 50/50, som viser fasit og ett av de feile svarene. Ett feil svar er nok. Har du to, velger spillet ett av dem.'],
+    ['Feil svar 1–3', 'Valgfritt. Gale, men troverdige svar i samme stil som fasiten. Svarer elevene med tastene 1–4, blir fasit og de tre feile svarene til fire alternativer. Jokeren 50/50 bruker dem også.'],
     ['Hint', 'Valgfritt. Brukes av jokeren Hint. Skriv et lite tips som hjelper uten å røpe svaret.'],
     ['Tips', 'Du kan ha så mange kategorier og spørsmål du vil. Slett eksemplene og skriv dine egne.'],
     ['Når du er ferdig', 'Lagre filen som Excel-arbeidsbok (.xlsx) og last den opp i Jeopardy-generatoren.']
@@ -3685,7 +3936,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
         '<Relationship Id="rId3" Type="' + REL_NS + '/styles" Target="styles.xml"/>' +
         '</Relationships>' },
       { navn: 'xl/styles.xml', data: stiler },
-      { navn: 'xl/worksheets/sheet1.xml', data: arkXml([OVERSKRIFT_RAD].concat(EKSEMPEL), { bredder: [18, 8, 56, 28, 22, 22, 44], frys: true, valgt: true }) },
+      { navn: 'xl/worksheets/sheet1.xml', data: arkXml([OVERSKRIFT_RAD].concat(EKSEMPEL), { bredder: [18, 8, 52, 26, 20, 20, 20, 44], frys: true, valgt: true }) },
       { navn: 'xl/worksheets/sheet2.xml', data: arkXml(VEILEDNING, { bredder: [24, 96], fetForsteKolonne: true }) }
     ];
     return lagZip(filer, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -3704,6 +3955,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
       tittel: hentTittel(),
       tid: tid,
       svar: document.querySelector('input[name="svar"]:checked').value === 'tur' ? 'tur' : 'alle',
+      svarmate: document.querySelector('input[name="svarmate"]:checked').value === 'taster' ? 'taster' : 'muntlig',
       forhandsvisning: !!forhandsvisning,
       tema: {
         bakgrunn: oppsett.tema.bakgrunn,
@@ -4416,7 +4668,29 @@ button { font: inherit; color: inherit; cursor: pointer; }
       : (tur ? 'Jokerne koster ingen poeng.' : 'Bruker du en joker, svarer du alene. Jokeren koster ingen poeng.');
     return 'Jokere: ' + navn + '. ' + antallTekst + ' Si «joker» før du svarer. ' + kost;
   }
+  function oppdaterSvarmate() {
+    const taster = document.querySelector('input[name="svarmate"]:checked').value === 'taster';
+    const alle = document.querySelector('input[name="svar"][value="alle"]');
+    const tur = document.querySelector('input[name="svar"][value="tur"]');
+    if (taster) tur.checked = true;
+    alle.disabled = taster;
+    alle.closest('label').classList.toggle('uten-data', taster);
+    alle.closest('label').title = taster ? 'Når spillerne svarer med tastene, må de svare etter tur, så spillet vet hvem som trykket.' : '';
+    const sp = tilstand.spill ? tilstand.spill.kategorier.flatMap(k => k.sporsmal) : [];
+    const fire = sp.filter(x => x.fasit && x.feil && x.feil.length >= 3).length;
+    const faerre = sp.filter(x => x.fasit && x.feil && x.feil.length > 0 && x.feil.length < 3).length;
+    const ingen = sp.length - fire - faerre;
+    let tekst = 'Spillet viser svaralternativer. Spilleren trykker 1, 2, 3 eller 4 før tiden går ut, og spillet gir poengene.';
+    if (sp.length) {
+      tekst += ' ' + fire + ' av ' + sp.length + ' spørsmål har fire alternativer.';
+      if (faerre) tekst += ' ' + faerre + ' har færre, fordi det mangler feil svar.';
+      if (ingen) tekst += ' ' + ingen + ' har ingen feil svar i Excel. Dem gir du poeng for selv.';
+    }
+    $('dekning-taster').textContent = tekst;
+    return taster;
+  }
   function oppdaterJokere() {
+    oppdaterSvarmate();
     const d = jokerDekning();
     const tid = Number($('tid').value) || 0;
     settJokerTilgjengelig('5050', d.feil > 0, d.feil > 0
@@ -4442,7 +4716,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
     oppdaterMusikkForklaring();
   }
   ['bruk-jokere', 'joker-kostnad', 'joker-antall', 'joker-trekk', 'tid'].forEach(id => $(id).addEventListener('input', oppdaterJokere));
-  document.querySelectorAll('input[name="svar"]').forEach(r => r.addEventListener('change', () => { oppdaterJokere(); oppdaterStorrelse(); }));
+  document.querySelectorAll('input[name="svar"], input[name="svarmate"]').forEach(r => r.addEventListener('change', () => { oppdaterJokere(); oppdaterStorrelse(); }));
   $('joker-valg').addEventListener('change', e => {
     if (e.target && e.target.dataset) delete e.target.dataset.varValgt;
     oppdaterJokere();
