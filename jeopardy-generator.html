@@ -858,6 +858,7 @@ h1 {
   --rute-ramme: rgba(0, 0, 0, .22);
   --slor: rgba(0, 0, 0, .3);
   --gull-glod: rgba(255, 204, 58, .45);
+  --knapp-kant: rgba(255, 255, 255, .35);
   --topp-bg: transparent;
   --panel-bg: transparent;
   --tallskygge: 3px 3px 0 rgba(1, 3, 15, .6);
@@ -922,7 +923,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   justify-content: center;
   padding: 12px 22px;
   border-radius: 10px;
-  border: 2px solid rgba(255, 255, 255, .35);
+  border: 2px solid var(--knapp-kant);
   background: var(--slor);
   color: var(--hvit);
   font-weight: 700;
@@ -982,7 +983,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   font-size: 20px;
   padding: 12px 14px;
   border-radius: 10px;
-  border: 2px solid rgba(255, 255, 255, .3);
+  border: 2px solid var(--knapp-kant);
   background: var(--slor);
   color: var(--hvit);
 }
@@ -1167,7 +1168,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .pb-joker.brukt { opacity: .4; text-decoration: line-through; }
 .poeng-brikke.leder { border-color: var(--gull); box-shadow: 0 0 22px rgba(255, 204, 58, .3); }
 .tur-modus .poeng-brikke { cursor: pointer; }
-.tur-modus .poengliste { padding: 14px 12px 10px; }
+.tur-modus .poengliste { padding: 14px 12px 10px; max-height: calc(30vh + 28px); }
+.brikke-tur { padding: 1px 8px; border-radius: 999px; background: var(--gull); color: var(--gull-tekst); font-size: 13px; text-transform: uppercase; letter-spacing: .08em; }
 .tur-modus .poeng-brikke { padding-top: 12px; }
 .tur-modus .poeng-brikke.leder { border-color: var(--rute-ramme); box-shadow: none; }
 .poeng-brikke.tur, .tur-modus .poeng-brikke.tur {
@@ -1235,8 +1237,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
   display: flex;
   align-items: center;
   gap: 14px;
-  min-height: 2.4em;
-  padding: 10px 18px;
+  min-height: 2.2em;
+  padding: 8px 18px;
   border-radius: 14px;
   border: 3px solid var(--gull);
   background: var(--slor);
@@ -1244,10 +1246,12 @@ button { font: inherit; color: inherit; cursor: pointer; }
   text-align: left;
   font-family: var(--font-ledetekst);
   font-weight: 700;
-  font-size: clamp(18px, 2.2vw, 36px);
+  font-size: clamp(16px, min(2.2vw, 3.4vh), 36px);
   line-height: 1.2;
   overflow-wrap: anywhere;
 }
+.svarvalg.lange .svar-alt { font-size: clamp(15px, min(1.6vw, 2.8vh), 28px); }
+.svarvalg.svaert-lange .svar-alt { font-size: clamp(13px, min(1.25vw, 2.3vh), 22px); padding: 6px 12px; }
 .svar-alt:hover:not(:disabled) { background: var(--joker-bg); }
 .svar-alt:disabled { cursor: default; }
 .svar-nr {
@@ -1268,7 +1272,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .svar-alt.valgt { outline: 4px solid var(--hvit); outline-offset: 3px; }
 .svar-alt.riktig { opacity: 1; border-color: var(--riktig); background: var(--riktig); color: var(--riktig-tekst); }
 .svar-alt.feil { opacity: 1; border-color: var(--feil); background: var(--feil); color: var(--feil-tekst); }
-.svar-alt.riktig .svar-nr, .svar-alt.feil .svar-nr { background: var(--slor); color: inherit; }
+.svar-alt.riktig .svar-nr { background: var(--riktig-tekst); color: var(--riktig); }
+.svar-alt.feil .svar-nr { background: var(--feil-tekst); color: var(--feil); }
 .svar-resultat {
   margin: 0;
   padding: 8px 24px;
@@ -1279,9 +1284,9 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 .svar-resultat.riktig { background: var(--riktig); color: var(--riktig-tekst); }
 .svar-resultat.feil { background: var(--feil); color: var(--feil-tekst); }
-.med-valg .sp-tekst { font-size: clamp(22px, 3.3vw, 56px); }
-.med-valg .sp-tekst.lang { font-size: clamp(20px, 2.6vw, 44px); }
-.med-valg .sp-tekst.svaert-lang { font-size: clamp(17px, 2vw, 34px); }
+.med-valg .sp-tekst, .med-valg.med-joker .sp-tekst, .med-valg.med-fasit .sp-tekst { font-size: clamp(20px, min(3.3vw, 5vh), 56px); }
+.med-valg .sp-tekst.lang, .med-valg.med-joker .sp-tekst.lang, .med-valg.med-fasit .sp-tekst.lang { font-size: clamp(18px, min(2.6vw, 4vh), 44px); }
+.med-valg .sp-tekst.svaert-lang, .med-valg.med-joker .sp-tekst.svaert-lang, .med-valg.med-fasit .sp-tekst.svaert-lang { font-size: clamp(16px, min(2vw, 3.2vh), 34px); }
 .med-valg .sp-midt { gap: clamp(10px, 2vh, 24px); }
 .pg-endre-rad { margin: 0; text-align: center; }
 .pg-endre-rad:has(#pg-endre[hidden]) { display: none; }
@@ -1920,6 +1925,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   const TREKK = Math.max(0, Math.round(Number(JK.trekk) || 0));
   // Med tastene 1–4 sjekker spillet svaret selv. Da må spillerne svare etter tur.
   const FLERVALG = DATA.svarmate === 'taster';
+  const HAR_ALT = KAT.some(k => k.sporsmal.some(x => x.fasit && Array.isArray(x.feil) && x.feil.length));
   const TUR = DATA.svar === 'tur' || FLERVALG;
   if (TUR) document.body.classList.add('tur-modus');
   const brukte = (p, id) => (p.jokere && p.jokere[id]) || 0;
@@ -1958,7 +1964,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   let S = tomTilstand();
   let lagret = null;
   function lagre() {
-    if (!LAGRE || !S.startet || !S.spillere.length) return;
+    if (!LAGRE || !S.startet || avsluttet || !S.spillere.length) return;
     try { localStorage.setItem(NOKKEL, JSON.stringify(S)); } catch (e) { /* lagring ikke tilgjengelig */ }
   }
   // Lagrer mens et spørsmål er åpent: en joker på det åpne spørsmålet regnes som ubrukt,
@@ -2009,9 +2015,12 @@ button { font: inherit; color: inherit; cursor: pointer; }
     lagret = m === 'ny' ? hentLagret() : null;
     $('fortsett').hidden = !lagret;
     if (lagret) {
-      $('fortsett-tekst').textContent = 'Du har et spill som ikke er ferdig. ' +
-        navneliste(lagret.spillere.map(s => s.navn)) + ' har spilt ' +
-        Object.keys(lagret.brukt).length + ' av ' + ANTALL + ' spørsmål.';
+      const n = Object.keys(lagret.brukt).length;
+      const navn = navneliste(lagret.spillere.map(s => s.navn));
+      $('fortsett-tekst').textContent = n >= ANTALL
+        ? 'Forrige spill er ferdig. ' + navn + ' spilte alle ' + ANTALL + ' spørsmålene.'
+        : 'Du har et spill som ikke er ferdig. ' + navn + ' har spilt ' + n + ' av ' + ANTALL + ' spørsmål.';
+      $('fortsett-knapp').textContent = n >= ANTALL ? 'Se resultatene' : 'Fortsett spillet';
     }
     $('start-knapp').textContent = m === 'rediger' ? 'Tilbake til brettet' : 'Start spillet';
     $('oppsett-melding').textContent = '';
@@ -2028,6 +2037,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
       if (TUR) li.append(lag('span', 'rekkefolge-nr', (i + 1) + '.'));
       li.append(lag('span', null, s.navn));
       if (modus === 'rediger') li.append(lag('span', 'brikke-poeng', poengTekst(s.poeng)));
+      if (modus === 'rediger' && TUR && s.id === S.turId) li.append(lag('span', 'brikke-tur', 'Tur'));
       const bekreft = fjernVenter === s.id;
       const fjern = lag('button', 'fjern' + (bekreft ? ' bekreft' : ''), bekreft ? 'Fjern?' : '×');
       fjern.type = 'button';
@@ -2046,6 +2056,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
         }
         S.spillere = S.spillere.filter(x => x.id !== s.id);
         fjernVenter = null;
+        $('oppsett-melding').textContent = '';
         lagre();
         tegnSpillerliste();
         $('nytt-navn').focus();
@@ -2055,6 +2066,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
     });
     $('start-knapp').disabled = S.spillere.length === 0;
     $('rekkefolge').hidden = !TUR || S.spillere.length < 2;
+    const tp = modus === 'rediger' ? turSpiller() : null;
+    $('rekkefolge-tekst').textContent = 'Spillerne svarer i denne rekkefølgen. ' + (tp ? tp.navn + ' har tur nå.' : 'Den første i lista starter.');
   }
   $('bland-knapp').addEventListener('click', () => {
     const a = S.spillere;
@@ -2127,7 +2140,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
     lagret = null;
     avsluttet = false;
     lydKontekst();
-    visBrett();
+    if (antallBrukt() >= ANTALL) visResultat(); else visBrett();
   });
   $('forkast-knapp').addEventListener('click', () => {
     if (lagret) {
@@ -2184,6 +2197,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
   $('brett').addEventListener('keydown', e => {
     const mal = e.target;
     if (!mal || !mal.classList || !mal.classList.contains('rute') || !mal.dataset.key) return;
+    // Enter som holdes inne eller trykkes to ganger rett etter et spørsmål, skal ikke åpne neste rute
+    if (e.key === 'Enter' && (e.repeat || performance.now() - sistLukket < 400)) { e.preventDefault(); return; }
     const steg = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
     if (!steg) return;
     e.preventDefault();
@@ -2204,6 +2219,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
     const harTur = turSpiller();
     S.spillere.forEach(s => {
       const li = lag('li', 'poeng-brikke');
+      li.dataset.id = s.id;
       if (topp > 0 && s.poeng === topp) li.classList.add('leder');
       if (harTur && harTur.id === s.id) {
         li.classList.add('tur');
@@ -2215,10 +2231,15 @@ button { font: inherit; color: inherit; cursor: pointer; }
         li.setAttribute('role', 'button');
         li.title = harTur && harTur.id === s.id ? s.navn + ' har tur' : 'Gi turen til ' + s.navn;
         const gi = () => {
-          if (S.turId === s.id) return;
+          if (aktiv || S.turId === s.id) return;
+          const hadde = document.activeElement === li;
           S.turId = s.id;
           lagre();
           tegnPoeng();
+          if (hadde) {
+            const ny = $('poengliste').querySelector('[data-id="' + s.id + '"]');
+            if (ny) ny.focus();
+          }
           toast('Turen gikk til ' + s.navn + '.');
         };
         li.addEventListener('click', gi);
@@ -2254,6 +2275,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   }
 
   $('knapp-angre').addEventListener('click', () => {
+    if (aktiv) return;
     const h = S.historikk.pop();
     if (!h) return;
     h.endringer.forEach(e => {
@@ -2286,11 +2308,13 @@ button { font: inherit; color: inherit; cursor: pointer; }
       ? (igjen === 1 ? 'Det er 1 spørsmål igjen. Det' : 'Det er ' + igjen + ' spørsmål igjen. De') + ' blir ikke brukt, og du går rett til resultatlisten.'
       : 'Du går rett til resultatlisten.');
     avsluttFokus = document.activeElement;
+    $('spill').inert = true;
     $('avslutt-dialog').hidden = false;
     $('avslutt-nei').focus();
   }
   function lukkAvsluttDialog() {
     $('avslutt-dialog').hidden = true;
+    $('spill').inert = false;
     if (avsluttFokus && avsluttFokus.focus) { try { avsluttFokus.focus({ preventScroll: true }); } catch (e) { /* ignorer */ } }
   }
   $('knapp-avslutt').addEventListener('click', visAvsluttDialog);
@@ -2298,6 +2322,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   $('avslutt-dialog').addEventListener('click', e => { if (e.target === $('avslutt-dialog')) lukkAvsluttDialog(); });
   $('avslutt-ja').addEventListener('click', () => {
     $('avslutt-dialog').hidden = true;
+    $('spill').inert = false;
     avsluttet = true;
     slettLagret();
     visResultat();
@@ -2308,6 +2333,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   let skjulTid = null;
   const aktivtSporsmal = () => KAT[aktiv.ki].sporsmal[aktiv.r];
 
+  let sistLukket = -Infinity;
   function apneSporsmal(ki, r, kilde) {
     if (aktiv) return;
     lydKontekst();
@@ -2337,11 +2363,13 @@ button { font: inherit; color: inherit; cursor: pointer; }
     $('sp-oppsummering').textContent = '';
     $('sp-timer').hidden = !TID;
     $('pg-endre').hidden = true;
+    $('sp-avbryt').hidden = false;
     $('sp-ferdig').textContent = FLERVALG ? 'Tilbake til brettet (Enter)' : 'Tilbake til brettet';
     aktiv.alternativer = lagAlternativer(aktiv.key, s);
     aktiv.besvart = false;
     tegnSvarvalg();
     tegnJokerrad();
+    $('spill').inert = true;
     ov.hidden = false;
     ov.scrollTop = 0;
     zoom(ov, kilde);
@@ -2420,6 +2448,9 @@ button { font: inherit; color: inherit; cursor: pointer; }
       b.addEventListener('click', () => svar(i));
       boks.append(b);
     });
+    const lengst = Math.max(...alt.map(t => t.length));
+    boks.classList.toggle('lange', lengst > 50 && lengst <= 90);
+    boks.classList.toggle('svaert-lange', lengst > 90);
     if (aktiv.joker && aktiv.joker.type === '5050') fjernToFeil();
     oppdaterInstruks();
   }
@@ -2462,6 +2493,24 @@ button { font: inherit; color: inherit; cursor: pointer; }
     if (riktig) visSvarResultat('riktig', navn ? navn + ' svarte riktig!' : 'Riktig svar!');
     else visSvarResultat('feil', (navn ? navn + ' svarte feil.' : 'Feil svar.') + ' Riktig svar er ' + s.fasit + '.');
     lyd(riktig ? 'riktig' : 'feil');
+    lagreBesvart();
+  }
+  // Lagrer spillet som om spørsmålet var ferdig. ferdig() lagrer senere den endelige stillingen.
+  function lagreBesvart() {
+    if (!LAGRE || !S.startet || avsluttet || !aktiv) return;
+    const kopi = JSON.parse(JSON.stringify(S));
+    const endringer = [];
+    kopi.spillere.forEach(p => {
+      const d = endringFor(p.id);
+      if (d) { p.poeng += d; endringer.push({ id: p.id, d: d }); }
+    });
+    kopi.brukt[aktiv.key] = true;
+    kopi.historikk.push({ key: aktiv.key, endringer: endringer, joker: aktiv.joker, turId: TUR ? kopi.turId : null });
+    if (TUR && kopi.spillere.length) {
+      const i = kopi.spillere.findIndex(x => x.id === kopi.turId);
+      kopi.turId = kopi.spillere[(i + 1) % kopi.spillere.length].id;
+    }
+    try { localStorage.setItem(NOKKEL, JSON.stringify(kopi)); } catch (e) { /* lagring ikke tilgjengelig */ }
   }
   function tidenUte() {
     if (!FLERVALG || !aktiv || !aktiv.alternativer || aktiv.besvart || aktiv.fasitVist) return;
@@ -2470,6 +2519,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
     if (tp) aktiv.valg[tp.id] = 0;
     visFasit(true);
     visSvarResultat('feil', 'Tiden er ute. Riktig svar er ' + aktivtSporsmal().fasit + '. Ingen poeng.');
+    lagreBesvart();
   }
   $('pg-endre').addEventListener('click', () => {
     $('sp-poenggiving').hidden = false;
@@ -2575,7 +2625,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
     tidForVelger = false;
     lyd('joker');
     tegnJokerrad();
-    visBunn();
+    if (!(aktiv.alternativer && !aktiv.besvart)) visBunn();
     try { $('sporsmal').focus({ preventScroll: true }); } catch (e) { /* ignorer */ }
   }
 
@@ -2592,7 +2642,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
     banner.hidden = false;
     if (j.type === '5050' && aktiv.alternativer) {
       fjernToFeil();
-      vis.append(lag('span', 'joker-etikett', '50/50 for ' + navn + ': to gale svar er fjernet'));
+      const n = aktiv.alternativer.length - 2;
+      vis.append(lag('span', 'joker-etikett', '50/50 for ' + navn + ': ' + (n === 1 ? 'ett galt svar er fjernet' : 'to gale svar er fjernet')));
     } else if (j.type === '5050') {
       if (!S.femti[aktiv.key] || !s.feil.includes(S.femti[aktiv.key])) {
         S.femti[aktiv.key] = s.feil[Math.floor(Math.random() * s.feil.length)];
@@ -2644,6 +2695,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
     if (aktiv.alternativer && !aktiv.besvart) tegnSvarvalg();
     tegnJokerrad();
     if (p) toast(p.navn + ' fikk ' + JOKER_INFO[j.type].navn + ' tilbake.');
+    if (TID && !timer.kjorer && timer.igjen <= 0 && !aktiv.besvart) { lyd('slutt'); tidenUte(); }
   }
   $('joker-angre').addEventListener('click', angreJoker);
 
@@ -2690,6 +2742,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
     $('sp-ferdig').hidden = false;
     tegnPoenggiving();
     const auto = automatisk === true && medValg;
+    aktiv.auto = auto;
+    $('sp-avbryt').hidden = auto;
     $('sp-poenggiving').hidden = auto;
     $('pg-endre').hidden = !auto;
     if (!auto) lyd('fasit');
@@ -2814,6 +2868,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
   }
 
   function avbryt() {
+    // Et svar spillet allerede har gitt poeng for, kan ikke lukkes bort. Bruk «Endre poeng».
+    if (aktiv && aktiv.auto) return;
     // Spørsmålet blir ikke brukt, så en joker som ble brukt på det, gis tilbake.
     if (aktiv && aktiv.joker) {
       const j = aktiv.joker;
@@ -2834,6 +2890,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
     $('sporsmal').hidden = true;
     clearTimeout(skjulTid);
     $('spill').classList.remove('bak-sporsmal');
+    $('spill').inert = false;
+    sistLukket = performance.now();
     const key = aktiv && aktiv.key;
     aktiv = null;
     tegnBrett();
@@ -2873,6 +2931,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
     stoppTimer();
     visTimer();
     musikkStyring();
+    if (timer.igjen <= 0 && aktiv) { lyd('slutt'); tegnJokerrad(); tidenUte(); }
   }
   function stoppTimer() {
     clearInterval(timer.intervall);
@@ -2916,18 +2975,20 @@ button { font: inherit; color: inherit; cursor: pointer; }
   }
   $('timer-pause').addEventListener('click', () => {
     if (timer.kjorer) pauseTimer(); else fortsettTimer();
+    if (FLERVALG) $('sporsmal').focus({ preventScroll: true });
   });
-  $('timer-restart').addEventListener('click', startTimer);
+  $('timer-restart').addEventListener('click', () => {
+    startTimer();
+    if (FLERVALG) $('sporsmal').focus({ preventScroll: true });
+  });
 
   document.addEventListener('keydown', e => {
     if (!$('avslutt-dialog').hidden) {
       if (e.key === 'Escape') { e.preventDefault(); lukkAvsluttDialog(); }
       if (e.key === 'Tab') {
-        // Hold fokus inne i dialogen
-        const ja = $('avslutt-ja');
-        const nei = $('avslutt-nei');
-        if (e.shiftKey && document.activeElement === ja) { e.preventDefault(); nei.focus(); }
-        else if (!e.shiftKey && document.activeElement === nei) { e.preventDefault(); ja.focus(); }
+        // Hold fokus inne i dialogen. Fokus på avveie havner på det trygge valget «Nei».
+        e.preventDefault();
+        (document.activeElement === $('avslutt-nei') ? $('avslutt-ja') : $('avslutt-nei')).focus();
       }
       return;
     }
@@ -2942,14 +3003,18 @@ button { font: inherit; color: inherit; cursor: pointer; }
     }
     const skriver = e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA');
     if (FLERVALG && aktiv && !skriver && !e.ctrlKey && !e.metaKey && !e.altKey) {
-      if (/^[1-9]$/.test(e.key) && !e.repeat && aktiv.alternativer && !aktiv.besvart && $('joker-velger').hidden) {
+      const np = /^(?:Digit|Numpad)([1-9])$/.exec(e.code || '');
+      const tast = /^[1-9]$/.test(e.key) ? e.key : (np && np[1]);
+      if (tast && !e.repeat && aktiv.alternativer && !aktiv.besvart && $('joker-velger').hidden) {
         e.preventDefault();
-        svar(Number(e.key) - 1);
+        svar(Number(tast) - 1);
         return;
       }
-      if (e.key === 'Enter' && aktiv.fasitVist && !e.repeat && !(e.target && e.target.tagName === 'BUTTON')) {
+      // Tastaturet er hos elevene: lærerknappene nås bare med musa
+      if (e.key === 'Tab') { e.preventDefault(); return; }
+      if (e.key === 'Enter') {
         e.preventDefault();
-        ferdig();
+        if (!e.repeat && aktiv.auto && $('sp-poenggiving').hidden) ferdig();
         return;
       }
       // Tastaturet er hos elevene: mellomrom skal ikke stoppe tiden
@@ -3094,7 +3159,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
     if ((e.key === 'm' || e.key === 'M') && HAR_LYDFIL && !musikkFeil && !e.ctrlKey && !e.metaKey && !e.altKey) {
       const t = e.target;
       if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
-      if (!S.startet || !$('oppsett').hidden || (FLERVALG && aktiv)) return;
+      if (!S.startet || !$('oppsett').hidden || (FLERVALG && aktiv) || !$('avslutt-dialog').hidden) return;
       S.musikk = !S.musikk;
       lagreTrygt();
       oppdaterMusikkknapp();
@@ -3284,9 +3349,9 @@ button { font: inherit; color: inherit; cursor: pointer; }
     r.textContent = '';
     if (TUR) {
       r.append(lag('strong', null, 'Etter tur: '), document.createTextNode('Den som har tur, velger et spørsmål og svarer. Navnet lyser på poengtavla.'));
-      if (FLERVALG || JOKERE.length) r.append(document.createElement('br'));
+      if ((FLERVALG && HAR_ALT) || JOKERE.length) r.append(document.createElement('br'));
     }
-    if (FLERVALG) {
+    if (FLERVALG && HAR_ALT) {
       r.append(lag('strong', null, 'Svar med tastene: '), document.createTextNode('Trykk 1, 2, 3 eller 4' + (TID ? ' før tiden går ut' : '') + '. Riktig svar gir poeng, feil svar gir minuspoeng' + (TID ? ', og svarer du ikke i tide, får du ingen poeng' : '') + '. Velg rute med piltastene og Enter.'));
       if (JOKERE.length) r.append(document.createElement('br'));
     }
@@ -4150,10 +4215,13 @@ button { font: inherit; color: inherit; cursor: pointer; }
         const har = c => rader.some(r => r && String(r[c] == null ? '' : r[c]).trim());
         const feilKol = STANDARD_KART.feil.filter(har);
         let tekst = 'Fant ingen overskriftsrad. Kolonnene ble lest som A = Kategori, B = Poeng, C = Spørsmål, D = Fasit';
-        if (feilKol.length) tekst += ', ' + feilKol.map(c => 'ABCDEFGH'[c]).join(' og ') + ' = Feil svar (til 50/50)';
+        if (feilKol.length) tekst += ', ' + liste(feilKol.map(c => 'ABCDEFGH'[c])) + ' = Feil svar (svaralternativer og 50/50)';
         if (har(STANDARD_KART.hint)) tekst += ', ' + 'ABCDEFGH'[STANDARD_KART.hint] + ' = Hint';
         tekst += '. Legg inn en overskriftsrad hvis dette ikke stemmer.';
         res.merknader.unshift({ niva: feilKol.length || har(STANDARD_KART.hint) ? 'varsel' : 'info', tekst: tekst });
+        if (har(6) && !har(7)) {
+          res.merknader.splice(1, 0, { niva: 'varsel', tekst: 'Kolonne G ble lest som Feil svar 3. I en eldre mal var G Hint. Legg inn overskriftsraden fra den nye malen hvis G er hint.' });
+        }
       }
       if (!res.antall) {
         tilstand.merknader = res.merknader;
@@ -4271,6 +4339,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
       '--gull': T,
       '--gull-tekst': tekstPa(T, gullMork, '#ffffff'),
       '--gull-glod': rgba(T, 0.45),
+      '--knapp-kant': luminans(B) > 0.5 || lysRute ? rgba(X, 0.4) : 'rgba(255, 255, 255, .35)',
       '--hvit': X,
       '--svak': sikre(bland(X, R, 0.28), [R, B, bland(R, mot, 0.62)], 4.5, X),
       '--slor': lysRute ? 'rgba(255, 255, 255, .6)' : 'rgba(0, 0, 0, .3)',
@@ -4672,7 +4741,13 @@ button { font: inherit; color: inherit; cursor: pointer; }
     const taster = document.querySelector('input[name="svarmate"]:checked').value === 'taster';
     const alle = document.querySelector('input[name="svar"][value="alle"]');
     const tur = document.querySelector('input[name="svar"][value="tur"]');
-    if (taster) tur.checked = true;
+    if (taster) {
+      if (alle.checked) alle.dataset.varValgt = 'ja';
+      tur.checked = true;
+    } else if (alle.dataset.varValgt === 'ja') {
+      alle.checked = true;
+      delete alle.dataset.varValgt;
+    }
     alle.disabled = taster;
     alle.closest('label').classList.toggle('uten-data', taster);
     alle.closest('label').title = taster ? 'Når spillerne svarer med tastene, må de svare etter tur, så spillet vet hvem som trykket.' : '';
@@ -4680,13 +4755,16 @@ button { font: inherit; color: inherit; cursor: pointer; }
     const fire = sp.filter(x => x.fasit && x.feil && x.feil.length >= 3).length;
     const faerre = sp.filter(x => x.fasit && x.feil && x.feil.length > 0 && x.feil.length < 3).length;
     const ingen = sp.length - fire - faerre;
-    let tekst = 'Spillet viser svaralternativer. Spilleren trykker 1, 2, 3 eller 4 før tiden går ut, og spillet gir poengene.';
-    if (sp.length) {
+    let tekst = 'Spillet viser svaralternativer. Spilleren trykker 1, 2, 3 eller 4' + (Number($('tid').value) ? ' før tiden går ut' : '') + ', og spillet gir poengene.';
+    if (sp.length && fire + faerre === 0) {
+      tekst += ' Ingen spørsmål har «Feil svar» i Excel, så alle blir muntlige.';
+    } else if (sp.length) {
       tekst += ' ' + fire + ' av ' + sp.length + ' spørsmål har fire alternativer.';
       if (faerre) tekst += ' ' + faerre + ' har færre, fordi det mangler feil svar.';
-      if (ingen) tekst += ' ' + ingen + ' har ingen feil svar i Excel. Dem gir du poeng for selv.';
+      if (ingen) tekst += ' ' + ingen + ' har ingen feil svar i Excel. ' + (ingen === 1 ? 'Det' : 'Dem') + ' gir du poeng for selv.';
     }
     $('dekning-taster').textContent = tekst;
+    document.querySelector('input[name="svarmate"][value="taster"]').closest('label').classList.toggle('uten-data', sp.length > 0 && fire + faerre === 0);
     return taster;
   }
   function oppdaterJokere() {
@@ -4716,7 +4794,12 @@ button { font: inherit; color: inherit; cursor: pointer; }
     oppdaterMusikkForklaring();
   }
   ['bruk-jokere', 'joker-kostnad', 'joker-antall', 'joker-trekk', 'tid'].forEach(id => $(id).addEventListener('input', oppdaterJokere));
-  document.querySelectorAll('input[name="svar"], input[name="svarmate"]').forEach(r => r.addEventListener('change', () => { oppdaterJokere(); oppdaterStorrelse(); }));
+  document.querySelectorAll('input[name="svar"]').forEach(r => r.addEventListener('change', () => {
+    delete document.querySelector('input[name="svar"][value="alle"]').dataset.varValgt;
+    oppdaterJokere();
+    oppdaterStorrelse();
+  }));
+  document.querySelectorAll('input[name="svarmate"]').forEach(r => r.addEventListener('change', () => { oppdaterJokere(); oppdaterStorrelse(); }));
   $('joker-valg').addEventListener('change', e => {
     if (e.target && e.target.dataset) delete e.target.dataset.varValgt;
     oppdaterJokere();
